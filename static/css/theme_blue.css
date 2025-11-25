@@ -1,0 +1,14 @@
+﻿:root {
+  --page-bg: #eef7ff;
+  --text-color: #0b2a4a;
+  --primary: #0066cc;
+  --primary-subtle: rgba(0,102,204,0.08);
+  --button-text: #ffffff;
+  --nav-bg: #034f84;
+  --nav-text: #ffffff;
+  --hero-start: #0072e6;
+  --hero-end: #004b8d;
+  --hero-text: #ffffff;
+  --footer-bg: #032b44;
+  --footer-text: #cfe8ff;
+}

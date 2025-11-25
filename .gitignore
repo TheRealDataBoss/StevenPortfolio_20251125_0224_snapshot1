@@ -1,0 +1,35 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Editor/project
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database, media
+*.sqlite3
+media/
+
+# static build artifacts
+staticfiles/
+node_modules/
+
+# packaging
+*.egg-info/
+dist/
+build/
+
+# dotenv
+.env

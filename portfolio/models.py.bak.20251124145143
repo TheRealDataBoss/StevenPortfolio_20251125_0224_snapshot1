@@ -1,0 +1,93 @@
+﻿from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    slug = models.SlugField(max_length=140, unique=True, blank=True)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "Categories"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("portfolio:project_list") + f"?category={self.slug}"
+
+
+class Project(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=220, unique=True, blank=True)
+    category = models.ForeignKey(Category, related_name="projects", on_delete=models.CASCADE)
+    summary = models.CharField(max_length=255, blank=True)
+    description = models.TextField()
+    image = models.ImageField(upload_to="projects/images/", blank=True, null=True)
+    attachment = models.FileField(upload_to="projects/files/", blank=True, null=True)
+    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords")
+    is_featured = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("portfolio:project_detail", args=[self.slug])
+
+
+class SiteSetting(models.Model):
+    hero_title = models.CharField(max_length=180, default="Welcome to my portfolio")
+    hero_subtitle = models.CharField(max_length=255, blank=True)
+    hero_image = models.ImageField(upload_to="site/hero/", blank=True, null=True)
+    about_title = models.CharField(max_length=180, default="About Me")
+    about_body = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = "Site setting"
+        verbose_name_plural = "Site settings"
+
+    def __str__(self) -> str:
+        return "Site Settings"
+
+
+class Resume(models.Model):
+    title = models.CharField(max_length=200)
+    file = models.FileField(upload_to="resumes/")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=120)
+    email = models.EmailField()
+    subject = models.CharField(max_length=150)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:
+        return f"Message from {self.name}: {self.subject}"

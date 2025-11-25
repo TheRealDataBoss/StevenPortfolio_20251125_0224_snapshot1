@@ -1,0 +1,24 @@
+﻿{# Render nested nav_items from context_processor #}
+<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+  {% for item in nav_items %}
+    {% if item.children %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="{{ item.url }}" id="nav{{ forloop.counter }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+           {% if item.new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+          {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %} {{ item.title }}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="nav{{ forloop.counter }}">
+          {% for child in item.children %}
+            <li><a class="dropdown-item" href="{{ child.url }}" {% if child.new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ child.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ item.url }}" {% if item.new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+          {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %} {{ item.title }}
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

@@ -1,0 +1,22 @@
+﻿{% extends "portfolio/base.html" %}
+{% block title %}About | Portfolio{% endblock %}
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                {% if settings.hero_image %}
+                    <img src="{{ settings.hero_image.url }}" class="img-fluid rounded shadow" alt="About image">
+                {% else %}
+                    <div class="bg-white border rounded p-5 text-center text-muted">Add a hero image in Site settings.</div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <p class="text-uppercase text-primary fw-semibold mb-2">About</p>
+                <h1 class="h3 mb-3">{{ settings.about_title|default:"About Me" }}</h1>
+                <p class="lead text-secondary">{{ settings.about_body|default:"Use the admin Site settings to tell your story, add your elevator pitch, and explain your work." }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

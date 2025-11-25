@@ -1,0 +1,42 @@
+﻿{% extends "portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <p class="text-uppercase text-primary fw-semibold mb-1">Contact</p>
+                <h1 class="h3 mb-3">Let’s connect</h1>
+                <p class="text-secondary">Send a note and I'll respond promptly.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                {{ form.name }}{{ form.name.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                {{ form.email }}{{ form.email.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Subject</label>
+                                {{ form.subject }}{{ form.subject.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Message</label>
+                                {{ form.message }}{{ form.message.errors }}
+                            </div>
+                            <button class="btn btn-primary" type="submit">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

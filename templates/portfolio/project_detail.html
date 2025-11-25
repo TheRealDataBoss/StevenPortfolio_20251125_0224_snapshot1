@@ -1,0 +1,44 @@
+﻿{% extends "portfolio/base.html" %}
+{% block title %}{{ project.title }} | Portfolio{% endblock %}
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" class="img-fluid rounded shadow" alt="{{ project.title }}">
+                {% endif %}
+                <div class="mt-4">
+                    <h1 class="h3">{{ project.title }}</h1>
+                    <p class="text-muted">{{ project.summary|default:project.description|truncatewords:30 }}</p>
+                    <span class="badge bg-primary">{{ project.category.name }}</span>
+                    {% if project.tags %}
+                        <div class="mt-2">
+                            {% for tag in project.tags.split(',') %}
+                                <span class="badge bg-secondary-subtle text-secondary">{{ tag|trim }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <hr>
+                <article class="text-secondary">{{ project.description|linebreaks }}</article>
+                {% if project.attachment %}
+                    <div class="mt-4">
+                        <a class="btn btn-outline-primary" href="{{ project.attachment.url }}">Download attachment</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Project meta</h5>
+                        <p class="mb-1"><strong>Category:</strong> {{ project.category.name }}</p>
+                        <p class="mb-1"><strong>Created:</strong> {{ project.created_at|date:"M d, Y" }}</p>
+                        <p class="mb-0"><strong>Updated:</strong> {{ project.updated_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

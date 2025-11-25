@@ -1,0 +1,41 @@
+﻿{% extends "portfolio/base.html" %}
+{% block title %}Resume | Portfolio{% endblock %}
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <p class="text-uppercase text-primary fw-semibold mb-1">Resume</p>
+                <h1 class="h3 mb-0">Latest resume download</h1>
+            </div>
+            {% if latest_resume %}
+                <a class="btn btn-primary" href="{{ latest_resume.file.url }}">Download</a>
+            {% endif %}
+        </div>
+        {% if latest_resume %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">{{ latest_resume.title }}</h5>
+                    <p class="text-muted mb-0">Last updated {{ latest_resume.updated_at|date:"M d, Y" }}</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">Upload a resume file in Admin → Resumes.</div>
+        {% endif %}
+        <h2 class="h5 mt-4">History</h2>
+        <ul class="list-group list-group-flush">
+            {% for resume in resume_entries %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ resume.title }}</span>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="text-muted small">{{ resume.updated_at|date:"M d, Y" }}</span>
+                        <a href="{{ resume.file.url }}" class="btn btn-sm btn-outline-secondary">Download</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">Upload your first resume to populate this list.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}

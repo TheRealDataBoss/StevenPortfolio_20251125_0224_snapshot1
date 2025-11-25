@@ -1,0 +1,65 @@
+﻿from django.core.cache import cache
+from .models import NavItem
+
+def nav_items(request):
+    """
+    Return a nested list of visible nav items for templates.
+    Caches the raw nav list for 1 hour.
+    """
+    cache_key = "nav_items_v1"
+    data = cache.get(cache_key)
+    if data is None:
+        qs = NavItem.objects.prefetch_related("allowed_groups").all().order_by("order")
+        data = [
+            {
+                "id": i.id,
+                "title": i.title,
+                "url": i.url,
+                "parent_id": i.parent_id,
+                "order": i.order,
+                "visible": i.visible,
+                "external": i.external,
+                "new_tab": i.new_tab,
+                "login_required": i.login_required,
+                "allowed_group_ids": [g.id for g in i.allowed_groups.all()],
+                "icon": i.icon,
+            }
+            for i in qs
+        ]
+        cache.set(cache_key, data, 3600)
+    # build tree
+    id_map = {d["id"]: d for d in data}
+    for d in data:
+        d["children"] = []
+    top = []
+    for d in data:
+        if d["parent_id"] and d["parent_id"] in id_map:
+            id_map[d["parent_id"]]["children"].append(d)
+        else:
+            top.append(d)
+
+    def visible(d):
+        if not d["visible"]:
+            return False
+        if d["login_required"] and not request.user.is_authenticated:
+            return False
+        if d["allowed_group_ids"] and not request.user.is_authenticated:
+            return False
+        if d["allowed_group_ids"]:
+            user_group_ids = set(g.id for g in request.user.groups.all())
+            if not user_group_ids.intersection(set(d["allowed_group_ids"])):
+                return False
+        return True
+
+    def to_template(d):
+        return {
+            "title": d["title"],
+            "url": d["url"] or "#",
+            "external": d["external"],
+            "new_tab": d["new_tab"],
+            "icon": d["icon"],
+            "children": [to_template(c) for c in sorted(d["children"], key=lambda x: x["order"]) if visible(c)]
+        }
+
+    items = [to_template(d) for d in sorted(top, key=lambda x: x["order"]) if visible(d)]
+    return {"nav_items": items}
