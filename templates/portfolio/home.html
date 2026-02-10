@@ -10,6 +10,9 @@
                 <p class="lead text-white-75">{{ settings.hero_subtitle|default:"Explore selected projects, resume highlights, and ways to contact me." }}</p>
                 <div class="mt-3">
                     <a class="btn btn-light btn-lg me-2" href="{% url 'portfolio:project_list' %}">See Projects</a>
+                    {% if site_settings.resume_file %}
+                        <a class="btn btn-outline-light btn-lg me-2" href="{{ site_settings.resume_file.url }}"><i class="fas fa-download me-1"></i> Resume</a>
+                    {% endif %}
                     <a class="btn btn-outline-light btn-lg" href="{% url 'portfolio:contact' %}">Contact</a>
                 </div>
             </div>

@@ -71,6 +71,7 @@ class SiteSetting(models.Model):
     hero_image = models.ImageField(upload_to="site/hero/", blank=True, null=True)
     about_title = models.CharField(max_length=180, default="About Me")
     about_body = models.TextField(blank=True)
+    resume_file = models.FileField(upload_to="resumes/", blank=True, null=True, help_text="Upload a resume PDF for site-wide download link")
 
     # theme choice retained for quick presets
     theme = models.CharField(max_length=20, choices=THEME_CHOICES, default="light", help_text="Visual theme preset")

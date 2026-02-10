@@ -1,8 +1,14 @@
-﻿from django import forms
+from django import forms
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.utils.html import format_html
 
-from .models import Category, Project, SiteSetting, Resume, ContactMessage
+from .models import Category, ContactMessage, NavItem, Project, Resume, SiteSetting
+
+
+# ---------------------------------------------------------------------------
+# 1. Site Settings (singleton)
+# ---------------------------------------------------------------------------
 
 class SiteSettingForm(forms.ModelForm):
     class Meta:
@@ -22,11 +28,72 @@ class SiteSettingForm(forms.ModelForm):
             "text_color": forms.TextInput(attrs={"type": "color"}),
         }
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
-    prepopulated_fields = {"slug": ("name",)}
-    search_fields = ("name", "description")
+
+@admin.register(SiteSetting)
+class SiteSettingAdmin(admin.ModelAdmin):
+    form = SiteSettingForm
+    list_display = ("hero_title", "theme", "primary_color_display")
+    fieldsets = (
+        ("Hero", {"fields": ("hero_title", "hero_subtitle", "hero_image")}),
+        ("About", {"fields": ("about_title", "about_body")}),
+        ("Resume", {"fields": ("resume_file",)}),
+        ("Theme", {
+            "fields": (
+                "theme",
+                ("primary_color", "button_text_color"),
+                ("nav_bg_color", "nav_text_color"),
+                ("hero_start_color", "hero_end_color", "hero_text_color"),
+                ("footer_bg_color", "footer_text_color"),
+                ("page_bg_color", "text_color"),
+            )
+        }),
+    )
+
+    def primary_color_display(self, obj):
+        return format_html(
+            '<div style="width:40px;height:20px;border:1px solid #ccc;background:{}"></div>',
+            obj.primary_color,
+        )
+    primary_color_display.short_description = "Primary"
+
+    def has_add_permission(self, request):
+        return not SiteSetting.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        obj = SiteSetting.objects.first()
+        if obj:
+            return redirect("admin:portfolio_sitesetting_change", obj.pk)
+        return super().changelist_view(request, extra_context=extra_context)
+
+
+# ---------------------------------------------------------------------------
+# 2. Navigation Items
+# ---------------------------------------------------------------------------
+
+@admin.register(NavItem)
+class NavItemAdmin(admin.ModelAdmin):
+    list_display = ("title", "parent", "url", "order", "visible", "new_tab", "login_required", "primary_groups")
+    list_editable = ("order", "visible")
+    list_filter = ("visible", "new_tab", "login_required", "parent")
+    search_fields = ("title", "url")
+    ordering = ("order",)
+    fieldsets = (
+        (None, {"fields": ("title", "url", "parent", "order", "icon")}),
+        ("Behavior", {"fields": ("visible", "external", "new_tab", "login_required", "allowed_groups")}),
+    )
+    filter_horizontal = ("allowed_groups",)
+
+    def primary_groups(self, obj):
+        return ", ".join(g.name for g in obj.allowed_groups.all())
+    primary_groups.short_description = "Allowed groups"
+
+
+# ---------------------------------------------------------------------------
+# 3. Projects
+# ---------------------------------------------------------------------------
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
@@ -47,60 +114,41 @@ class ProjectAdmin(admin.ModelAdmin):
         return ""
     thumbnail.short_description = "Preview"
 
-@admin.register(SiteSetting)
-class SiteSettingAdmin(admin.ModelAdmin):
-    form = SiteSettingForm
-    list_display = ("hero_title", "theme", "primary_color_display")
-    fieldsets = (
-        ("Hero", {"fields": ("hero_title", "hero_subtitle", "hero_image")}),
-        ("About", {"fields": ("about_title", "about_body")}),
-        ("Theme", {
-            "fields": (
-                "theme",
-                ("primary_color", "button_text_color"),
-                ("nav_bg_color", "nav_text_color"),
-                ("hero_start_color", "hero_end_color", "hero_text_color"),
-                ("footer_bg_color", "footer_text_color"),
-                ("page_bg_color", "text_color"),
-            )
-        }),
-    )
 
-    def primary_color_display(self, obj):
-        return format_html('<div style="width:40px;height:20px;border:1px solid #ccc;background:{}"></div>', obj.primary_color)
-    primary_color_display.short_description = "Primary"
-    
+# ---------------------------------------------------------------------------
+# 4. Resumes
+# ---------------------------------------------------------------------------
+
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ("title", "updated_at")
+    list_display = ("title", "category", "is_primary", "updated_at")
+    list_filter = ("category", "is_primary")
+    search_fields = ("title", "category")
     ordering = ("-updated_at",)
+
+
+# ---------------------------------------------------------------------------
+# 5. Contact Messages
+# ---------------------------------------------------------------------------
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "subject", "created_at")
+    list_filter = ("created_at",)
     search_fields = ("name", "email", "subject", "message")
     readonly_fields = ("name", "email", "subject", "message", "created_at")
 
+    def has_add_permission(self, request):
+        return False
 
-# ---- Admin registration for NavItem ----
-from django.contrib import admin
-from django.utils.html import format_html
-from .models import NavItem
 
-class NavItemAdmin(admin.ModelAdmin):
-    list_display = ("title", "parent", "order", "visible", "login_required", "primary_groups")
-    list_editable = ("order", "visible")
-    list_filter = ("visible", "login_required")
-    search_fields = ("title", "url")
-    ordering = ("order",)
-    fieldsets = (
-        (None, {"fields": ("title", "url", "parent", "order", "icon")}),
-        ("Behavior", {"fields": ("visible", "external", "new_tab", "login_required", "allowed_groups")}),
-    )
-    filter_horizontal = ("allowed_groups",)
+# ---------------------------------------------------------------------------
+# 6. Categories
+# ---------------------------------------------------------------------------
 
-    def primary_groups(self, obj):
-        return ", ".join(g.name for g in obj.allowed_groups.all())
-    primary_groups.short_description = "Allowed groups"
-
-admin.site.register(NavItem, NavItemAdmin)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "description")
+    list_filter = ("name",)
+    search_fields = ("name", "description")
+    prepopulated_fields = {"slug": ("name",)}

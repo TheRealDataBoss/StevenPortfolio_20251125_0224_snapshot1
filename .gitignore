@@ -33,3 +33,7 @@ build/
 
 # dotenv
 .env
+nul
+.claude/
+CLAUDE_BUGREPORT.md
+FINAL_REPORT.md
