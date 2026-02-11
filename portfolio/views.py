@@ -1,10 +1,44 @@
 ﻿from django.contrib import messages
 from django.db.models import Q
+from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.generic import TemplateView, ListView, DetailView
 
 from .forms import ContactForm
 from .models import Category, Project, Resume, SiteSetting
+
+
+def _is_pdf(field):
+    return field and field.name and field.name.lower().endswith(".pdf")
+
+
+def _is_docx(field):
+    return field and field.name and field.name.lower().endswith(".docx")
+
+
+def _find_pdf(resume):
+    """Return the best PDF FileField from a Resume, or None."""
+    if resume.preview_pdf:
+        return resume.preview_pdf
+    if _is_pdf(resume.file):
+        return resume.file
+    if _is_pdf(resume.alternate_file):
+        return resume.alternate_file
+    return None
+
+
+@xframe_options_sameorigin
+def resume_pdf_inline(request):
+    resume = Resume.objects.filter(is_primary=True).order_by("-updated_at", "-id").first()
+    if not resume:
+        raise Http404
+    pdf_file = _find_pdf(resume)
+    if not pdf_file:
+        raise Http404
+    response = FileResponse(pdf_file.open(), content_type="application/pdf")
+    response["Content-Disposition"] = 'inline; filename="Steven_Wazlavek_Resume.pdf"'
+    return response
 
 
 class HomeView(TemplateView):
@@ -80,6 +114,33 @@ class ResumeView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx["latest_resume"] = Resume.objects.first()
         ctx["resume_entries"] = Resume.objects.all()
+
+        resume = ctx.get("primary_resume")  # from context processor
+        if not resume:
+            resume = Resume.objects.filter(is_primary=True).order_by("-updated_at", "-id").first()
+
+        has_pdf = False
+        download_primary_url = None
+        download_pdf_url = None
+
+        if resume:
+            # Best DOCX for download
+            if _is_docx(resume.file):
+                download_primary_url = resume.file.url
+            elif _is_docx(resume.alternate_file):
+                download_primary_url = resume.alternate_file.url
+            elif resume.file:
+                download_primary_url = resume.file.url
+
+            # Best PDF for preview and download
+            pdf_field = _find_pdf(resume)
+            if pdf_field:
+                has_pdf = True
+                download_pdf_url = pdf_field.url
+
+        ctx["has_pdf"] = has_pdf
+        ctx["download_primary_url"] = download_primary_url
+        ctx["download_pdf_url"] = download_pdf_url
         return ctx
 
 

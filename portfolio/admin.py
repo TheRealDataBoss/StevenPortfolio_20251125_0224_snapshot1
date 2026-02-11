@@ -121,10 +121,24 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "is_primary", "updated_at")
+    list_display = ("title", "category", "is_primary", "has_preview", "has_alternate", "updated_at")
     list_filter = ("category", "is_primary")
     search_fields = ("title", "category")
     ordering = ("-updated_at",)
+    fieldsets = (
+        (None, {"fields": ("title", "category", "is_primary")}),
+        ("Files", {"fields": ("file", "preview_pdf", "alternate_file")}),
+    )
+
+    def has_preview(self, obj):
+        return bool(obj.preview_pdf)
+    has_preview.boolean = True
+    has_preview.short_description = "PDF Preview"
+
+    def has_alternate(self, obj):
+        return bool(obj.alternate_file)
+    has_alternate.boolean = True
+    has_alternate.short_description = "Alt File"
 
 
 # ---------------------------------------------------------------------------

@@ -108,7 +108,9 @@ class Resume(models.Model):
         help_text="If true, this resume is the primary one for its category."
     )
     title = models.CharField(max_length=200)
-    file = models.FileField(upload_to="resumes/")
+    file = models.FileField(upload_to="resumes/", help_text="Primary resume file (PDF or DOCX)")
+    preview_pdf = models.FileField(upload_to="resumes/previews/", blank=True, null=True, help_text="Optional PDF for inline preview (use when main file is DOCX)")
+    alternate_file = models.FileField(upload_to="resumes/", blank=True, null=True, help_text="Optional second format (e.g. DOCX if main is PDF, or vice versa)")
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

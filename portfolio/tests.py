@@ -3,7 +3,9 @@ import re
 from django.test import TestCase
 from django.urls import reverse
 
-from portfolio.models import NavItem
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from portfolio.models import NavItem, Resume
 
 
 class HomepageTestCase(TestCase):
@@ -49,6 +51,27 @@ class AllPagesTestCase(TestCase):
     def test_resume_page(self):
         response = self.client.get('/resume/')
         self.assertEqual(response.status_code, 200)
+
+
+class ResumeDownloadTests(TestCase):
+    """Verify /resume/ surfaces the primary resume download link."""
+
+    def test_resume_page_shows_download_when_primary_exists(self):
+        Resume.objects.create(
+            title="My Resume",
+            category="general",
+            is_primary=True,
+            file=SimpleUploadedFile("resume.pdf", b"%PDF-1.4 test content"),
+        )
+        response = self.client.get("/resume/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Download Resume")
+        self.assertContains(response, "/media/resumes/")
+
+    def test_resume_page_shows_message_when_no_primary(self):
+        response = self.client.get("/resume/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No resume uploaded yet")
 
 
 class NavigationWiringTests(TestCase):

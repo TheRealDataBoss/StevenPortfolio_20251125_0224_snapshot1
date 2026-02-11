@@ -43,4 +43,5 @@ def navigation(request):
         "nav_items": nav_items,
         "nav_categories": Category.objects.all(),
         "site_settings": SiteSetting.objects.first(),
+        "primary_resume": Resume.objects.filter(is_primary=True).order_by("-updated_at", "-id").first(),
     }
