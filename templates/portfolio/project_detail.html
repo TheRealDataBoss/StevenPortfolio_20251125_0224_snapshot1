@@ -7,7 +7,7 @@
         <div class="row g-4">
             <div class="col-lg-7">
                 {% if project.image %}
-                    <img src="{{ project.image.url }}" class="img-fluid rounded shadow" alt="{{ project.title }}">
+                    {% responsive_image image=project.image variant="hero" alt=project.title extra_class="img-fluid" %}
                 {% endif %}
                 <div class="mt-4">
                     <h1 class="h3">{{ project.title }}</h1>

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.utils.html import format_html
 
-from .models import Category, ContactMessage, NavItem, Project, Resume, SiteSetting
+from .models import Category, ContactMessage, ImageVariant, NavItem, Project, Resume, SiteSetting
 
 
 # ---------------------------------------------------------------------------
@@ -97,7 +97,30 @@ class NavItemAdmin(admin.ModelAdmin):
 
 
 # ---------------------------------------------------------------------------
-# 3. Projects
+# 3. Image Variants
+# ---------------------------------------------------------------------------
+
+@admin.register(ImageVariant)
+class ImageVariantAdmin(admin.ModelAdmin):
+    list_display = ("name", "aspect_ratio", "crop_mode", "shape", "allow_zoom", "order")
+    list_editable = ("order",)
+    ordering = ("order", "name")
+    fieldsets = (
+        (None, {"fields": ("name", "aspect_ratio", ("width", "height"), "order")}),
+        ("Crop & Fit", {
+            "fields": ("crop_mode", "object_position", "background_color"),
+            "description": "COVER crops to fill the container. CONTAIN fits the full image with possible letterboxing. object_position controls crop focus (e.g. '50% 20%' shifts focus upward).",
+        }),
+        ("Shape", {
+            "fields": ("shape", "border_radius"),
+            "description": "RECT = sharp corners. ROUNDED = custom radius. CIRCLE = fully round (forces 1:1 aspect ratio).",
+        }),
+        ("Behavior", {"fields": ("allow_zoom",)}),
+    )
+
+
+# ---------------------------------------------------------------------------
+# 4. Projects
 # ---------------------------------------------------------------------------
 
 @admin.register(Project)
@@ -111,7 +134,7 @@ class ProjectAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Basics", {"fields": ("title", "slug", "category", "summary", "description", "tags", "tech_stack")}),
         ("Links", {"fields": ("repo_url", "live_url")}),
-        ("Media", {"fields": ("image", "attachment", "thumbnail")}),
+        ("Media", {"fields": ("image", "image_variant", "attachment", "thumbnail")}),
         ("Meta", {"fields": ("is_featured", "visible", "order", "created_at", "updated_at")}),
     )
 

@@ -1,7 +1,7 @@
 from django import template
 from django.utils.html import format_html
 
-from portfolio.models import SiteSetting
+from portfolio.models import ImageVariant, SiteSetting
 
 register = template.Library()
 
@@ -65,3 +65,108 @@ def media_img(image, ratio="", fit="", alt="", extra_class="", rounded=True, sha
         " ".join(classes),
         alt,
     )
+
+
+# Mapping of ImageVariant names to predefined CSS classes
+_VARIANT_CSS = {
+    "hero": "img-hero",
+    "card": "img-card",
+    "square": "img-square",
+    "portrait": "img-portrait",
+}
+
+
+@register.inclusion_tag("portfolio/components/_responsive_image.html")
+def responsive_image(image=None, variant="", alt="", extra_class="", shape=""):
+    """
+    Render a responsive image via the _responsive_image.html partial.
+
+    Usage:
+        {% responsive_image image=project.image variant="card" alt=project.title %}
+        {% responsive_image image=headshot variant="square" shape="circle" %}
+
+    The variant can be:
+      - A predefined name: "hero", "card", "square", "portrait"
+      - An ImageVariant.name from the database (admin-created)
+      - Empty string: uses SiteSetting.default_image_ratio
+
+    The shape can be: "rect", "rounded", "circle" (overrides DB variant shape).
+    """
+    image_url = ""
+    if image and hasattr(image, "url"):
+        image_url = image.url
+    elif image:
+        image_url = str(image)
+
+    classes = []
+    inline_styles = []
+    effective_shape = shape
+    border_radius = ""
+    allow_zoom = True
+
+    if variant:
+        # Check predefined CSS classes first
+        if variant in _VARIANT_CSS:
+            classes.append(_VARIANT_CSS[variant])
+        else:
+            # Look up an admin-created ImageVariant
+            try:
+                iv = ImageVariant.objects.get(name=variant)
+                inline_styles.append(f"aspect-ratio: {iv.css_ratio}")
+                inline_styles.append(f"object-fit: {iv.crop_mode}")
+                inline_styles.append("width: 100%")
+                inline_styles.append("display: block")
+                if iv.width:
+                    inline_styles.append(f"max-width: {iv.width}px")
+                if iv.height:
+                    inline_styles.append(f"max-height: {iv.height}px")
+                if iv.object_position and iv.object_position != "center center":
+                    inline_styles.append(f"object-position: {iv.object_position}")
+                if iv.background_color:
+                    inline_styles.append(f"background-color: {iv.background_color}")
+                # Use DB shape unless param overrides
+                if not effective_shape:
+                    effective_shape = iv.shape
+                border_radius = iv.border_radius
+                allow_zoom = iv.allow_zoom
+            except ImageVariant.DoesNotExist:
+                classes.append("img-card")
+    else:
+        # Fall back to SiteSetting default
+        try:
+            settings = SiteSetting.objects.only("default_image_ratio").first()
+            ratio = getattr(settings, "default_image_ratio", "landscape") or "landscape"
+        except Exception:
+            ratio = "landscape"
+        classes.append(f"media-img media-img--{ratio} media-img--cover")
+
+    # Shape handling
+    if effective_shape == "circle":
+        classes.append("img-shape-circle")
+    elif effective_shape == "rounded":
+        if border_radius:
+            inline_styles.append(f"border-radius: {border_radius}")
+            inline_styles.append("overflow: hidden")
+        else:
+            classes.append("img-shape-rounded")
+    elif effective_shape == "rect":
+        pass  # No rounding
+    else:
+        # No shape specified — backward-compatible default rounding
+        classes.append("media-img--rounded")
+
+    # Hover zoom (respects allow_zoom and requires an actual image)
+    if image_url and allow_zoom:
+        classes.append("img-hover-scale")
+
+    if extra_class:
+        classes.append(extra_class)
+
+    css_style = "; ".join(inline_styles) + (";" if inline_styles else "")
+
+    return {
+        "image_url": image_url,
+        "css_classes": " ".join(classes),
+        "css_style": css_style,
+        "alt_text": alt or "",
+    }

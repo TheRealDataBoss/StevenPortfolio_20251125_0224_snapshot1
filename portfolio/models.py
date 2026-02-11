@@ -29,6 +29,46 @@ IMAGE_FIT_CHOICES = (
     ("contain", "Contain (fit inside, letterbox)"),
 )
 
+CROP_MODE_CHOICES = (
+    ("cover", "Cover (fill, crop edges)"),
+    ("contain", "Contain (fit inside, letterbox)"),
+)
+
+SHAPE_CHOICES = (
+    ("rect", "Rectangle (no rounding)"),
+    ("rounded", "Rounded corners"),
+    ("circle", "Circle (forces 1:1 ratio)"),
+)
+
+
+class ImageVariant(models.Model):
+    """Admin-configurable image display presets (e.g. hero, card, portrait)."""
+    name = models.CharField(max_length=60, unique=True, help_text="Slug-like key, e.g. hero, card, portrait")
+    aspect_ratio = models.CharField(max_length=10, help_text="CSS ratio, e.g. 16:9, 4:3, 1:1")
+    width = models.PositiveIntegerField(blank=True, null=True, help_text="Optional max width in px")
+    height = models.PositiveIntegerField(blank=True, null=True, help_text="Optional max height in px")
+    crop_mode = models.CharField(max_length=10, choices=CROP_MODE_CHOICES, default="cover", help_text="COVER crops to fill; CONTAIN fits fully with possible letterboxing")
+    shape = models.CharField(max_length=10, choices=SHAPE_CHOICES, default="rect", help_text="RECT: no rounding; ROUNDED: custom radius; CIRCLE: fully round (1:1)")
+    border_radius = models.CharField(max_length=20, blank=True, help_text='Custom border radius for ROUNDED shape, e.g. "12px" or "1rem"')
+    object_position = models.CharField(max_length=40, default="center center", help_text='CSS object-position to control crop focus, e.g. "50% 20%"')
+    background_color = models.CharField(max_length=30, blank=True, help_text='Background color for CONTAIN mode letterboxing, e.g. "#f0f0f0"')
+    allow_zoom = models.BooleanField(default=True, help_text="Enable CSS scale on hover (only when site motion is enabled)")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "name"]
+        verbose_name = "Image variant"
+        verbose_name_plural = "Image variants"
+
+    def __str__(self):
+        return f"{self.name} ({self.aspect_ratio})"
+
+    @property
+    def css_ratio(self):
+        """Convert '16:9' → '16 / 9' for CSS aspect-ratio property."""
+        return self.aspect_ratio.replace(":", " / ")
+
+
 class Category(models.Model):
     name = models.CharField(max_length=120, unique=True)
     slug = models.SlugField(max_length=140, unique=True, blank=True)
@@ -57,6 +97,7 @@ class Project(models.Model):
     summary = models.CharField(max_length=255, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to="projects/images/", blank=True, null=True)
+    image_variant = models.ForeignKey(ImageVariant, blank=True, null=True, on_delete=models.SET_NULL, help_text="Display preset for this project's image")
     attachment = models.FileField(upload_to="projects/files/", blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords")
     tech_stack = models.CharField(max_length=255, blank=True, help_text="Comma-separated technologies, e.g. Python, Django, PostgreSQL")

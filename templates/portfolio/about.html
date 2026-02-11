@@ -7,7 +7,7 @@
         <div class="row g-4 align-items-center">
             <div class="col-lg-5 text-center">
                 {% if site_settings and site_settings.headshot %}
-                    {% media_img site_settings.headshot ratio="portrait" fit="cover" alt=site_settings.full_name|default:"About" shadow=True extra_class="mx-auto" %}
+                    {% responsive_image image=site_settings.headshot variant="square" shape="circle" alt=site_settings.full_name|default:"Headshot" extra_class="mx-auto" %}
                 {% elif site_settings and site_settings.hero_image %}
                     {% media_img site_settings.hero_image ratio="landscape" fit="cover" alt="About image" shadow=True %}
                 {% else %}

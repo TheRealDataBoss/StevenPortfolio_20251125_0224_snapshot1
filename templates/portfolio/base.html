@@ -65,6 +65,22 @@
     .media-img--rounded { border-radius: var(--media-radius); }
     .media-img--shadow  { box-shadow: var(--media-shadow); }
 
+    /* Semantic image variant aliases */
+    .img-hero     { aspect-ratio: 16 / 9; object-fit: cover; width: 100%; display: block; }
+    .img-square   { aspect-ratio: 1 / 1;  object-fit: cover; width: 100%; display: block; }
+    .img-portrait { aspect-ratio: 3 / 4;  object-fit: cover; width: 100%; display: block; }
+    .img-card     { aspect-ratio: 4 / 3;  object-fit: cover; width: 100%; display: block; }
+
+    /* Image shape modifiers */
+    .img-shape-circle  { border-radius: 9999px; aspect-ratio: 1 / 1; overflow: hidden; }
+    .img-shape-rounded { border-radius: var(--media-radius); overflow: hidden; }
+
+    /* Hover scale for cards (respects motion preference) */
+    .img-hover-scale { transition: transform 0.25s ease; }
+    .img-hover-scale:hover { transform: scale(1.03); }
+    body.no-motion .img-hover-scale,
+    body.no-motion .img-hover-scale:hover { transition: none; transform: none; }
+
     .footer { background: var(--footer-bg); color: var(--footer-text); }
     .btn-primary {
       background: var(--primary);

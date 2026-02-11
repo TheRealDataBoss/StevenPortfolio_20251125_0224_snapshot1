@@ -1,0 +1,12 @@
+{# Responsive image component — used via {% responsive_image %} tag #}
+{% if image_url %}
+<img src="{{ image_url }}"
+     class="{{ css_classes }}"
+     {% if css_style %}style="{{ css_style }}"{% endif %}
+     alt="{{ alt_text }}">
+{% else %}
+<div class="bg-secondary-subtle d-flex align-items-center justify-content-center text-muted {{ css_classes }}"
+     {% if css_style %}style="{{ css_style }}"{% endif %}>
+    <i class="fas fa-image fa-2x"></i>
+</div>
+{% endif %}
