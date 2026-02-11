@@ -37,3 +37,4 @@ nul
 .claude/
 CLAUDE_BUGREPORT.md
 FINAL_REPORT.md
+CLAUDE_CONTEXT_*.txt
