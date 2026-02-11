@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from portfolio.models import NavItem, Resume
+from portfolio.models import Category, NavItem, Project, Resume, SiteSetting
 
 
 class HomepageTestCase(TestCase):
@@ -214,3 +214,160 @@ class NavigationWiringTests(TestCase):
         self.assertIn("Projects", menu_html)
         self.assertIn("Resume", menu_html)
         self.assertEqual(menu_html.count("dropdown-item"), 2)
+
+
+class ProjectVisibilityTests(TestCase):
+    """Task 1: projects respect visible/order fields."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.cat = Category.objects.create(name="Data Science", slug="data-science")
+        cls.visible = Project.objects.create(
+            title="Visible Project", slug="visible-project",
+            category=cls.cat, description="A visible project.",
+            visible=True, order=1,
+        )
+        cls.hidden = Project.objects.create(
+            title="Hidden Project", slug="hidden-project",
+            category=cls.cat, description="A hidden project.",
+            visible=False, order=2,
+        )
+
+    def test_project_list_shows_visible_only(self):
+        response = self.client.get("/projects/")
+        self.assertContains(response, "Visible Project")
+        self.assertNotContains(response, "Hidden Project")
+
+    def test_project_detail_renders(self):
+        response = self.client.get("/projects/visible-project/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Visible Project")
+
+    def test_project_list_links_to_detail(self):
+        response = self.client.get("/projects/")
+        self.assertContains(response, "/projects/visible-project/")
+
+
+class AboutPageTests(TestCase):
+    """Task 2: about page renders SiteSetting personal fields."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.settings = SiteSetting.objects.create(
+            full_name="Steven Wazlavek",
+            headline="Data Analyst | Python Developer",
+            bio_long="Test bio content for about page.",
+            linkedin_url="https://linkedin.com/in/test",
+            github_url="https://github.com/test",
+        )
+
+    def test_about_shows_full_name(self):
+        response = self.client.get("/about/")
+        self.assertContains(response, "Steven Wazlavek")
+
+    def test_about_shows_headline(self):
+        response = self.client.get("/about/")
+        self.assertContains(response, "Data Analyst | Python Developer")
+
+    def test_about_shows_social_links(self):
+        response = self.client.get("/about/")
+        self.assertContains(response, "https://linkedin.com/in/test")
+        self.assertContains(response, "https://github.com/test")
+
+    def test_contact_shows_social_links(self):
+        response = self.client.get("/contact/")
+        self.assertContains(response, "https://linkedin.com/in/test")
+        self.assertContains(response, "https://github.com/test")
+
+
+class NavActiveStateTests(TestCase):
+    """Task 3: active class applied to current nav item."""
+
+    @classmethod
+    def setUpTestData(cls):
+        NavItem.objects.create(title="Projects", url="/projects/", order=1, visible=True)
+        NavItem.objects.create(title="About", url="/about/", order=2, visible=True)
+
+    def test_projects_nav_active_on_projects_page(self):
+        response = self.client.get("/projects/")
+        html = response.content.decode()
+        # The Projects nav link should have the active class
+        match = re.search(r'<a\s+class="nav-link\s+active"\s+href="/projects/"', html)
+        self.assertIsNotNone(match, "Projects nav link should have 'active' class on /projects/")
+
+    def test_about_nav_not_active_on_projects_page(self):
+        response = self.client.get("/projects/")
+        html = response.content.decode()
+        # The About nav link should NOT have the active class on /projects/
+        match = re.search(r'<a\s+class="nav-link\s+active"\s+href="/about/"', html)
+        self.assertIsNone(match, "About nav link should NOT have 'active' class on /projects/")
+
+
+class ThemeTemplateSwitchingTests(TestCase):
+    """Verify ThemeTemplateMixin selects templates based on SiteSetting.theme."""
+
+    def test_default_uses_standard_templates(self):
+        """No SiteSetting at all — light theme, standard templates."""
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "portfolio/home.html")
+
+    def test_light_theme_uses_standard_templates(self):
+        SiteSetting.objects.create(theme="light")
+        response = self.client.get("/")
+        self.assertTemplateUsed(response, "portfolio/home.html")
+
+    def test_dark_theme_uses_dark_base(self):
+        """Dark theme should extend dark/base.html which extends base.html."""
+        SiteSetting.objects.create(theme="dark")
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "portfolio/dark/base.html")
+        self.assertTemplateUsed(response, "portfolio/base.html")
+
+    def test_dark_theme_injects_base_template_context(self):
+        SiteSetting.objects.create(theme="dark")
+        response = self.client.get("/")
+        self.assertEqual(response.context["base_template"], "portfolio/dark/base.html")
+
+    def test_light_theme_no_base_template_in_context(self):
+        SiteSetting.objects.create(theme="light")
+        response = self.client.get("/")
+        self.assertNotIn("base_template", response.context)
+
+    def test_dark_theme_loads_dark_css(self):
+        SiteSetting.objects.create(theme="dark")
+        response = self.client.get("/")
+        self.assertContains(response, "theme_dark.css")
+
+    def test_motion_disabled_adds_body_class(self):
+        SiteSetting.objects.create(motion_enabled=False)
+        response = self.client.get("/")
+        self.assertContains(response, "no-motion")
+
+    def test_motion_enabled_no_class(self):
+        SiteSetting.objects.create(motion_enabled=True)
+        response = self.client.get("/")
+        self.assertNotContains(response, "no-motion")
+
+
+class MediaImgTests(TestCase):
+    """Verify {% media_img %} tag outputs correct aspect-ratio classes."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.settings = SiteSetting.objects.create(
+            full_name="Test User",
+            bio_long="Full executive bio paragraph.",
+            headshot=SimpleUploadedFile("face.jpg", b"\xff\xd8\xff\xe0", content_type="image/jpeg"),
+        )
+
+    def test_about_headshot_has_media_img_classes(self):
+        response = self.client.get("/about/")
+        self.assertContains(response, "media-img")
+        self.assertContains(response, "media-img--portrait")
+        self.assertContains(response, "media-img--cover")
+
+    def test_about_renders_bio_long(self):
+        response = self.client.get("/about/")
+        self.assertContains(response, "Full executive bio paragraph.")

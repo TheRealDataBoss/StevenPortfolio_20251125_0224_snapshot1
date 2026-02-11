@@ -32,14 +32,19 @@ class SiteSettingForm(forms.ModelForm):
 @admin.register(SiteSetting)
 class SiteSettingAdmin(admin.ModelAdmin):
     form = SiteSettingForm
-    list_display = ("hero_title", "theme", "primary_color_display")
+    list_display = ("full_name", "headline", "theme", "primary_color_display")
     fieldsets = (
+        ("Personal Info", {"fields": ("full_name", "headline", "bio_short", "bio_long", "headshot")}),
+        ("Social Links", {"fields": ("linkedin_url", "github_url")}),
         ("Hero", {"fields": ("hero_title", "hero_subtitle", "hero_image")}),
         ("About", {"fields": ("about_title", "about_body")}),
         ("Resume", {"fields": ("resume_file",)}),
+        ("Media Defaults", {
+            "fields": (("default_image_ratio", "default_image_fit"),),
+        }),
         ("Theme", {
             "fields": (
-                "theme",
+                ("theme", "motion_enabled"),
                 ("primary_color", "button_text_color"),
                 ("nav_bg_color", "nav_text_color"),
                 ("hero_start_color", "hero_end_color", "hero_text_color"),
@@ -97,15 +102,17 @@ class NavItemAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "is_featured", "created_at")
-    list_filter = ("category", "is_featured", "created_at")
-    search_fields = ("title", "summary", "description", "tags")
+    list_display = ("title", "category", "is_featured", "visible", "order", "created_at")
+    list_editable = ("visible", "order")
+    list_filter = ("category", "is_featured", "visible", "created_at")
+    search_fields = ("title", "summary", "description", "tags", "tech_stack")
     readonly_fields = ("created_at", "updated_at", "thumbnail")
     prepopulated_fields = {"slug": ("title",)}
     fieldsets = (
-        ("Basics", {"fields": ("title", "slug", "category", "summary", "description", "tags")}),
+        ("Basics", {"fields": ("title", "slug", "category", "summary", "description", "tags", "tech_stack")}),
+        ("Links", {"fields": ("repo_url", "live_url")}),
         ("Media", {"fields": ("image", "attachment", "thumbnail")}),
-        ("Meta", {"fields": ("is_featured", "created_at", "updated_at")}),
+        ("Meta", {"fields": ("is_featured", "visible", "order", "created_at", "updated_at")}),
     )
 
     def thumbnail(self, obj):

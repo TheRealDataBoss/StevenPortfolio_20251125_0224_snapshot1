@@ -1,4 +1,5 @@
-﻿{% extends "portfolio/base.html" %}
+﻿{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
 {% block title %}{{ project.title }} | Portfolio{% endblock %}
 {% block content %}
 <section class="py-5 bg-light">
@@ -14,25 +15,40 @@
                     <span class="badge bg-primary">{{ project.category.name }}</span>
                     {% if project.tags %}
                         <div class="mt-2">
-                            {% for tag in project.tags.split(',') %}
-                                <span class="badge bg-secondary-subtle text-secondary">{{ tag|trim }}</span>
+                            {% for tag in project.tags|split:"," %}
+                                <span class="badge bg-secondary-subtle text-secondary">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if project.tech_stack %}
+                        <div class="mt-2">
+                            <strong class="small text-muted">Tech:</strong>
+                            {% for tech in project.tech_stack|split:"," %}
+                                <span class="badge bg-primary-subtle text-primary">{{ tech }}</span>
                             {% endfor %}
                         </div>
                     {% endif %}
                 </div>
                 <hr>
                 <article class="text-secondary">{{ project.description|linebreaks }}</article>
-                {% if project.attachment %}
-                    <div class="mt-4">
-                        <a class="btn btn-outline-primary" href="{{ project.attachment.url }}">Download attachment</a>
-                    </div>
-                {% endif %}
+                <div class="mt-4 d-flex flex-wrap gap-2">
+                    {% if project.repo_url %}
+                        <a class="btn btn-outline-dark" href="{{ project.repo_url }}" target="_blank" rel="noopener"><i class="fab fa-github me-1"></i> Source Code</a>
+                    {% endif %}
+                    {% if project.live_url %}
+                        <a class="btn btn-outline-primary" href="{{ project.live_url }}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt me-1"></i> Live Demo</a>
+                    {% endif %}
+                    {% if project.attachment %}
+                        <a class="btn btn-outline-secondary" href="{{ project.attachment.url }}"><i class="fas fa-download me-1"></i> Download attachment</a>
+                    {% endif %}
+                </div>
             </div>
             <div class="col-lg-5">
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Project meta</h5>
                         <p class="mb-1"><strong>Category:</strong> {{ project.category.name }}</p>
+                        {% if project.tech_stack %}<p class="mb-1"><strong>Tech stack:</strong> {{ project.tech_stack }}</p>{% endif %}
                         <p class="mb-1"><strong>Created:</strong> {{ project.created_at|date:"M d, Y" }}</p>
                         <p class="mb-0"><strong>Updated:</strong> {{ project.updated_at|date:"M d, Y" }}</p>
                     </div>

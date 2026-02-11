@@ -16,6 +16,19 @@ THEME_CHOICES = (
     ("purple", "Purple"),
 )
 
+IMAGE_RATIO_CHOICES = (
+    ("square", "Square (1:1)"),
+    ("landscape", "Landscape (4:3)"),
+    ("wide", "Wide (16:9)"),
+    ("ultrawide", "Ultrawide (21:9)"),
+    ("portrait", "Portrait (4:5)"),
+)
+
+IMAGE_FIT_CHOICES = (
+    ("cover", "Cover (fill, crop edges)"),
+    ("contain", "Contain (fit inside, letterbox)"),
+)
+
 class Category(models.Model):
     name = models.CharField(max_length=120, unique=True)
     slug = models.SlugField(max_length=140, unique=True, blank=True)
@@ -46,12 +59,17 @@ class Project(models.Model):
     image = models.ImageField(upload_to="projects/images/", blank=True, null=True)
     attachment = models.FileField(upload_to="projects/files/", blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated keywords")
+    tech_stack = models.CharField(max_length=255, blank=True, help_text="Comma-separated technologies, e.g. Python, Django, PostgreSQL")
+    repo_url = models.URLField(blank=True, help_text="GitHub / source repository URL")
+    live_url = models.URLField(blank=True, help_text="Live demo / deployed URL")
     is_featured = models.BooleanField(default=False)
+    visible = models.BooleanField(default=True, help_text="Uncheck to hide from public pages")
+    order = models.PositiveIntegerField(default=0, help_text="Lower numbers appear first")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["order", "-created_at"]
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -66,6 +84,16 @@ class Project(models.Model):
 
 
 class SiteSetting(models.Model):
+    # Personal info
+    full_name = models.CharField(max_length=180, blank=True, help_text="Your display name")
+    headline = models.CharField(max_length=255, blank=True, help_text="Short tagline, e.g. 'Data Analyst | Python Developer'")
+    bio_short = models.CharField(max_length=300, blank=True, help_text="One-liner for cards and meta descriptions")
+    bio_long = models.TextField(blank=True, help_text="Full bio for the About page")
+    headshot = models.ImageField(upload_to="site/headshot/", blank=True, null=True, help_text="Professional headshot photo")
+    linkedin_url = models.URLField(blank=True, help_text="LinkedIn profile URL")
+    github_url = models.URLField(blank=True, help_text="GitHub profile URL")
+
+    # Hero section
     hero_title = models.CharField(max_length=180, default="Welcome to my portfolio")
     hero_subtitle = models.CharField(max_length=255, blank=True)
     hero_image = models.ImageField(upload_to="site/hero/", blank=True, null=True)
@@ -75,6 +103,9 @@ class SiteSetting(models.Model):
 
     # theme choice retained for quick presets
     theme = models.CharField(max_length=20, choices=THEME_CHOICES, default="light", help_text="Visual theme preset")
+    motion_enabled = models.BooleanField(default=True, help_text="Enable CSS animations and transitions")
+    default_image_ratio = models.CharField(max_length=20, choices=IMAGE_RATIO_CHOICES, default="landscape", help_text="Default aspect ratio for images site-wide")
+    default_image_fit = models.CharField(max_length=10, choices=IMAGE_FIT_CHOICES, default="cover", help_text="Default object-fit for images")
 
     # Per-color fields (hex strings). Use HTML5 color pickers in admin.
     primary_color = models.CharField(max_length=7, validators=[HEX_COLOR_VALIDATOR], default="#0d6efd", help_text="Primary brand color (hex)")

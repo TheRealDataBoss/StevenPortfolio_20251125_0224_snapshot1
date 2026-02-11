@@ -1,20 +1,50 @@
-﻿{% extends "portfolio/base.html" %}
-{% block title %}About | Portfolio{% endblock %}
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}About{% if site_settings.full_name %} - {{ site_settings.full_name }}{% endif %} | Portfolio{% endblock %}
 {% block content %}
 <section class="py-5 bg-light">
     <div class="container">
         <div class="row g-4 align-items-center">
-            <div class="col-lg-6">
-                {% if settings.hero_image %}
-                    <img src="{{ settings.hero_image.url }}" class="img-fluid rounded shadow" alt="About image">
+            <div class="col-lg-5 text-center">
+                {% if site_settings and site_settings.headshot %}
+                    {% media_img site_settings.headshot ratio="portrait" fit="cover" alt=site_settings.full_name|default:"About" shadow=True extra_class="mx-auto" %}
+                {% elif site_settings and site_settings.hero_image %}
+                    {% media_img site_settings.hero_image ratio="landscape" fit="cover" alt="About image" shadow=True %}
                 {% else %}
-                    <div class="bg-white border rounded p-5 text-center text-muted">Add a hero image in Site settings.</div>
+                    <div class="bg-white border rounded p-5 text-center text-muted">Add a headshot in Site Settings.</div>
                 {% endif %}
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-7">
                 <p class="text-uppercase text-primary fw-semibold mb-2">About</p>
-                <h1 class="h3 mb-3">{{ settings.about_title|default:"About Me" }}</h1>
-                <p class="lead text-secondary">{{ settings.about_body|default:"Use the admin Site settings to tell your story, add your elevator pitch, and explain your work." }}</p>
+                {% if site_settings and site_settings.full_name %}
+                    <h1 class="h3 mb-1">{{ site_settings.full_name }}</h1>
+                {% elif site_settings and site_settings.about_title %}
+                    <h1 class="h3 mb-1">{{ site_settings.about_title }}</h1>
+                {% else %}
+                    <h1 class="h3 mb-1">About Me</h1>
+                {% endif %}
+                {% if site_settings and site_settings.headline %}
+                    <p class="text-muted mb-3">{{ site_settings.headline }}</p>
+                {% endif %}
+                <div class="text-secondary">
+                    {% if site_settings and site_settings.bio_long %}
+                        {{ site_settings.bio_long|linebreaks }}
+                    {% elif site_settings and site_settings.about_body %}
+                        <p class="lead">{{ site_settings.about_body }}</p>
+                    {% else %}
+                        <p class="lead">Use the admin Site Settings to tell your story, add your elevator pitch, and explain your work.</p>
+                    {% endif %}
+                </div>
+                {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+                    <div class="mt-3 d-flex gap-3">
+                        {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-outline-primary"><i class="fab fa-linkedin me-1"></i> LinkedIn</a>
+                        {% endif %}
+                        {% if site_settings.github_url %}
+                            <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-outline-dark"><i class="fab fa-github me-1"></i> GitHub</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

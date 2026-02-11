@@ -6,6 +6,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.generic import TemplateView, ListView, DetailView
 
 from .forms import ContactForm
+from .mixins import ThemeTemplateMixin
 from .models import Category, Project, Resume, SiteSetting
 
 
@@ -41,26 +42,26 @@ def resume_pdf_inline(request):
     return response
 
 
-class HomeView(TemplateView):
+class HomeView(ThemeTemplateMixin, TemplateView):
     template_name = "portfolio/home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["settings"] = SiteSetting.objects.first()
-        context["featured_projects"] = Project.objects.filter(is_featured=True)[:3]
-        context["recent_projects"] = Project.objects.order_by("-created_at")[:6]
+        context["featured_projects"] = Project.objects.filter(is_featured=True, visible=True)[:3]
+        context["recent_projects"] = Project.objects.filter(visible=True).order_by("-created_at")[:6]
         context["categories"] = Category.objects.all()
         return context
 
 
-class ProjectListView(ListView):
+class ProjectListView(ThemeTemplateMixin, ListView):
     model = Project
     template_name = "portfolio/project_list.html"
     context_object_name = "projects"
     paginate_by = 9
 
     def get_queryset(self):
-        qs = Project.objects.select_related("category").all()
+        qs = Project.objects.select_related("category").filter(visible=True)
         cat = self.request.GET.get("category")
         q = self.request.GET.get("q")
         if cat:
@@ -82,7 +83,7 @@ class ProjectListView(ListView):
         return ctx
 
 
-class ProjectDetailView(DetailView):
+class ProjectDetailView(ThemeTemplateMixin, DetailView):
     model = Project
     slug_field = "slug"
     template_name = "portfolio/project_detail.html"
@@ -91,14 +92,14 @@ class ProjectDetailView(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["related"] = (
-            Project.objects.filter(category=self.object.category)
+            Project.objects.filter(category=self.object.category, visible=True)
             .exclude(pk=self.object.pk)
             .order_by("-created_at")[:3]
         )
         return ctx
 
 
-class AboutView(TemplateView):
+class AboutView(ThemeTemplateMixin, TemplateView):
     template_name = "portfolio/about.html"
 
     def get_context_data(self, **kwargs):
@@ -107,7 +108,17 @@ class AboutView(TemplateView):
         return ctx
 
 
-class ResumeView(TemplateView):
+class ResumeViewerView(TemplateView):
+    """Standalone PDF.js viewer page, embedded via iframe on /resume/."""
+    template_name = "portfolio/resume_viewer.html"
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        return xframe_options_sameorigin(view)
+
+
+class ResumeView(ThemeTemplateMixin, TemplateView):
     template_name = "portfolio/resume.html"
 
     def get_context_data(self, **kwargs):
@@ -144,11 +155,12 @@ class ResumeView(TemplateView):
         return ctx
 
 
-class ContactView(TemplateView):
+class ContactView(ThemeTemplateMixin, TemplateView):
     template_name = "portfolio/contact.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {"form": ContactForm()})
+        ctx = self.get_context_data(form=ContactForm())
+        return render(request, self.get_template_names(), ctx)
 
     def post(self, request, *args, **kwargs):
         form = ContactForm(request.POST)
@@ -157,4 +169,5 @@ class ContactView(TemplateView):
             messages.success(request, "Thanks for reaching out! I'll respond soon.")
             return redirect("portfolio:contact")
         messages.error(request, "Please correct the errors below.")
-        return render(request, self.template_name, {"form": form})
+        ctx = self.get_context_data(form=form)
+        return render(request, self.get_template_names(), ctx)

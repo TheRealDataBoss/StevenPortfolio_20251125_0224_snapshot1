@@ -1,4 +1,4 @@
-{% extends "portfolio/base.html" %}
+﻿{% extends base_template|default:"portfolio/base.html" %}
 {% block title %}Resume - Steven Wazlavek | Data Analyst{% endblock %}
 
 {% block extra_head %}
@@ -77,22 +77,10 @@
             </div>
         {% endif %}
 
-        {# Inline PDF preview #}
+        {# Inline PDF preview via PDF.js viewer #}
         {% if has_pdf %}
-            <div class="d-flex gap-2 mb-3">
-                <a class="btn btn-outline-secondary btn-sm" href="{% url 'portfolio:resume_pdf_inline' %}" target="_blank" rel="noopener">
-                    <i class="fas fa-external-link-alt me-1"></i> Open PDF in new tab
-                </a>
-                <button class="btn btn-outline-secondary btn-sm" id="printResumeBtn" type="button">
-                    <i class="fas fa-print me-1"></i> Print
-                </button>
-            </div>
             <div class="mb-4">
-                <iframe id="resumePdfFrame" src="{% url 'portfolio:resume_pdf_inline' %}#toolbar=1&navpanes=0&view=FitH" width="100%" height="900" style="border:1px solid #dee2e6; border-radius:.375rem;"></iframe>
-                <p class="text-muted small mt-2">
-                    <i class="fas fa-info-circle me-1"></i>
-                    Page navigation is available via your browser's built-in PDF viewer toolbar.
-                </p>
+                <iframe id="resumePdfFrame" src="{% url 'portfolio:resume_viewer' %}" width="100%" height="900" style="border:1px solid #dee2e6; border-radius:.375rem;"></iframe>
             </div>
         {% elif primary_resume %}
             <div class="alert alert-secondary">
@@ -121,21 +109,4 @@
 </section>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-(function() {
-    var btn = document.getElementById('printResumeBtn');
-    if (!btn) return;
-    btn.addEventListener('click', function() {
-        var frame = document.getElementById('resumePdfFrame');
-        if (!frame) return;
-        try {
-            frame.contentWindow.focus();
-            frame.contentWindow.print();
-        } catch (e) {
-            window.open(frame.src, '_blank');
-        }
-    });
-})();
-</script>
-{% endblock %}
+

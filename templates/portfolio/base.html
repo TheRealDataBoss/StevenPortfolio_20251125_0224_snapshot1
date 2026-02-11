@@ -47,6 +47,24 @@
       background: linear-gradient(135deg, var(--hero-start), var(--hero-end));
     }
     .card-img-top { object-fit: cover; height: 200px; }
+
+    /* Media component: aspect-ratio image system */
+    :root {
+      --media-radius: 0.375rem;
+      --media-shadow: 0 2px 8px rgba(0,0,0,.12);
+      --media-spacing: 1rem;
+    }
+    .media-img { width: 100%; height: auto; display: block; }
+    .media-img--cover  { object-fit: cover; }
+    .media-img--contain { object-fit: contain; }
+    .media-img--square    { aspect-ratio: 1 / 1; }
+    .media-img--landscape { aspect-ratio: 4 / 3; }
+    .media-img--wide      { aspect-ratio: 16 / 9; }
+    .media-img--ultrawide { aspect-ratio: 21 / 9; }
+    .media-img--portrait  { aspect-ratio: 4 / 5; }
+    .media-img--rounded { border-radius: var(--media-radius); }
+    .media-img--shadow  { box-shadow: var(--media-shadow); }
+
     .footer { background: var(--footer-bg); color: var(--footer-text); }
     .btn-primary {
       background: var(--primary);
@@ -54,10 +72,11 @@
       color: var(--button-text);
     }
   </style>
+  {% block theme_css %}{% endblock %}
 
   {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% if motion_enabled == False %}no-motion{% endif %}">
   {# navigation: use dynamic nav_items if present, otherwise fallback static links #}
   {% if nav_items %}
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
