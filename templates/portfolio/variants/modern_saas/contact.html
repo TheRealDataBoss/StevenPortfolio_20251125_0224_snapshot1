@@ -1,0 +1,72 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="modern_saas"></div>
+
+{# ── COMPACT HERO ── #}
+<section class="hero hero--compact">
+    <div class="container">
+        <div class="ms-eyebrow">Say Hello</div>
+        <h1 class="mb-2">Get in Touch</h1>
+        <p class="ms-hero-subtitle mb-0">Send a note and I'll respond promptly.</p>
+    </div>
+</section>
+
+{# ── CONTACT FORM ── #}
+<section class="ms-section ms-section--white">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-6">
+                {# Social links above form #}
+                {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+                    <div class="d-flex flex-wrap gap-3 mb-4 justify-content-center">
+                        {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-primary btn-lg rounded-pill px-4">
+                                <i class="fab fa-linkedin me-2"></i> LinkedIn
+                            </a>
+                        {% endif %}
+                        {% if site_settings.github_url %}
+                            <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-dark btn-lg rounded-pill px-4">
+                                <i class="fab fa-github me-2"></i> GitHub
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# Form card #}
+                <div class="card ms-card-static ms-contact-card ms-card-accent border-0 rounded-4">
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                {{ form.name }}
+                                {{ form.name.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Subject</label>
+                                {{ form.subject }}
+                                {{ form.subject.errors }}
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Message</label>
+                                {{ form.message }}
+                                {{ form.message.errors }}
+                            </div>
+                            <button class="btn btn-primary btn-lg w-100" type="submit" style="border-radius:var(--ms-radius-pill);">
+                                <i class="fas fa-paper-plane me-2"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

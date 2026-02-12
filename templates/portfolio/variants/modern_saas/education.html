@@ -1,0 +1,127 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Education | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Education",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for entry in all_education %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ entry.title|escapejs }}",
+        "description": "{{ entry.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ entry.institution|escapejs }}"
+        }{% if entry.url %},
+        "url": "{{ entry.url|escapejs }}"{% endif %}{% if entry.start_date %},
+        "dateCreated": "{{ entry.start_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="modern_saas"></div>
+
+{# ── COMPACT HERO ── #}
+<section class="hero hero--compact">
+    <div class="container">
+        <div class="ms-eyebrow">Background</div>
+        <h1 class="mb-2">Education</h1>
+        <p class="ms-hero-subtitle mb-0">Academic credentials and continuing education.</p>
+    </div>
+</section>
+
+{# ── EDUCATION ENTRIES ── #}
+<section class="ms-section ms-section--white">
+    <div class="container">
+        {% for group_name, group_cat, entries in education_groups %}
+            <h4 class="ms-group-heading">{{ group_name }}</h4>
+            {% for entry in entries %}
+                <div class="card ms-card-static ms-entry-card border-0 rounded-4 mb-4">
+                    <div class="card-body" style="padding-top:1.75rem;">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-2">
+                            <div>
+                                <h5 class="card-title fw-bold mb-1">{{ entry.title }}</h5>
+                                <p class="text-muted mb-0">{{ entry.institution }}{% if entry.location %} &middot; {{ entry.location }}{% endif %}</p>
+                            </div>
+                            <div class="ms-date-text mt-1 mt-md-0">
+                                {% if entry.start_date %}{{ entry.start_date|date:"M Y" }}{% endif %}{% if entry.start_date and entry.end_date %} &ndash; {% endif %}{% if entry.end_date %}{{ entry.end_date|date:"M Y" }}{% endif %}
+                            </div>
+                        </div>
+                        {% if entry.description %}
+                            <div class="text-secondary mt-2 mb-2">{{ entry.description|linebreaks }}</div>
+                        {% endif %}
+                        {% if entry.image %}
+                            <div class="mt-2 mb-2">
+                                <img src="{{ entry.image.url }}" alt="{{ entry.title }}" class="img-fluid rounded-4" style="max-height:240px;box-shadow:var(--ms-shadow-sm);">
+                            </div>
+                        {% endif %}
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            {% if entry.url %}
+                                <a href="{{ entry.url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm rounded-pill">
+                                    <i class="fas fa-external-link-alt me-1"></i> Website
+                                </a>
+                            {% endif %}
+                            {% if entry.attachment %}
+                                <a href="{% url 'portfolio:education_download' entry.pk %}" class="btn btn-outline-secondary btn-sm rounded-pill">
+                                    <i class="fas fa-download me-1"></i> Download
+                                </a>
+                                {% if entry.preview_kind == "pdf" %}
+                                    <a href="{% url 'portfolio:education_preview' entry.pk %}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm rounded-pill">
+                                        <i class="fas fa-file-pdf me-1"></i> Preview PDF
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        {% if entry.preview_kind == "pdf" %}
+                            <div class="mt-3 ratio ratio-16x9 border rounded-4 overflow-hidden edu-pdf-preview" data-entry-id="{{ entry.pk }}">
+                                <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="PDF preview: {{ entry.title }}" allowfullscreen></iframe>
+                            </div>
+                        {% elif entry.preview_kind == "image" %}
+                            <div class="mt-3 text-center">
+                                <img src="{% url 'portfolio:education_inline' entry.pk %}" alt="Attachment: {{ entry.title }}" class="img-fluid rounded-4" style="max-height:400px;box-shadow:var(--ms-shadow-sm);">
+                            </div>
+                        {% elif entry.preview_kind == "text" %}
+                            <div class="mt-3 ratio ratio-16x9 border rounded-4 overflow-hidden">
+                                <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="Text preview: {{ entry.title }}" style="background:var(--ms-surface,#f8f9fa);"></iframe>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% empty %}
+            <div class="text-center py-5">
+                <i class="fas fa-graduation-cap fa-2x text-muted mb-3 d-block"></i>
+                <p class="text-muted mb-0">No education entries yet. Add them via the admin.</p>
+            </div>
+        {% endfor %}
+
+        {% if is_paginated %}
+            <nav aria-label="Education pagination" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

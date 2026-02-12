@@ -1,0 +1,134 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}About{% if site_settings and site_settings.full_name %} - {{ site_settings.full_name }}{% endif %} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-stat-card { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-stat-card .stat-value { font-size: 1rem; font-weight: 700; line-height: 1.2; }
+    .cd-stat-card .stat-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: #6c757d; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">About</li>
+                    </ol>
+                </nav>
+                <span class="cd-dot cd-dot--green me-1"></span><span class="text-muted" style="font-size:.8rem;">Profile</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-3">
+            {# Profile card #}
+            <div class="col-md-6 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-id-badge me-1"></i> Profile Card</div>
+                    <div class="widget-body text-center">
+                        {% if site_settings and site_settings.headshot %}
+                            {% responsive_image image=site_settings.headshot variant="square" shape="circle" alt=site_settings.full_name|default:"Headshot" extra_class="mx-auto mb-3" %}
+                        {% elif site_settings and site_settings.hero_image %}
+                            {% media_img site_settings.hero_image ratio="square" fit="cover" alt="About" shadow=True %}
+                        {% else %}
+                            <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:100px;height:100px;">
+                                <i class="fas fa-user fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        {% if site_settings and site_settings.full_name %}
+                            <h5 class="fw-bold mb-1">{{ site_settings.full_name }}</h5>
+                        {% elif site_settings and site_settings.about_title %}
+                            <h5 class="fw-bold mb-1">{{ site_settings.about_title }}</h5>
+                        {% else %}
+                            <h5 class="fw-bold mb-1">About Me</h5>
+                        {% endif %}
+                        {% if site_settings and site_settings.headline %}
+                            <p class="text-muted cd-compact mb-0">{{ site_settings.headline }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Social / connect card #}
+            <div class="col-md-6 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-share-alt me-1"></i> Connect</div>
+                    <div class="widget-body cd-compact">
+                        {% if site_settings and site_settings.linkedin_url %}
+                        <a href="{{ site_settings.linkedin_url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-primary me-2"><i class="fab fa-linkedin-in"></i></span>
+                            LinkedIn
+                            <i class="fas fa-external-link-alt ms-auto text-muted" style="font-size:.7rem;"></i>
+                        </a>
+                        {% endif %}
+                        {% if site_settings and site_settings.github_url %}
+                        <a href="{{ site_settings.github_url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-dark me-2"><i class="fab fa-github"></i></span>
+                            GitHub
+                            <i class="fas fa-external-link-alt ms-auto text-muted" style="font-size:.7rem;"></i>
+                        </a>
+                        {% endif %}
+                        {% if not site_settings or not site_settings.linkedin_url and not site_settings.github_url %}
+                        <p class="text-muted mb-0" style="font-size:.8rem;">No social links configured. Add them in Site Settings.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Quick stats card #}
+            <div class="col-md-12 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-chart-bar me-1"></i> At a Glance</div>
+                    <div class="widget-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="cd-stat-card p-2 text-center">
+                                    <div class="stat-label">Status</div>
+                                    <div class="stat-value"><span class="cd-dot cd-dot--green me-1"></span> Active</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="cd-stat-card p-2 text-center">
+                                    <div class="stat-label">Profile</div>
+                                    <div class="stat-value" style="font-size:.85rem;">{% if site_settings and site_settings.headshot %}Complete{% else %}Partial{% endif %}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Bio section - full width card #}
+        <div class="row g-3 mt-1">
+            <div class="col-12">
+                <div class="cd-widget shadow-sm">
+                    <div class="widget-header"><i class="fas fa-align-left me-1"></i> Biography</div>
+                    <div class="widget-body cd-compact text-secondary">
+                        {% if site_settings and site_settings.bio_long %}
+                            {{ site_settings.bio_long|linebreaks }}
+                        {% elif site_settings and site_settings.about_body %}
+                            <p>{{ site_settings.about_body }}</p>
+                        {% else %}
+                            <p class="text-muted">Use the admin Site Settings to tell your story, add your elevator pitch, and explain your work.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

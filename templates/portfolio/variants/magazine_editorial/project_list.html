@@ -1,0 +1,93 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Projects | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="magazine_editorial"></div>
+
+<section style="background: #faf8f5; border-bottom: 3px double #2c2c2c; padding: 3rem 0;">
+    <div class="container">
+        <p class="text-uppercase mb-1" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; color: #999;">Portfolio</p>
+        <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem;">Projects</h1>
+        <p style="font-family: Georgia, serif; font-size: 1rem; color: #666; font-style: italic;">A curated collection of selected work.</p>
+    </div>
+</section>
+
+<section style="background: #fff; padding: 3rem 0;">
+    <div class="container">
+        <!-- Search & filter bar -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-3 gap-3">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <a class="btn btn-sm {% if not current_category %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}" style="border-radius: 0; font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem;">All</a>
+                {% for category in categories %}
+                <a class="btn btn-sm {% if current_category == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}" style="border-radius: 0; font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem;">{% if category.image %}<img src="{{ category.image.url }}" alt="" style="height:16px;width:16px;object-fit:cover;vertical-align:text-bottom;margin-right:4px;">{% endif %}{{ category.name }}</a>
+                {% endfor %}
+            </div>
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="q" value="{{ search_term }}" class="form-control form-control-sm" placeholder="Search..." style="border-radius: 0; font-family: Georgia, serif; border-color: #ccc;">
+                {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                <button class="btn btn-primary btn-sm" type="submit" style="border-radius: 0; font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem;">Search</button>
+            </form>
+        </div>
+        <hr style="border: none; border-top: 3px double #2c2c2c; margin-bottom: 2.5rem;">
+
+        <!-- Project grid -->
+        <div class="row g-4">
+            {% for project in projects %}
+            <div class="col-md-4">
+                <div class="card h-100" style="border: none; border-top: 3px solid #1a1a1a; border-radius: 0; box-shadow: none;">
+                    {% if project.image %}
+                    <div style="overflow: hidden;">
+                        {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+                    </div>
+                    {% endif %}
+                    <div class="card-body px-0 pt-3 d-flex flex-column">
+                        <p class="text-uppercase mb-1" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; color: #999;">{{ project.category.name }}</p>
+                        <h3 style="font-family: Georgia, serif; font-size: 1.15rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.4rem;">{{ project.title }}</h3>
+                        <p style="font-family: Georgia, serif; font-size: 0.85rem; color: #666; line-height: 1.6;">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                        {% if project.tech_stack %}
+                        <div class="d-flex flex-wrap gap-1 mb-2">
+                            {% for tech in project.tech_stack|split:"," %}
+                            <span class="badge" style="background: #f0ebe3; color: #555; border-radius: 0; font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.6rem; letter-spacing: 0.08em;">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="mt-auto d-flex justify-content-between align-items-center pt-2" style="border-top: 1px solid #eee;">
+                            <a href="{{ project.get_absolute_url }}" style="font-family: Georgia, serif; font-size: 0.85rem; color: #1a1a1a; text-decoration: underline;">Read more</a>
+                            {% if project.is_featured %}<span style="font-family: Georgia, serif; font-size: 0.75rem; font-style: italic; color: #999;">Featured</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p style="font-family: Georgia, serif; font-style: italic; color: #999;">No projects yet. Add some in the admin.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <nav aria-label="Project pages" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}" style="border-radius: 0; font-family: Georgia, serif;">&laquo; Prev</a></li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link" style="border-radius: 0; font-family: Georgia, serif;">&laquo; Prev</span></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                {% if num == page_obj.number %}
+                <li class="page-item active"><span class="page-link" style="border-radius: 0; font-family: Georgia, serif;">{{ num }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}" style="border-radius: 0; font-family: Georgia, serif;">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}" style="border-radius: 0; font-family: Georgia, serif;">Next &raquo;</a></li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link" style="border-radius: 0; font-family: Georgia, serif;">Next &raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

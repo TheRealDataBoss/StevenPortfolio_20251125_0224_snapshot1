@@ -1,0 +1,88 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Projects | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="glass_modern"></div>
+
+<!-- Hero -->
+<section class="hero py-4">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-1">Projects</h1>
+        <p class="lead text-white-75 mb-0">Browse the collection, filter by category, or search.</p>
+    </div>
+</section>
+
+<!-- Project listing -->
+<section class="py-5">
+    <div class="container">
+        <!-- Filters and search -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-sm {% if not current_category %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}">All</a>
+                {% for category in categories %}
+                    <a class="btn btn-sm {% if current_category == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}">{% if category.image %}<img src="{{ category.image.url }}" alt="" class="category-icon me-1" style="height:18px;width:18px;border-radius:50%;object-fit:cover;vertical-align:text-bottom;">{% endif %}{{ category.name }}</a>
+                {% endfor %}
+            </div>
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="q" value="{{ search_term }}" class="form-control" placeholder="Search projects...">
+                {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                <button class="btn btn-primary px-4" type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Project cards -->
+        <div class="row g-4">
+            {% for project in projects %}
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                        {% if project.image %}{% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}{% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <span class="badge bg-secondary-subtle text-secondary mb-2">{{ project.category.name }}</span>
+                            <h5 class="card-title fw-bold">{{ project.title }}</h5>
+                            <p class="card-text text-muted">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                            {% if project.tech_stack %}
+                                <div class="mb-2">
+                                    {% for tech in project.tech_stack|split:"," %}
+                                        <span class="badge bg-primary-subtle text-primary small">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <a href="{{ project.get_absolute_url }}" class="stretched-link fw-semibold">View</a>
+                                {% if project.is_featured %}<span class="badge bg-success">Featured</span>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center text-muted">No projects yet. Add some in the admin.</div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Project pages" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">&laquo; Prev</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                    {% if num == page_obj.number %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">Next &raquo;</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

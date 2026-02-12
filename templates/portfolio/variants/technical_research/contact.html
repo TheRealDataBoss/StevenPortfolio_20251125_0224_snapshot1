@@ -1,0 +1,89 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; }
+    .tr-paper .tr-subtitle { text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 2rem; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper .tr-footnote a { color: #555; text-decoration: underline; }
+    .tr-paper table.tr-meta-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1rem; }
+    .tr-paper table.tr-meta-table th { text-align: left; font-weight: 600; width: 28%; padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; color: #555; font-size: 0.82rem; vertical-align: top; }
+    .tr-paper table.tr-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+    .tr-paper table.tr-meta-table tr:last-child th, .tr-paper table.tr-meta-table tr:last-child td { border-bottom: none; }
+    .tr-paper .tr-form label { font-size: 0.88rem; color: #444; margin-bottom: 0.2rem; }
+    .tr-paper .tr-form input, .tr-paper .tr-form textarea { font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.9rem; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="tr-paper">
+            <h1 class="tr-title">5. Correspondence</h1>
+            <p class="tr-subtitle">For inquiries, collaboration proposals, or general correspondence.</p>
+
+            {# ── 5.1 Contact Channels ── #}
+            {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+            <h2 class="tr-section-heading">5.1 External Channels</h2>
+            <table class="tr-meta-table">
+                {% if site_settings.linkedin_url %}
+                <tr>
+                    <th>LinkedIn</th>
+                    <td><a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" style="color:#555; text-decoration:underline;">{{ site_settings.linkedin_url }}</a></td>
+                </tr>
+                {% endif %}
+                {% if site_settings.github_url %}
+                <tr>
+                    <th>GitHub</th>
+                    <td><a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" style="color:#555; text-decoration:underline;">{{ site_settings.github_url }}</a></td>
+                </tr>
+                {% endif %}
+            </table>
+            {% endif %}
+
+            {# ── 5.2 Contact Form ── #}
+            <h2 class="tr-section-heading">{% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}5.2{% else %}5.1{% endif %} Direct Message</h2>
+            <p style="font-size:0.9rem; margin-bottom:1rem;">Complete the fields below to send a message. All fields are required unless noted otherwise.</p>
+
+            <div class="tr-form">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        {{ form.name }}{{ form.name.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        {{ form.email }}{{ form.email.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        {{ form.subject }}{{ form.subject.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message Body</label>
+                        {{ form.message }}{{ form.message.errors }}
+                    </div>
+                    <button class="btn btn-outline-dark btn-sm" type="submit" style="font-family:Georgia,serif; font-size:0.88rem;">Submit Message</button>
+                </form>
+            </div>
+
+            {# ── Footnote references ── #}
+            {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+            <div class="mt-4 pt-3" style="border-top: 1px solid #ddd;">
+                <p class="tr-footnote mb-1"><strong>References</strong></p>
+                {% if site_settings.linkedin_url %}
+                    <p class="tr-footnote mb-0">[1] LinkedIn profile: <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener">{{ site_settings.linkedin_url }}</a></p>
+                {% endif %}
+                {% if site_settings.github_url %}
+                    <p class="tr-footnote mb-0">[{% if site_settings.linkedin_url %}2{% else %}1{% endif %}] GitHub profile: <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener">{{ site_settings.github_url }}</a></p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

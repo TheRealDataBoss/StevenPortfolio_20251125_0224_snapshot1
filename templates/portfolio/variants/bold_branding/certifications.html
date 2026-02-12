@@ -1,0 +1,136 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+
+{% block title %}Certifications{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Certifications",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for cert in all_certifications %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ cert.name|escapejs }}",
+        "description": "{{ cert.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ cert.issuer|escapejs }}"
+        }{% if cert.credential_url %},
+        "url": "{{ cert.credential_url|escapejs }}"{% endif %}{% if cert.credential_id %},
+        "credentialCategory": "{{ cert.credential_id|escapejs }}"{% endif %}{% if cert.issue_date %},
+        "dateCreated": "{{ cert.issue_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO BANNER
+     ============================================================ -->
+<section class="bb-hero bb-hero--banner">
+  <div class="container position-relative">
+    <span class="bb-eyebrow" style="letter-spacing: 0.35em; font-size: 0.78rem;">Credentials</span>
+    <h1 class="display-2 text-uppercase mb-3">Certifications</h1>
+    <span class="bb-accent-bar--lg"></span>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     CERTIFICATION GROUPS
+     ============================================================ -->
+<section class="bb-section bb-section--surface">
+  <div class="container">
+    {% for group_name, group_cat, certs in cert_groups %}
+    <div class="mb-5">
+      <!-- Group Header -->
+      <div class="bb-group-header">
+        <div class="bb-group-header__bar"></div>
+        <h2 class="h3 text-uppercase mb-0" style="letter-spacing: 0.1em;">{{ group_name }}</h2>
+      </div>
+
+      <div class="row g-4">
+        {% for cert in certs %}
+        <div class="col-md-6 col-lg-4">
+          <div class="bb-card {% if not cert.credential_url %}bb-card--dark-border{% endif %} h-100">
+            {% if cert.image %}
+            <div class="bb-card__img" style="background: var(--bb-surface); padding: 1rem; text-align: center;">
+              {% responsive_image image=cert.image variant="card" shape="rect" alt=cert.name %}
+            </div>
+            {% endif %}
+            <div class="bb-card__body">
+              <span class="bb-card__cat">{{ cert.issuer }}</span>
+              <h3 class="bb-card__title" style="font-size: 1.05rem;">{{ cert.name }}</h3>
+
+              {% if cert.credential_id %}
+              <span class="d-block text-muted small mb-2" style="font-family: monospace; font-size: 0.78rem;">ID: {{ cert.credential_id }}</span>
+              {% endif %}
+
+              <div class="d-flex flex-wrap gap-2 mb-2">
+                {% if cert.issue_date %}
+                <span class="bb-credential__meta">Issued {{ cert.issue_date|date:"M Y" }}</span>
+                {% endif %}
+                {% if cert.expires_date %}
+                <span class="bb-credential__meta" style="background: #374151;">Expires {{ cert.expires_date|date:"M Y" }}</span>
+                {% endif %}
+              </div>
+
+              {% if cert.description %}
+              <p class="bb-card__desc mb-3">{{ cert.description|truncatewords:25 }}</p>
+              {% endif %}
+
+              <div class="d-flex flex-wrap gap-2 mt-auto">
+                {% if cert.credential_url %}
+                <a href="{{ cert.credential_url }}" class="btn btn-sm btn-dark" target="_blank" rel="noopener">Verify</a>
+                {% endif %}
+                {% if cert.attachment %}
+                  {% if cert.preview_kind %}
+                  <a href="{% url 'portfolio:certification_preview' cert.pk %}" class="btn btn-sm btn-outline-dark" target="_blank">Preview</a>
+                  <a href="{% url 'portfolio:certification_inline' cert.pk %}" class="btn btn-sm btn-outline-dark" target="_blank">View</a>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a>
+        </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

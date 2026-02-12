@@ -1,0 +1,80 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}About{% if site_settings and site_settings.full_name %} - {{ site_settings.full_name }}{% endif %} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="magazine_editorial"></div>
+
+<!-- About header -->
+<section style="background: #faf8f5; border-bottom: 3px double #2c2c2c; padding: 3.5rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto text-center">
+            <p class="text-uppercase mb-2" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; color: #999;">Profile</p>
+            {% if site_settings and site_settings.full_name %}
+            <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem;">{{ site_settings.full_name }}</h1>
+            {% elif site_settings and site_settings.about_title %}
+            <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem;">{{ site_settings.about_title }}</h1>
+            {% else %}
+            <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem;">About Me</h1>
+            {% endif %}
+            {% if site_settings and site_settings.headline %}
+            <p style="font-family: Georgia, serif; font-size: 1.1rem; font-style: italic; color: #666;">{{ site_settings.headline }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- About body -->
+<section style="background: #fff; padding: 3.5rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            <!-- Headshot / hero image -->
+            {% if site_settings and site_settings.headshot %}
+            <div class="text-center mb-4">
+                <div style="display: inline-block; border: 1px solid #ddd; padding: 5px; background: #fff;">
+                    {% responsive_image image=site_settings.headshot variant="square" shape="circle" alt=site_settings.full_name|default:"Headshot" extra_class="mx-auto" %}
+                </div>
+                <style>.media-img--square{max-width:160px;margin:0 auto;}</style>
+            </div>
+            {% elif site_settings and site_settings.hero_image %}
+            <div class="text-center mb-4">
+                <div style="display: inline-block; border: 1px solid #ddd; padding: 5px; background: #fff;">
+                    {% media_img site_settings.hero_image ratio="landscape" fit="cover" alt="About image" shadow=False %}
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center mb-4">
+                <div style="display: inline-block; border: 1px solid #ddd; padding: 2.5rem 3rem; background: #fff; color: #999;">
+                    <i class="fa-solid fa-user fa-2x"></i>
+                </div>
+            </div>
+            {% endif %}
+
+            <hr style="border: none; border-top: 3px double #2c2c2c; margin-bottom: 2rem;">
+
+            <!-- Bio content -->
+            <div style="font-family: Georgia, serif; font-size: 1.05rem; color: #333; line-height: 1.8;">
+                {% if site_settings and site_settings.bio_long %}
+                {{ site_settings.bio_long|linebreaks }}
+                {% elif site_settings and site_settings.about_body %}
+                <p>{{ site_settings.about_body }}</p>
+                {% else %}
+                <p style="font-style: italic; color: #999;">Use the admin Site Settings to tell your story, add your elevator pitch, and explain your work.</p>
+                {% endif %}
+            </div>
+
+            <!-- Social links -->
+            {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+            <hr style="border: none; border-top: 3px double #2c2c2c; margin: 2.5rem 0 1.5rem;">
+            <div class="text-center">
+                {% if site_settings.linkedin_url %}
+                <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="me-4" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.15em; color: #555; text-decoration: none;"><i class="fab fa-linkedin me-1"></i> LinkedIn</a>
+                {% endif %}
+                {% if site_settings.github_url %}
+                <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.15em; color: #555; text-decoration: none;"><i class="fab fa-github me-1"></i> GitHub</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

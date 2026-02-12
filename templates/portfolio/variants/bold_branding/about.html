@@ -1,0 +1,103 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO: Dark with display heading, headshot, accent stripe
+     ============================================================ -->
+<section class="bb-hero bb-hero--half">
+  {% if site_settings and site_settings.hero_image %}
+  <div class="bb-hero__overlay" style="background-image: url('{{ site_settings.hero_image.url }}');"></div>
+  {% endif %}
+  <div class="bb-hero__gradient"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="bb-eyebrow" style="letter-spacing: 0.35em; font-size: 0.78rem;">
+          {% if site_settings and site_settings.about_title %}{{ site_settings.about_title }}{% else %}About{% endif %}
+        </span>
+        <h1 class="display-1 mb-3">
+          {% if site_settings and site_settings.full_name %}{{ site_settings.full_name }}{% else %}About Me{% endif %}
+        </h1>
+        {% if site_settings and site_settings.headline %}
+        <p class="lead fs-3 mb-0" style="opacity: 0.85;">{{ site_settings.headline }}</p>
+        {% endif %}
+      </div>
+      {% if site_settings and site_settings.headshot %}
+      <div class="col-lg-5 text-center">
+        <div class="bb-headshot-frame">
+          {% responsive_image image=site_settings.headshot variant="square" shape="rect" alt=site_settings.full_name %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     BIO SECTION
+     ============================================================ -->
+{% if site_settings and site_settings.bio_long %}
+<section class="bb-section" style="background: var(--bb-bg);">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="bb-section-header">
+          <div class="bb-section-header__bar"></div>
+          <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">Background</h2>
+        </div>
+        <div class="fs-5 lh-lg">{{ site_settings.bio_long|linebreaks }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============================================================
+     ABOUT BODY (extended content with accent border)
+     ============================================================ -->
+{% if site_settings and site_settings.about_body %}
+<section class="bb-section bb-section--surface">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="fs-5 lh-lg" style="border-left: 5px solid var(--bb-accent); padding-left: 2rem;">
+          {{ site_settings.about_body|linebreaks }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============================================================
+     SOCIAL / CONNECT -- Dark band
+     ============================================================ -->
+{% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+<section class="bb-section bb-section--dark">
+  <div class="container">
+    <div class="bb-section-header" style="margin-bottom: 2rem;">
+      <div class="bb-section-header__bar"></div>
+      <h2 class="display-4 text-uppercase mb-0" style="letter-spacing: 0.03em;">Connect</h2>
+    </div>
+    <div class="d-flex flex-wrap gap-3">
+      {% if site_settings and site_settings.linkedin_url %}
+      <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-warning btn-lg px-5 py-3">
+        <i class="fab fa-linkedin me-2"></i>LinkedIn
+      </a>
+      {% endif %}
+      {% if site_settings and site_settings.github_url %}
+      <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg px-5 py-3">
+        <i class="fab fa-github me-2"></i>GitHub
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

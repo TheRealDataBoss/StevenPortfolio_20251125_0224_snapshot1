@@ -1,0 +1,140 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Resume - Steven Wazlavek | Data Analyst{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="Steven Wazlavek - Data Analyst transitioning to Data Scientist. Resume with experience in Python, SQL, data visualization, machine learning. Kennesaw State University, MIT IDSS, Harvard Business School Online, Wharton.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Wazlavek",
+  "jobTitle": "Data Analyst (transitioning to Data Scientist)",
+  "url": "/",
+  "sameAs": [
+    "https://github.com/TheRealDataBoss",
+    "https://www.linkedin.com/in/databoss/"
+  ],
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "Kennesaw State University"},
+    {"@type": "CollegeOrUniversity", "name": "University of Alabama Manderson Graduate School of Business"},
+    {"@type": "CollegeOrUniversity", "name": "MIT Institute for Data, Systems, and Society (IDSS)"},
+    {"@type": "CollegeOrUniversity", "name": "Harvard Business School Online"},
+    {"@type": "CollegeOrUniversity", "name": "The Wharton School, University of Pennsylvania"}
+  ]{% if has_pdf %},
+  "mainEntityOfPage": {
+    "@type": "MediaObject",
+    "contentUrl": "{% url 'portfolio:resume_pdf_inline' %}",
+    "encodingFormat": "application/pdf",
+    "name": "Steven Wazlavek Resume"
+  }{% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; }
+    .tr-paper .tr-author { text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper .tr-footnote a { color: #555; text-decoration: underline; }
+    .tr-paper table.tr-meta-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1rem; }
+    .tr-paper table.tr-meta-table th { text-align: left; font-weight: 600; width: 30%; padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; color: #555; font-size: 0.82rem; vertical-align: top; }
+    .tr-paper table.tr-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+    .tr-paper table.tr-meta-table tr:last-child th, .tr-paper table.tr-meta-table tr:last-child td { border-bottom: none; }
+    .tr-paper .tr-dl-links { font-size: 0.85rem; text-align: center; margin-bottom: 1.5rem; }
+    .tr-paper .tr-dl-links a { color: #555; text-decoration: underline; margin: 0 0.75rem; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="tr-paper">
+            {# ── Paper Header ── #}
+            <h1 class="tr-title">Curriculum Vitae</h1>
+            <p class="tr-author">Steven Wazlavek</p>
+
+            {# ── Download Links ── #}
+            <div class="tr-dl-links">
+                {% if download_primary_url %}
+                    <a href="{{ download_primary_url }}" target="_blank" rel="noopener"><i class="fas fa-download me-1"></i>Download Resume</a>
+                {% elif site_settings.resume_file %}
+                    <a href="{{ site_settings.resume_file.url }}" target="_blank" rel="noopener"><i class="fas fa-download me-1"></i>Download Resume</a>
+                {% endif %}
+                {% if download_pdf_url and download_pdf_url != download_primary_url %}
+                    <a href="{{ download_pdf_url }}" target="_blank" rel="noopener"><i class="fas fa-file-pdf me-1"></i>Download PDF</a>
+                {% endif %}
+            </div>
+
+            {# ── 1. Document Information ── #}
+            <h2 class="tr-section-heading">1. Document Information</h2>
+            {% if primary_resume %}
+                <table class="tr-meta-table">
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ primary_resume.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ primary_resume.category|title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Updated</th>
+                        <td>{{ primary_resume.updated_at|date:"Y-m-d" }}</td>
+                    </tr>
+                </table>
+            {% elif not site_settings.resume_file %}
+                <p class="text-muted" style="font-size:0.9rem;">
+                    No resume uploaded yet. Add one in
+                    <a href="/admin/portfolio/resume/add/" style="color:#555; text-decoration:underline;">Admin &rarr; Resumes</a>
+                    and mark it as primary.
+                </p>
+            {% endif %}
+
+            {# ── 2. Document Preview ── #}
+            {% if has_pdf %}
+            <h2 class="tr-section-heading">2. Document Preview</h2>
+            <div class="mb-4">
+                <iframe id="resumePdfFrame" src="{% url 'portfolio:resume_viewer' %}" width="100%" height="900" style="border:1px solid #dee2e6; border-radius:.375rem;"></iframe>
+            </div>
+            {% elif primary_resume %}
+            <h2 class="tr-section-heading">2. Document Preview</h2>
+            <p class="text-muted" style="font-size:0.9rem;">
+                <i class="fas fa-info-circle me-1"></i>
+                Upload a PDF preview in <a href="/admin/portfolio/resume/" style="color:#555; text-decoration:underline;">Admin &rarr; Resumes</a> to enable inline display.
+                {% if download_primary_url %}The download link is available above.{% endif %}
+            </p>
+            {% endif %}
+
+            {# ── 3. Revision History ── #}
+            <h2 class="tr-section-heading">{% if has_pdf or primary_resume %}3{% else %}2{% endif %}. Revision History</h2>
+            <table class="tr-meta-table">
+                <thead>
+                    <tr>
+                        <th style="width:5%; font-size:0.78rem;">#</th>
+                        <th style="width:50%;">Document</th>
+                        <th style="width:25%;">Date</th>
+                        <th style="width:20%; text-align:right;">Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resume in resume_entries %}
+                    <tr>
+                        <td style="font-size:0.82rem; color:#888;">{{ forloop.counter }}</td>
+                        <td>{{ resume.title }}</td>
+                        <td style="font-size:0.85rem; color:#666;">{{ resume.updated_at|date:"Y-m-d" }}</td>
+                        <td style="text-align:right;"><a href="{{ resume.file.url }}" class="tr-footnote" style="text-decoration:underline;">Download</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-muted" style="font-size:0.85rem;">Upload your first resume to populate this list.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

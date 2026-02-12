@@ -1,0 +1,68 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="executive_minimal"></div>
+
+<section class="em-section">
+    <div class="container">
+        <div class="em-content--narrow" style="margin:0 auto;">
+
+            {# ── Page Header ── #}
+            <div class="text-center mb-2">
+                <span class="em-eyebrow">Get in Touch</span>
+                <h1>Contact</h1>
+                <p class="em-lead mx-auto">Send a note and I will respond promptly.</p>
+            </div>
+
+            <hr class="em-rule">
+
+            {# ── Form Card ── #}
+            <div class="em-form-card">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        {{ form.subject }}
+                        {{ form.subject.errors }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Message</label>
+                        {{ form.message }}
+                        {{ form.message.errors }}
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Send Message</button>
+                </form>
+            </div>
+
+            {# ── Social Links ── #}
+            {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+                <div class="em-social-links mt-5">
+                    {% if site_settings.linkedin_url %}
+                        <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="em-social-link"><i class="fab fa-linkedin me-2"></i>LinkedIn</a>
+                    {% endif %}
+                    {% if site_settings.github_url %}
+                        <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="em-social-link"><i class="fab fa-github me-2"></i>GitHub</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</section>
+{% endblock %}

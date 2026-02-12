@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <style>
+:root { --nav-h: 72px; }
+body { padding-top: var(--nav-h) !important; }
+
     /* Root CSS variables bound to SiteSetting values (fallbacks provided) */
     :root {
       {% if site_settings %}
@@ -81,6 +84,11 @@
     body.no-motion .img-hover-scale,
     body.no-motion .img-hover-scale:hover { transition: none; transform: none; }
 
+    /* Featured projects grid */
+    .featured-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+    @media (min-width: 768px)  { .featured-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 992px)  { .featured-grid { grid-template-columns: repeat(3, 1fr); } }
+
     .footer { background: var(--footer-bg); color: var(--footer-text); }
     .btn-primary {
       background: var(--primary);
@@ -89,15 +97,44 @@
     }
   </style>
   {% block theme_css %}{% endblock %}
+  {% block variant_css %}{% if template_variant %}{% with "portfolio/variants/"|add:template_variant|add:"/base.css" as vpath %}
+  <style>
+:root { --nav-h: 72px; }
+body { padding-top: var(--nav-h) !important; }
+{% include vpath %}</style>
+  {% endwith %}{% endif %}{% endblock %}
+
+  {% block design_tokens %}{% if active_profile %}
+  <style>
+:root { --nav-h: 72px; }
+body { padding-top: var(--nav-h) !important; }
+
+    :root {
+      {% if active_profile.accent_color %}--accent: {{ active_profile.accent_color }};{% endif %}
+      {% if active_profile.bg_color %}--bg: {{ active_profile.bg_color }};{% endif %}
+      {% if active_profile.surface_color %}--surface: {{ active_profile.surface_color }};{% endif %}
+      {% if active_profile.token_text_color %}--text: {{ active_profile.token_text_color }};{% endif %}
+      {% if active_profile.muted_text_color %}--text-muted: {{ active_profile.muted_text_color }};{% endif %}
+      {% if active_profile.border_color %}--border: {{ active_profile.border_color }};{% endif %}
+      {% if active_profile.font_stack == "sans" %}--font-family: "Inter", "Helvetica Neue", Arial, sans-serif;{% endif %}
+      {% if active_profile.font_stack == "serif" %}--font-family: Georgia, "Merriweather", "Times New Roman", serif;{% endif %}
+      {% if active_profile.type_scale == "compact" %}--type-scale: 0.9;{% endif %}
+      {% if active_profile.type_scale == "spacious" %}--type-scale: 1.15;{% endif %}
+    }
+    {% if active_profile.font_stack != "system" %}body { font-family: var(--font-family); }{% endif %}
+    {% if active_profile.type_scale == "compact" %}body { font-size: 0.9rem; }{% endif %}
+    {% if active_profile.type_scale == "spacious" %}body { font-size: 1.1rem; line-height: 1.8; }{% endif %}
+  </style>
+  {% endif %}{% endblock %}
 
   {% block extra_head %}{% endblock %}
 </head>
-<body class="{% if motion_enabled == False %}no-motion{% endif %}">
+<body class="{% if motion_enabled == False %}no-motion{% endif %}{% if template_variant %} variant-{{ template_variant }}{% endif %}" data-variant="{{ template_variant|default:'default' }}">
   {# navigation: use dynamic nav_items if present, otherwise fallback static links #}
   {% if nav_items %}
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'portfolio:home' %}">My Portfolio</a>
+        <a class="navbar-brand" href="{% url 'portfolio:home' %}">Data Dedicated LLC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -109,7 +146,7 @@
   {% else %}
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'portfolio:home' %}">My Portfolio</a>
+        <a class="navbar-brand" href="{% url 'portfolio:home' %}">Data Dedicated LLC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -139,7 +176,7 @@
 
   <footer class="footer mt-5 py-4">
     <div class="container d-flex justify-content-between align-items-center">
-      <div>© {% now "Y" %}. All rights reserved.</div>
+      <div>&copy; {% now "Y" %}. All rights reserved.</div>
       <div class="d-flex gap-3">
         {% for category in nav_categories %}
           <a class="link-light text-decoration-none" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}">{{ category.name }}</a>
@@ -152,5 +189,22 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   {% block extra_js %}{% endblock %}
+<script>
+(function () {
+  function setNavHeight() {
+    var nav = document.querySelector('nav.navbar.fixed-top');
+    if (!nav) return;
+    var h = nav.getBoundingClientRect().height;
+    document.documentElement.style.setProperty('--nav-h', h + 'px');
+  }
+  window.addEventListener('load', setNavHeight);
+  window.addEventListener('resize', setNavHeight);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(setNavHeight).catch(function(){});
+  }
+  setTimeout(setNavHeight, 50);
+})();
+</script>
 </body>
 </html>
+

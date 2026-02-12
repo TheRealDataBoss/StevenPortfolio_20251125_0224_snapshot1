@@ -1,0 +1,167 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     PROJECT HERO BANNER
+     ============================================================ -->
+<section class="bb-hero bb-hero--banner">
+  <div class="container position-relative">
+    <div class="row align-items-end">
+      <div class="col-lg-8">
+        {% if project.category %}
+        <span class="bb-eyebrow" style="letter-spacing: 0.35em;">{{ project.category.name }}</span>
+        {% endif %}
+        <h1 class="display-2 mb-3">{{ project.title }}</h1>
+        {% if project.summary %}
+        <p class="lead fs-4 mb-0" style="opacity: 0.85;">{{ project.summary }}</p>
+        {% endif %}
+      </div>
+      <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+          {% if project.live_url %}
+          <a href="{{ project.live_url }}" target="_blank" rel="noopener" class="btn btn-warning btn-lg px-4">Live Site</a>
+          {% endif %}
+          {% if project.repo_url %}
+          <a href="{{ project.repo_url }}" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg px-4">Repository</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     PROJECT IMAGE (full-width)
+     ============================================================ -->
+{% if project.image %}
+<section style="background: var(--bb-bg); padding: 0;">
+  <div class="container-fluid px-0">
+    <div style="max-height: 520px; overflow: hidden;">
+      {% responsive_image image=project.image variant="card" shape="rect" alt=project.title %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============================================================
+     PROJECT CONTENT: Two-column layout
+     ============================================================ -->
+<section class="bb-section" style="background: var(--bb-bg);">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Main Content Column -->
+      <div class="col-lg-8">
+        {% if project.description %}
+        <div class="mb-5">
+          <div class="bb-section-header">
+            <div class="bb-section-header__bar"></div>
+            <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">About This Project</h2>
+          </div>
+          <div class="fs-5 lh-lg">{{ project.description|linebreaks }}</div>
+        </div>
+        {% endif %}
+
+        {% if project.notes %}
+        <div class="mb-5 p-4" style="border-left: 5px solid var(--bb-accent); background: var(--bb-surface);">
+          <h3 class="h5 text-uppercase mb-3" style="letter-spacing: 0.15em;">Notes</h3>
+          <div>{{ project.notes|linebreaks }}</div>
+        </div>
+        {% endif %}
+
+        <!-- Attachments -->
+        {% if visible_attachments %}
+        <div class="mb-5">
+          <div class="bb-section-header">
+            <div class="bb-section-header__bar"></div>
+            <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">Attachments</h2>
+          </div>
+          {% for att in visible_attachments %}
+          <div class="bb-attachment">
+            <div class="bb-attachment__name">{{ att.file.name|default:"Attachment" }}</div>
+            <div class="d-flex flex-wrap gap-2">
+              {% if att.is_pdf %}
+              <a href="{% url 'portfolio:project_attachment_pdf_inline' project.pk att.pk %}" class="btn btn-sm btn-dark" target="_blank">View PDF</a>
+              {% elif att.preview_kind == 'notebook' %}
+              <a href="{% url 'portfolio:project_attachment_notebook_inline' project.pk att.pk %}" class="btn btn-sm btn-dark" target="_blank">View Notebook</a>
+              {% elif att.preview_kind %}
+              <a href="{% url 'portfolio:project_attachment_preview' project.pk att.pk %}" class="btn btn-sm btn-dark" target="_blank">Preview</a>
+              {% endif %}
+              {% if att.external_url %}
+              <a href="{{ att.external_url }}" class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener">External</a>
+              {% endif %}
+              <a href="{% url 'portfolio:project_attachment_download' project.pk att.pk %}" class="btn btn-sm btn-warning">Download</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Legacy attachment fallback -->
+        {% if project.attachment and not visible_attachments %}
+        <div class="mb-5">
+          <div class="bb-section-header">
+            <div class="bb-section-header__bar"></div>
+            <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">Attachment</h2>
+          </div>
+          <div class="d-flex gap-2">
+            {% if legacy_preview_kind %}
+            <a href="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="btn btn-dark" target="_blank">Preview</a>
+            {% endif %}
+            <a href="{% url 'portfolio:legacy_attachment_download' project.pk %}" class="btn btn-warning">Download</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar: Dark Panel -->
+      <div class="col-lg-4">
+        <div class="bb-panel">
+          <div class="bb-panel__title">Project Details</div>
+
+          {% if project.tech_stack %}
+          <div class="mb-4">
+            <span class="bb-panel__label">Tech Stack</span>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+              {% for tech in project.tech_stack|split:"," %}
+              <span class="bb-tag">{{ tech }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if project.tags %}
+          <div class="mb-4">
+            <span class="bb-panel__label">Tags</span>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+              {% for tag in project.tags|split:"," %}
+              <span class="bb-badge" style="background: #374151;">{{ tag }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if project.created_at %}
+          <div class="mb-4">
+            <span class="bb-panel__label">Created</span>
+            <span class="bb-panel__value">{{ project.created_at|date:"F j, Y" }}</span>
+          </div>
+          {% endif %}
+
+          {% if project.updated_at %}
+          <div class="mb-0">
+            <span class="bb-panel__label">Updated</span>
+            <span class="bb-panel__value">{{ project.updated_at|date:"F j, Y" }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

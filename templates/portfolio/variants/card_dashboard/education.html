@@ -1,0 +1,147 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Education | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Education",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for entry in all_education %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ entry.title|escapejs }}",
+        "description": "{{ entry.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ entry.institution|escapejs }}"
+        }{% if entry.url %},
+        "url": "{{ entry.url|escapejs }}"{% endif %}{% if entry.start_date %},
+        "dateCreated": "{{ entry.start_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+    .cd-dot--blue { background: #007bff; }
+    .cd-group-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #6c757d; margin-bottom: .5rem; padding-bottom: .25rem; border-bottom: 2px solid #e0e3e8; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Education</li>
+                    </ol>
+                </nav>
+                <span class="badge bg-primary">{{ all_education|length }} entr{{ all_education|length|pluralize:"y,ies" }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        {% for group_name, group_cat, entries in education_groups %}
+            <div class="cd-group-label mt-3"><i class="fas fa-graduation-cap me-1"></i> {{ group_name }}</div>
+            <div class="row g-3 mb-4">
+                {% for entry in entries %}
+                <div class="col-md-6 col-lg-6">
+                    <div class="cd-widget shadow-sm h-100">
+                        <div class="widget-header d-flex justify-content-between align-items-center">
+                            <span class="text-truncate">{{ entry.title }}</span>
+                            <span class="text-muted" style="font-size:.7rem;white-space:nowrap;">
+                                {% if entry.start_date %}{{ entry.start_date|date:"M Y" }}{% endif %}{% if entry.start_date and entry.end_date %} &ndash; {% endif %}{% if entry.end_date %}{{ entry.end_date|date:"M Y" }}{% endif %}
+                            </span>
+                        </div>
+                        <div class="widget-body cd-compact">
+                            <div class="d-flex align-items-start mb-2">
+                                <span class="cd-dot cd-dot--blue me-2 mt-1 flex-shrink-0"></span>
+                                <div>
+                                    <span class="fw-semibold">{{ entry.institution }}</span>
+                                    {% if entry.location %}<span class="text-muted"> &middot; {{ entry.location }}</span>{% endif %}
+                                </div>
+                            </div>
+                            {% if entry.description %}
+                                <p class="text-secondary mb-2" style="font-size:.82rem;">{{ entry.description|linebreaks }}</p>
+                            {% endif %}
+                            {% if entry.image %}
+                                <div class="mb-2">
+                                    <img src="{{ entry.image.url }}" alt="{{ entry.title }}" class="img-fluid rounded shadow-sm" style="max-height:160px;">
+                                </div>
+                            {% endif %}
+                            <div class="d-flex flex-wrap gap-1">
+                                {% if entry.url %}
+                                    <a href="{{ entry.url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary" style="font-size:.7rem;"><i class="fas fa-external-link-alt me-1"></i> Website</a>
+                                {% endif %}
+                                {% if entry.attachment %}
+                                    <a href="{% url 'portfolio:education_download' entry.pk %}" class="btn btn-sm btn-outline-secondary" style="font-size:.7rem;"><i class="fas fa-download me-1"></i> Download</a>
+                                    {% if entry.preview_kind == "pdf" %}
+                                        <a href="{% url 'portfolio:education_preview' entry.pk %}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary" style="font-size:.7rem;"><i class="fas fa-file-pdf me-1"></i> Preview</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            {% if entry.preview_kind == "pdf" %}
+                                <div class="mt-2 ratio ratio-16x9 border rounded overflow-hidden edu-pdf-preview" data-entry-id="{{ entry.pk }}">
+                                    <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="PDF preview: {{ entry.title }}" allowfullscreen></iframe>
+                                </div>
+                            {% elif entry.preview_kind == "image" %}
+                                <div class="mt-2 text-center">
+                                    <img src="{% url 'portfolio:education_inline' entry.pk %}" alt="Attachment: {{ entry.title }}" class="img-fluid rounded shadow-sm" style="max-height:300px;">
+                                </div>
+                            {% elif entry.preview_kind == "text" %}
+                                <div class="mt-2 ratio ratio-16x9 border rounded overflow-hidden">
+                                    <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="Text preview: {{ entry.title }}" style="background:#f8f9fa;"></iframe>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% empty %}
+            <div class="cd-widget shadow-sm">
+                <div class="widget-body text-center text-muted cd-compact py-4">
+                    <i class="fas fa-graduation-cap fa-2x mb-2 d-block"></i>
+                    No education entries yet. Add them via the admin.
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if is_paginated %}
+        <nav aria-label="Education pagination" class="mt-4">
+            <ul class="pagination pagination-sm justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Home | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="timeline_pro"></div>
+<section class="hero py-5">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                {% if settings.hero_label %}
+                    <p class="text-uppercase small fw-semibold mb-2" style="letter-spacing:.1em; opacity:.75;">{{ settings.hero_label }}</p>
+                {% endif %}
+                <h1 class="display-4 mb-3" style="font-family:Georgia,'Times New Roman',serif; font-weight:700;">{{ settings.hero_title|default:"Steven Wazlavek" }}</h1>
+                {% if settings.hero_roles %}
+                    <p class="lead mb-2" style="opacity:.85;">{{ settings.hero_roles }}</p>
+                {% endif %}
+                <p class="lead" style="opacity:.85;">{{ settings.hero_subtitle|default:"Explore selected projects, resume highlights, and ways to contact me." }}</p>
+                <div class="mt-4 d-flex gap-3 flex-wrap">
+                    <a class="btn btn-primary btn-lg" href="{% url 'portfolio:project_list' %}">View Projects</a>
+                    {% if site_settings and site_settings.resume_file %}
+                        <a class="btn btn-outline-light btn-lg" href="{{ site_settings.resume_file.url }}"><i class="fas fa-download me-1"></i> Resume</a>
+                    {% endif %}
+                    <a class="btn btn-outline-light btn-lg" href="{% url 'portfolio:contact' %}">Get in Touch</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                {% if settings.hero_image %}
+                    {% responsive_image image=settings.hero_image variant="square" shape="rounded" alt="Profile photo" extra_class="img-fluid shadow" %}
+                {% else %}
+                    <div class="bg-white bg-opacity-10 border border-light rounded p-5 text-center">
+                        <i class="fa-solid fa-user fa-4x mb-3 d-block"></i>
+                        <p class="mb-0">Upload a hero image via Admin &rarr; Site settings.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-family:Georgia,'Times New Roman',serif; font-weight:700;" class="mb-0">Featured Projects</h2>
+            <a href="{% url 'portfolio:project_list' %}" class="btn btn-outline-primary btn-sm">View All</a>
+        </div>
+        {% if featured_projects %}
+        <div class="featured-grid">
+            {% for project in featured_projects %}
+                <div class="card h-100 shadow-sm border-0 overflow-hidden" style="border-top:3px solid var(--primary) !important;">
+                    {% if project.image %}
+                        {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge bg-primary-subtle text-primary mb-2 align-self-start">{{ project.category.name }}</span>
+                        <h5 class="card-title" style="font-family:Georgia,'Times New Roman',serif;">{{ project.title }}</h5>
+                        <p class="card-text text-muted">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                        <a href="{{ project.get_absolute_url }}" class="mt-auto stretched-link" style="font-family:Georgia,'Times New Roman',serif;">Read more &rarr;</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <div class="text-center text-muted py-4">No featured projects yet. Mark projects as Featured in Admin to display them here.</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Contact</li>
+                    </ol>
+                </nav>
+                <span class="cd-dot cd-dot--green me-1"></span><span class="text-muted" style="font-size:.8rem;">Open for messages</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-3">
+            {# Social links widget #}
+            <div class="col-md-6 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-share-alt me-1"></i> Connect</div>
+                    <div class="widget-body cd-compact">
+                        {% if site_settings and site_settings.linkedin_url %}
+                        <a href="{{ site_settings.linkedin_url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-primary me-2"><i class="fab fa-linkedin-in"></i></span>
+                            LinkedIn
+                            <i class="fas fa-external-link-alt ms-auto text-muted" style="font-size:.7rem;"></i>
+                        </a>
+                        {% endif %}
+                        {% if site_settings and site_settings.github_url %}
+                        <a href="{{ site_settings.github_url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-dark me-2"><i class="fab fa-github"></i></span>
+                            GitHub
+                            <i class="fas fa-external-link-alt ms-auto text-muted" style="font-size:.7rem;"></i>
+                        </a>
+                        {% endif %}
+                        <div class="d-flex align-items-center text-muted py-2" style="font-size:.8rem;">
+                            <span class="badge bg-light text-muted me-2"><i class="fas fa-envelope"></i></span>
+                            Use the form to send a message
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Contact form widget #}
+            <div class="col-md-6 col-lg-8">
+                <div class="cd-widget shadow-sm">
+                    <div class="widget-header"><i class="fas fa-paper-plane me-1"></i> Send Message</div>
+                    <div class="widget-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold cd-compact">Name</label>
+                                    {{ form.name }}
+                                    {{ form.name.errors }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold cd-compact">Email</label>
+                                    {{ form.email }}
+                                    {{ form.email.errors }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold cd-compact">Subject</label>
+                                    {{ form.subject }}
+                                    {{ form.subject.errors }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold cd-compact">Message</label>
+                                    {{ form.message }}
+                                    {{ form.message.errors }}
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-sm btn-primary px-4" type="submit"><i class="fas fa-paper-plane me-1"></i> Send Message</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

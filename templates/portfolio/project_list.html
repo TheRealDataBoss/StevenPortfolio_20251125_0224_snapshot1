@@ -1,4 +1,4 @@
-﻿{% extends base_template|default:"portfolio/base.html" %}
+{% extends base_template|default:"portfolio/base.html" %}
 {% load portfolio_tags %}
 {% block title %}Projects | Portfolio{% endblock %}
 {% block content %}
@@ -19,7 +19,7 @@
             <div class="d-flex flex-wrap gap-2">
                 <a class="btn btn-sm {% if not current_category %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}">All</a>
                 {% for category in categories %}
-                    <a class="btn btn-sm {% if current_category == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}">{{ category.name }}</a>
+                    <a class="btn btn-sm {% if current_category == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}">{% if category.image %}<img src="{{ category.image.url }}" alt="" class="category-icon me-1" style="height:18px;width:18px;border-radius:50%;object-fit:cover;vertical-align:text-bottom;">{% endif %}{{ category.name }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -50,6 +50,29 @@
                 <div class="col-12 text-center text-muted">No projects yet. Add some in the admin.</div>
             {% endfor %}
         </div>
+        {% if is_paginated %}
+        <nav aria-label="Project pages" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">&laquo; Prev</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                    {% if num == page_obj.number %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">Next &raquo;</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

@@ -1,0 +1,127 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO BANNER: Dark with display heading + accent stripe
+     ============================================================ -->
+<section class="bb-hero bb-hero--banner">
+  <div class="container position-relative">
+    <span class="bb-eyebrow">Portfolio</span>
+    <h1 class="display-2 text-uppercase mb-3">Projects</h1>
+    <span class="bb-accent-bar--lg"></span>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     FILTER & SEARCH BAR
+     ============================================================ -->
+<section style="background: var(--bb-bg); border-bottom: 3px solid var(--bb-dark);">
+  <div class="container py-4">
+    <div class="row align-items-center g-3">
+      <div class="col-lg-8">
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{% url 'portfolio:project_list' %}"
+             class="btn {% if not current_category %}btn-dark{% else %}btn-outline-dark{% endif %} px-3 py-2"
+             style="font-size: 0.78rem;">All</a>
+          {% for cat in categories %}
+          <a href="{% url 'portfolio:project_list' %}?category={{ cat.slug }}"
+             class="btn {% if current_category == cat.slug %}btn-dark{% else %}btn-outline-dark{% endif %} px-3 py-2"
+             style="font-size: 0.78rem;">{{ cat.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <form method="get" action="{% url 'portfolio:project_list' %}">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="SEARCH..." value="{{ search_term|default:'' }}" style="letter-spacing: 0.1em;">
+            <button class="btn btn-dark" type="submit">Go</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECT GRID
+     ============================================================ -->
+<section class="bb-section bb-section--surface">
+  <div class="container">
+    {% if projects %}
+    <div class="row g-4">
+      {% for project in projects %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ project.get_absolute_url }}" class="text-decoration-none d-block h-100">
+          <div class="bb-card {% if not project.is_featured %}bb-card--dark-border{% endif %}">
+            {% if project.image %}
+            <div class="bb-card__img" style="max-height: 220px;">
+              {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+            </div>
+            {% endif %}
+            <div class="bb-card__body">
+              {% if project.is_featured %}
+              <span class="bb-badge--accent" style="margin-bottom: 0.5rem; display: inline-block; font-size: 0.62rem;">Featured</span>
+              {% endif %}
+              {% if project.category %}
+              <span class="bb-card__cat">{{ project.category.name }}</span>
+              {% endif %}
+              <h3 class="bb-card__title">{{ project.title }}</h3>
+              {% if project.summary %}
+              <p class="bb-card__desc mb-3">{{ project.summary|truncatewords:20 }}</p>
+              {% elif project.description %}
+              <p class="bb-card__desc mb-3">{{ project.description|truncatewords:20 }}</p>
+              {% endif %}
+              {% if project.tech_stack %}
+              <div class="d-flex flex-wrap gap-1 mt-auto">
+                {% for tech in project.tech_stack|split:"," %}
+                <span class="bb-tag">{{ tech }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav class="mt-5">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">Prev</a>
+        </li>
+        {% endif %}
+        {% for num in paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+          <a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- No results state -->
+    <div class="text-center py-5">
+      <h3 class="display-5 text-uppercase mb-3">No Projects Found</h3>
+      <p class="text-muted fs-5 mb-4">Try adjusting your search or filter criteria.</p>
+      <a href="{% url 'portfolio:project_list' %}" class="btn btn-dark btn-lg px-5">Clear Filters</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

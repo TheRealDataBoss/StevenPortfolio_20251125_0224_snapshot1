@@ -1,0 +1,167 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Dashboard | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-stat-card { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-stat-card .stat-value { font-size: 1.75rem; font-weight: 700; line-height: 1.2; }
+    .cd-stat-card .stat-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: #6c757d; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+    .cd-dot--blue { background: #007bff; }
+    .cd-dot--amber { background: #ffc107; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+</style>
+<div class="cd-page">
+    {# Compact header bar with breadcrumb #}
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><i class="fas fa-th-large me-1"></i> Dashboard</li>
+                        <li class="breadcrumb-item active" aria-current="page">Overview</li>
+                    </ol>
+                </nav>
+                <span class="text-muted" style="font-size:.8rem;"><i class="fas fa-clock me-1"></i> {{ settings.hero_label|default:"Portfolio" }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        {# Stat summary widgets row #}
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="cd-stat-card shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Projects</div>
+                            <div class="stat-value">{{ featured_projects|length }}</div>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary"><i class="fas fa-folder-open"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="cd-stat-card shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Status</div>
+                            <div class="stat-value"><span class="cd-dot cd-dot--green me-1"></span> Active</div>
+                        </div>
+                        <span class="badge bg-success-subtle text-success"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="cd-stat-card shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Role</div>
+                            <div class="stat-value" style="font-size:1rem;">{% if settings.hero_roles %}{{ settings.hero_roles }}{% else %}Developer{% endif %}</div>
+                        </div>
+                        <span class="badge bg-info-subtle text-info"><i class="fas fa-user-tag"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="cd-stat-card shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label">Resume</div>
+                            <div class="stat-value" style="font-size:1rem;">{% if site_settings.resume_file %}<span class="cd-dot cd-dot--green me-1"></span> On file{% else %}<span class="cd-dot cd-dot--amber me-1"></span> Pending{% endif %}</div>
+                        </div>
+                        <span class="badge bg-secondary-subtle text-secondary"><i class="fas fa-file-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            {# Profile widget #}
+            <div class="col-md-6 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-user me-1"></i> Profile</div>
+                    <div class="widget-body text-center cd-compact">
+                        {% if settings.hero_image %}
+                            <img src="{{ settings.hero_image.url }}" class="rounded-circle shadow-sm mb-2" alt="Profile" style="width:72px;height:72px;object-fit:cover;" />
+                        {% else %}
+                            <div class="bg-light rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width:72px;height:72px;">
+                                <i class="fas fa-user fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        <h6 class="fw-bold mb-1">{{ settings.hero_title|default:"Steven Wazlavek" }}</h6>
+                        <p class="text-muted mb-2" style="font-size:.8rem;">{{ settings.hero_subtitle|default:"Explore projects, resume, and contact info." }}</p>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a href="{% url 'portfolio:project_list' %}" class="btn btn-sm btn-primary"><i class="fas fa-folder me-1"></i> Projects</a>
+                            <a href="{% url 'portfolio:contact' %}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-envelope me-1"></i> Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Quick actions widget #}
+            <div class="col-md-6 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-bolt me-1"></i> Quick Actions</div>
+                    <div class="widget-body cd-compact">
+                        <a href="{% url 'portfolio:project_list' %}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom">
+                            <span class="badge bg-primary me-2"><i class="fas fa-search"></i></span>
+                            Browse all projects
+                        </a>
+                        {% if site_settings.resume_file %}
+                        <a href="{{ site_settings.resume_file.url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-success me-2"><i class="fas fa-download"></i></span>
+                            Download resume
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'portfolio:contact' %}" class="d-flex align-items-center text-decoration-none text-dark py-2">
+                            <span class="badge bg-info me-2"><i class="fas fa-paper-plane"></i></span>
+                            Send a message
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {# Featured projects widget #}
+            <div class="col-md-12 col-lg-4">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-star me-1"></i> Featured Projects</span>
+                        <a href="{% url 'portfolio:project_list' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.7rem;">View All</a>
+                    </div>
+                    <div class="widget-body cd-compact">
+                        {% if featured_projects %}
+                            {% for project in featured_projects %}
+                            <div class="d-flex align-items-start py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                                {% if project.image %}
+                                    <img src="{{ project.image.url }}" class="rounded me-2 flex-shrink-0" alt="{{ project.title }}" style="width:40px;height:40px;object-fit:cover;">
+                                {% else %}
+                                    <div class="bg-light rounded me-2 flex-shrink-0 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                        <i class="fas fa-cube text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <a href="{{ project.get_absolute_url }}" class="fw-semibold text-decoration-none text-dark d-block text-truncate" style="font-size:.85rem;">{{ project.title }}</a>
+                                    <span class="badge bg-light text-muted" style="font-size:.65rem;">{{ project.category.name }}</span>
+                                </div>
+                                <span class="cd-dot cd-dot--green flex-shrink-0 ms-2 mt-2" title="Active"></span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted mb-0" style="font-size:.8rem;">No featured projects yet. Mark projects as Featured in Admin.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

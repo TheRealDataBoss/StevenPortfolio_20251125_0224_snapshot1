@@ -1,0 +1,1158 @@
+/* =================================================================
+   Split Screen Variant — Premium Split-Panel Portfolio
+   Scoped entirely to body.variant-split_screen
+   ================================================================= */
+
+/* --- Design Tokens ------------------------------------------------ */
+body.variant-split_screen {
+  --ss-accent:      var(--accent, #6366f1);
+  --ss-accent-rgb:  99, 102, 241;
+  --ss-bg:          var(--bg, #ffffff);
+  --ss-surface:     var(--surface, #f8fafc);
+  --ss-text:        var(--text, #1e293b);
+  --ss-text-muted:  var(--text-muted, #64748b);
+  --ss-border:      var(--border, #e2e8f0);
+  --ss-glow:        color-mix(in srgb, var(--ss-accent) 14%, transparent);
+  --ss-accent-soft: color-mix(in srgb, var(--ss-accent) 8%, white);
+  --ss-panel-bg:    color-mix(in srgb, var(--ss-accent) 4%, var(--ss-surface));
+  --ss-panel-bg-strong: color-mix(in srgb, var(--ss-accent) 8%, var(--ss-surface));
+  --ss-footer-bg:   #0f172a;
+  --ss-footer-text: #94a3b8;
+
+  background: var(--ss-bg);
+  color: var(--ss-text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+}
+
+/* --- Typography --------------------------------------------------- */
+body.variant-split_screen h1,
+body.variant-split_screen h2,
+body.variant-split_screen h3 {
+  color: var(--ss-text);
+  line-height: 1.2;
+}
+body.variant-split_screen h1 {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+body.variant-split_screen h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+body.variant-split_screen h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+body.variant-split_screen h4,
+body.variant-split_screen h5,
+body.variant-split_screen h6 {
+  font-weight: 700;
+  color: var(--ss-text);
+}
+
+/* Eyebrow / small-caps label */
+body.variant-split_screen .ss-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ss-accent);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* --- Navbar ------------------------------------------------------- */
+body.variant-split_screen .navbar {
+  background: var(--ss-bg) !important;
+  border-bottom: 1px solid var(--ss-border);
+  padding: 0.6rem 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  backdrop-filter: blur(12px);
+}
+body.variant-split_screen .navbar .navbar-brand {
+  color: var(--ss-text) !important;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+body.variant-split_screen .navbar .nav-link {
+  color: var(--ss-text-muted) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+body.variant-split_screen .navbar .nav-link:hover {
+  color: var(--ss-text) !important;
+  background: var(--ss-surface);
+}
+body.variant-split_screen .navbar .nav-link.active {
+  color: var(--ss-accent) !important;
+  font-weight: 600;
+}
+body.variant-split_screen .navbar-toggler {
+  border-color: var(--ss-border);
+}
+body.variant-split_screen .dropdown-menu {
+  background: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+body.variant-split_screen .dropdown-item {
+  color: var(--ss-text-muted);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  transition: background 0.12s ease;
+}
+body.variant-split_screen .dropdown-item:hover {
+  background: var(--ss-surface);
+  color: var(--ss-text);
+}
+body.variant-split_screen .dropdown-toggle::after {
+  opacity: 0.5;
+}
+
+/* =================================================================
+   HERO — Asymmetric True Split (60/40)
+   ================================================================= */
+body.variant-split_screen .ss-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  display: flex;
+  background: var(--ss-bg);
+}
+body.variant-split_screen .ss-hero__content {
+  flex: 0 0 58%;
+  max-width: 58%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4.5rem 4rem 4.5rem 6%;
+  position: relative;
+  z-index: 1;
+}
+body.variant-split_screen .ss-hero__visual {
+  flex: 0 0 42%;
+  max-width: 42%;
+  background: var(--ss-panel-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+}
+body.variant-split_screen .ss-hero__visual::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8%;
+  bottom: 8%;
+  width: 3px;
+  background: linear-gradient(180deg, transparent, var(--ss-accent), transparent);
+  border-radius: 3px;
+}
+body.variant-split_screen .ss-hero__visual img {
+  max-height: 400px;
+  max-width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.06);
+}
+body.variant-split_screen .ss-hero__visual .ss-hero__placeholder {
+  background: var(--ss-surface);
+  border: 2px dashed var(--ss-border);
+  border-radius: 14px;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--ss-text-muted);
+}
+body.variant-split_screen .ss-hero h1 {
+  font-size: 3.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: var(--ss-text);
+  margin-bottom: 0.75rem;
+}
+body.variant-split_screen .ss-hero .ss-hero__subtitle {
+  color: var(--ss-text-muted);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  max-width: 520px;
+}
+body.variant-split_screen .ss-hero .ss-hero__roles {
+  color: var(--ss-text-muted);
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+}
+body.variant-split_screen .ss-hero__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.75rem;
+}
+
+/* Hero buttons */
+body.variant-split_screen .ss-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--ss-accent);
+  color: #fff;
+  border: 2px solid var(--ss-accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px var(--ss-glow);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+body.variant-split_screen .ss-btn-primary:hover {
+  background: color-mix(in srgb, var(--ss-accent) 85%, black);
+  border-color: color-mix(in srgb, var(--ss-accent) 85%, black);
+  box-shadow: 0 6px 20px var(--ss-glow);
+  color: #fff;
+  transform: translateY(-1px);
+}
+body.variant-split_screen .ss-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--ss-accent);
+  border: 2px solid color-mix(in srgb, var(--ss-accent) 40%, transparent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+body.variant-split_screen .ss-btn-ghost:hover {
+  background: var(--ss-accent);
+  color: #fff;
+  border-color: var(--ss-accent);
+  box-shadow: 0 6px 20px var(--ss-glow);
+  transform: translateY(-1px);
+}
+
+/* =================================================================
+   COMPACT PAGE HERO — Accent panel header
+   ================================================================= */
+body.variant-split_screen .ss-page-hero {
+  background: var(--ss-panel-bg);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 3rem 0;
+}
+body.variant-split_screen .ss-page-hero h1 {
+  font-size: 2.25rem;
+  margin-bottom: 0.25rem;
+}
+body.variant-split_screen .ss-page-hero p {
+  color: var(--ss-text-muted);
+  font-size: 1rem;
+  margin-bottom: 0;
+  max-width: 540px;
+}
+
+/* =================================================================
+   SPLIT COMPOSITION — Alternating panel layouts
+   ================================================================= */
+body.variant-split_screen .ss-split {
+  display: flex;
+  gap: 0;
+  min-height: 400px;
+}
+body.variant-split_screen .ss-split--reverse {
+  flex-direction: row-reverse;
+}
+body.variant-split_screen .ss-split__panel {
+  flex: 0 0 38%;
+  max-width: 38%;
+  background: var(--ss-panel-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  position: relative;
+}
+body.variant-split_screen .ss-split__panel::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--ss-accent), transparent);
+  opacity: 0.3;
+}
+body.variant-split_screen .ss-split--reverse .ss-split__panel::after {
+  right: auto;
+  left: 0;
+}
+body.variant-split_screen .ss-split__main {
+  flex: 1;
+  padding: 3rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* =================================================================
+   FEATURED PROJECTS — Split composition
+   ================================================================= */
+body.variant-split_screen .ss-featured {
+  background: var(--ss-surface);
+  padding: 4.5rem 0;
+}
+body.variant-split_screen .ss-featured-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+body.variant-split_screen .ss-featured-side {
+  flex: 0 0 240px;
+  max-width: 240px;
+  position: sticky;
+  top: 100px;
+  padding-top: 0.5rem;
+}
+body.variant-split_screen .ss-featured-side h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+body.variant-split_screen .ss-featured-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* =================================================================
+   CARDS — Elevated clean panels
+   ================================================================= */
+body.variant-split_screen .card {
+  background: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+}
+body.variant-split_screen .card:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+  transform: translateY(-3px);
+}
+body.variant-split_screen .card-body {
+  padding: 1.5rem;
+}
+body.variant-split_screen .card-title {
+  color: var(--ss-text);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+body.variant-split_screen .card-text.text-muted {
+  color: var(--ss-text-muted) !important;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+body.variant-split_screen .shadow-sm {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02) !important;
+}
+
+/* Card images */
+body.variant-split_screen .card .media-img,
+body.variant-split_screen .card .img-card {
+  border-radius: 10px 10px 0 0;
+}
+
+/* No-hover card (for detail/resume meta) */
+body.variant-split_screen .ss-card-static {
+  transition: none;
+}
+body.variant-split_screen .ss-card-static:hover {
+  transform: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+}
+
+/* Accent-left card */
+body.variant-split_screen .ss-card-accent {
+  border-left: 3px solid var(--ss-accent);
+  border-radius: 0 10px 10px 0;
+}
+
+/* =================================================================
+   BADGES — Soft pill shapes
+   ================================================================= */
+body.variant-split_screen .badge.bg-primary-subtle {
+  background: var(--ss-accent-soft) !important;
+  color: var(--ss-accent) !important;
+  border: 1px solid color-mix(in srgb, var(--ss-accent) 18%, transparent);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  padding: 0.3em 0.7em;
+  border-radius: 20px;
+}
+body.variant-split_screen .badge.bg-secondary-subtle {
+  background: var(--ss-surface) !important;
+  color: var(--ss-text-muted) !important;
+  border: 1px solid var(--ss-border);
+  font-weight: 500;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  padding: 0.3em 0.7em;
+}
+body.variant-split_screen .badge.bg-success {
+  background: rgba(34,197,94,0.1) !important;
+  color: #16a34a !important;
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 20px;
+  font-size: 0.72rem;
+}
+body.variant-split_screen .badge.bg-primary {
+  background: var(--ss-accent) !important;
+  color: #fff !important;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  padding: 0.3em 0.7em;
+}
+body.variant-split_screen .ss-badge-cat {
+  display: inline-block;
+  background: var(--ss-accent-soft);
+  color: var(--ss-accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25em 0.7em;
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--ss-accent) 18%, transparent);
+}
+
+/* =================================================================
+   BUTTONS
+   ================================================================= */
+body.variant-split_screen .btn-primary {
+  background: var(--ss-accent);
+  border-color: var(--ss-accent);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px var(--ss-glow);
+  transition: all 0.2s ease;
+}
+body.variant-split_screen .btn-primary:hover {
+  background: color-mix(in srgb, var(--ss-accent) 85%, black);
+  border-color: color-mix(in srgb, var(--ss-accent) 85%, black);
+  box-shadow: 0 4px 14px var(--ss-glow);
+  transform: translateY(-1px);
+}
+body.variant-split_screen .btn-outline-primary {
+  color: var(--ss-accent);
+  border-color: var(--ss-accent);
+  font-weight: 600;
+  background: transparent;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+body.variant-split_screen .btn-outline-primary:hover {
+  background: var(--ss-accent);
+  color: #fff;
+  box-shadow: 0 4px 14px var(--ss-glow);
+}
+body.variant-split_screen .btn-outline-primary.active,
+body.variant-split_screen .btn-outline-primary:active {
+  background: var(--ss-accent) !important;
+  color: #fff !important;
+}
+body.variant-split_screen .btn-outline-secondary {
+  color: var(--ss-text-muted);
+  border-color: var(--ss-border);
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+body.variant-split_screen .btn-outline-secondary:hover {
+  background: var(--ss-surface);
+  color: var(--ss-text);
+  border-color: var(--ss-text-muted);
+}
+body.variant-split_screen .btn-outline-dark {
+  color: var(--ss-text);
+  border-color: var(--ss-text);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+body.variant-split_screen .btn-outline-dark:hover {
+  background: var(--ss-text);
+  color: var(--ss-bg);
+}
+
+/* Filter pill chips */
+body.variant-split_screen .ss-filter-bar .btn-sm {
+  border-radius: 20px;
+  padding: 0.35rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+/* Focus states */
+body.variant-split_screen :focus-visible {
+  outline: 2px solid var(--ss-accent);
+  outline-offset: 2px;
+}
+body.variant-split_screen .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--ss-glow);
+}
+
+/* =================================================================
+   LINKS
+   ================================================================= */
+body.variant-split_screen a {
+  color: var(--ss-accent);
+  transition: color 0.15s ease;
+}
+body.variant-split_screen a:hover {
+  color: color-mix(in srgb, var(--ss-accent) 75%, black);
+}
+body.variant-split_screen .stretched-link {
+  color: var(--ss-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+body.variant-split_screen .stretched-link:hover {
+  text-decoration: underline;
+}
+
+/* =================================================================
+   FORM CONTROLS
+   ================================================================= */
+body.variant-split_screen .form-control,
+body.variant-split_screen .form-select {
+  background: var(--ss-bg);
+  border: 1.5px solid var(--ss-border);
+  color: var(--ss-text);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.925rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+body.variant-split_screen .form-control::placeholder {
+  color: var(--ss-text-muted);
+}
+body.variant-split_screen .form-control:focus,
+body.variant-split_screen .form-select:focus {
+  border-color: var(--ss-accent);
+  box-shadow: 0 0 0 4px var(--ss-glow);
+  background: var(--ss-bg);
+  color: var(--ss-text);
+}
+body.variant-split_screen .form-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--ss-text);
+  margin-bottom: 0.4rem;
+}
+body.variant-split_screen textarea.form-control {
+  min-height: 130px;
+}
+
+/* =================================================================
+   SECTIONS
+   ================================================================= */
+body.variant-split_screen section {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+body.variant-split_screen .bg-light {
+  background: var(--ss-surface) !important;
+}
+body.variant-split_screen .text-muted {
+  color: var(--ss-text-muted) !important;
+}
+
+/* =================================================================
+   PROJECT LIST — Filter bar & grid
+   ================================================================= */
+body.variant-split_screen .ss-filter-bar {
+  background: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* =================================================================
+   PROJECT DETAIL — Split header + article
+   ================================================================= */
+body.variant-split_screen .ss-detail-header {
+  display: flex;
+  gap: 0;
+  min-height: 380px;
+  background: var(--ss-bg);
+  border-bottom: 1px solid var(--ss-border);
+}
+body.variant-split_screen .ss-detail-header__info {
+  flex: 0 0 50%;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem 3rem 3.5rem 5%;
+}
+body.variant-split_screen .ss-detail-header__image {
+  flex: 0 0 50%;
+  max-width: 50%;
+  background: var(--ss-panel-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+body.variant-split_screen .ss-detail-header__image::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--ss-accent), transparent);
+  opacity: 0.4;
+}
+body.variant-split_screen .ss-detail-header__image img,
+body.variant-split_screen .ss-detail-header__image .media-img,
+body.variant-split_screen .ss-detail-header__image .img-hero {
+  max-height: 340px;
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+}
+
+/* Sidebar meta card */
+body.variant-split_screen .ss-sidebar-meta {
+  position: sticky;
+  top: 90px;
+  border-left: 3px solid var(--ss-accent);
+  border-radius: 0 10px 10px 0;
+}
+body.variant-split_screen .ss-sidebar-meta .ss-meta-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ss-text-muted);
+  margin-bottom: 1rem;
+}
+body.variant-split_screen .ss-sidebar-meta p {
+  font-size: 0.9rem;
+}
+
+/* Attachment cards */
+body.variant-split_screen .ss-attachment-card {
+  border-left: 3px solid color-mix(in srgb, var(--ss-accent) 40%, transparent);
+  border-radius: 0 10px 10px 0;
+}
+body.variant-split_screen .ss-attachment-card:hover {
+  border-left-color: var(--ss-accent);
+}
+
+/* =================================================================
+   ABOUT — Split layout with accent panel
+   ================================================================= */
+body.variant-split_screen .ss-about-split {
+  display: flex;
+  min-height: 500px;
+}
+body.variant-split_screen .ss-about-visual {
+  flex: 0 0 42%;
+  max-width: 42%;
+  background: var(--ss-panel-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+}
+body.variant-split_screen .ss-about-visual::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--ss-accent), transparent);
+  opacity: 0.35;
+}
+body.variant-split_screen .ss-about-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem 5% 3.5rem 3.5rem;
+}
+body.variant-split_screen .ss-about-content .ss-about-bio {
+  color: var(--ss-text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 580px;
+}
+body.variant-split_screen .ss-about-content .ss-about-bio p {
+  margin-bottom: 1rem;
+}
+body.variant-split_screen .ss-about-social {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* =================================================================
+   RESUME — Split content layout
+   ================================================================= */
+body.variant-split_screen .ss-resume-header {
+  background: var(--ss-panel-bg);
+  border-bottom: 1px solid var(--ss-border);
+  padding: 2.5rem 0;
+}
+body.variant-split_screen .ss-resume-content {
+  padding: 2.5rem 0;
+}
+body.variant-split_screen .ss-resume-sidebar .card {
+  border-left: 3px solid var(--ss-accent);
+  border-radius: 0 10px 10px 0;
+}
+body.variant-split_screen iframe#resumePdfFrame {
+  border: 1px solid var(--ss-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+/* Resume history list */
+body.variant-split_screen .ss-history-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ss-text-muted);
+  margin-bottom: 1rem;
+  padding-top: 2rem;
+}
+body.variant-split_screen .list-group-item {
+  background: var(--ss-bg);
+  border-color: var(--ss-border);
+  padding: 1rem 1.25rem;
+  transition: background 0.15s ease;
+}
+body.variant-split_screen .list-group-item:hover {
+  background: var(--ss-surface);
+}
+
+/* =================================================================
+   EDUCATION & CERTIFICATIONS — Group styling
+   ================================================================= */
+body.variant-split_screen .ss-group-header {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ss-accent);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  margin-top: 2.5rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--ss-accent) 20%, transparent);
+  position: relative;
+}
+body.variant-split_screen .ss-group-header::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--ss-accent);
+}
+body.variant-split_screen .ss-entry-card {
+  border: 1px solid var(--ss-border);
+  border-left: 3px solid var(--ss-border);
+  border-radius: 0 10px 10px 0;
+  transition: border-color 0.2s ease, box-shadow 0.3s ease;
+}
+body.variant-split_screen .ss-entry-card:hover {
+  border-left-color: var(--ss-accent);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transform: none;
+}
+
+/* Date badges in entries */
+body.variant-split_screen .ss-entry-date {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ss-text-muted);
+  white-space: nowrap;
+}
+
+/* PDF preview containers */
+body.variant-split_screen .ratio.ratio-16x9 {
+  border-color: var(--ss-border) !important;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* =================================================================
+   CONTACT — Split layout
+   ================================================================= */
+body.variant-split_screen .ss-contact-split {
+  display: flex;
+  min-height: 550px;
+}
+body.variant-split_screen .ss-contact-info {
+  flex: 0 0 40%;
+  max-width: 40%;
+  background: var(--ss-panel-bg-strong);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem 2.5rem;
+  position: relative;
+}
+body.variant-split_screen .ss-contact-info::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--ss-accent), transparent);
+  opacity: 0.3;
+}
+body.variant-split_screen .ss-contact-form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem;
+}
+body.variant-split_screen .ss-contact-form .card {
+  width: 100%;
+  max-width: 520px;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+body.variant-split_screen .ss-contact-form .card:hover {
+  transform: none;
+}
+body.variant-split_screen .ss-contact-info h1 {
+  font-size: 2.25rem;
+}
+body.variant-split_screen .ss-contact-info p {
+  color: var(--ss-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+body.variant-split_screen .ss-contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+body.variant-split_screen .ss-contact-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--ss-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ss-accent) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ss-accent) 12%, transparent);
+  transition: all 0.15s ease;
+}
+body.variant-split_screen .ss-contact-links a:hover {
+  background: var(--ss-accent);
+  color: #fff;
+  border-color: var(--ss-accent);
+}
+body.variant-split_screen .ss-contact-links a i {
+  font-size: 1.1rem;
+  width: 1.25rem;
+  text-align: center;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-split_screen .alert {
+  background: var(--ss-surface);
+  border-color: var(--ss-border);
+  color: var(--ss-text);
+  border-radius: 10px;
+}
+body.variant-split_screen .alert-info {
+  border-left: 4px solid var(--ss-accent);
+}
+body.variant-split_screen .alert-secondary {
+  border-left: 4px solid var(--ss-text-muted);
+}
+body.variant-split_screen .alert-success {
+  background: rgba(34,197,94,0.06);
+  border-color: rgba(34,197,94,0.2);
+  border-left: 4px solid #16a34a;
+  color: #15803d;
+}
+
+/* =================================================================
+   FOOTER — Dark slate
+   ================================================================= */
+body.variant-split_screen .footer {
+  background: var(--ss-footer-bg) !important;
+  color: var(--ss-footer-text);
+  border-top: none;
+  padding: 2.5rem 0;
+}
+body.variant-split_screen .footer a {
+  color: var(--ss-footer-text) !important;
+  transition: color 0.15s ease;
+}
+body.variant-split_screen .footer a:hover {
+  color: #fff !important;
+}
+
+/* =================================================================
+   PAGINATION
+   ================================================================= */
+body.variant-split_screen .page-link {
+  background: var(--ss-bg);
+  border-color: var(--ss-border);
+  color: var(--ss-text-muted);
+  border-radius: 8px;
+  margin: 0 3px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.4rem 0.8rem;
+  transition: all 0.15s ease;
+}
+body.variant-split_screen .page-link:hover {
+  background: var(--ss-surface);
+  border-color: var(--ss-accent);
+  color: var(--ss-accent);
+}
+body.variant-split_screen .page-item.active .page-link {
+  background: var(--ss-accent);
+  border-color: var(--ss-accent);
+  color: #fff;
+  box-shadow: 0 2px 8px var(--ss-glow);
+}
+body.variant-split_screen .page-item.disabled .page-link {
+  background: var(--ss-surface);
+  border-color: var(--ss-border);
+  color: color-mix(in srgb, var(--ss-text-muted) 40%, transparent);
+}
+
+/* =================================================================
+   SELECTION & SCROLLBAR
+   ================================================================= */
+body.variant-split_screen ::selection {
+  background: var(--ss-accent);
+  color: #fff;
+}
+body.variant-split_screen::-webkit-scrollbar {
+  width: 8px;
+}
+body.variant-split_screen::-webkit-scrollbar-track {
+  background: var(--ss-surface);
+}
+body.variant-split_screen::-webkit-scrollbar-thumb {
+  background: var(--ss-border);
+  border-radius: 4px;
+}
+body.variant-split_screen::-webkit-scrollbar-thumb:hover {
+  background: var(--ss-text-muted);
+}
+
+/* =================================================================
+   REDUCED MOTION
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-split_screen .card,
+  body.variant-split_screen .ss-btn-primary,
+  body.variant-split_screen .ss-btn-ghost,
+  body.variant-split_screen .btn,
+  body.variant-split_screen .ss-contact-links a {
+    transition: none !important;
+  }
+  body.variant-split_screen .card:hover,
+  body.variant-split_screen .ss-btn-primary:hover,
+  body.variant-split_screen .ss-btn-ghost:hover,
+  body.variant-split_screen .btn:hover {
+    transform: none !important;
+  }
+}
+
+/* =================================================================
+   RESPONSIVE — Stack on mobile
+   ================================================================= */
+@media (max-width: 767.98px) {
+  /* Hero */
+  body.variant-split_screen .ss-hero {
+    flex-direction: column;
+    min-height: auto;
+  }
+  body.variant-split_screen .ss-hero__content,
+  body.variant-split_screen .ss-hero__visual {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  body.variant-split_screen .ss-hero__content {
+    padding: 2.5rem 1.5rem 1.5rem;
+  }
+  body.variant-split_screen .ss-hero__visual {
+    padding: 1.5rem;
+  }
+  body.variant-split_screen .ss-hero__visual::before {
+    left: 10%; right: 10%; top: 0; bottom: auto;
+    width: auto; height: 2px;
+  }
+  body.variant-split_screen .ss-hero h1 {
+    font-size: 2.1rem;
+  }
+
+  /* Featured */
+  body.variant-split_screen .ss-featured-inner {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  body.variant-split_screen .ss-featured-side {
+    flex: none;
+    max-width: 100%;
+    position: static;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  body.variant-split_screen .ss-featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Detail header */
+  body.variant-split_screen .ss-detail-header {
+    flex-direction: column;
+    min-height: auto;
+  }
+  body.variant-split_screen .ss-detail-header__info,
+  body.variant-split_screen .ss-detail-header__image {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  body.variant-split_screen .ss-detail-header__info {
+    padding: 2rem 1.5rem;
+  }
+  body.variant-split_screen .ss-detail-header__image {
+    padding: 1.5rem;
+    order: -1;
+  }
+  body.variant-split_screen .ss-detail-header__image::before {
+    display: none;
+  }
+
+  /* About */
+  body.variant-split_screen .ss-about-split {
+    flex-direction: column;
+    min-height: auto;
+  }
+  body.variant-split_screen .ss-about-visual,
+  body.variant-split_screen .ss-about-content {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+  }
+  body.variant-split_screen .ss-about-visual::after {
+    display: none;
+  }
+
+  /* Contact */
+  body.variant-split_screen .ss-contact-split {
+    flex-direction: column;
+    min-height: auto;
+  }
+  body.variant-split_screen .ss-contact-info,
+  body.variant-split_screen .ss-contact-form {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+  }
+  body.variant-split_screen .ss-contact-info::after {
+    display: none;
+  }
+
+  /* Split compositions */
+  body.variant-split_screen .ss-split {
+    flex-direction: column;
+    min-height: auto;
+  }
+  body.variant-split_screen .ss-split__panel,
+  body.variant-split_screen .ss-split__main {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+  }
+  body.variant-split_screen .ss-split__panel::after {
+    display: none;
+  }
+
+  /* Sidebar unstick */
+  body.variant-split_screen .ss-sidebar-meta {
+    position: static;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  body.variant-split_screen .ss-hero__content {
+    padding: 3rem 2.5rem 3rem 3%;
+  }
+  body.variant-split_screen .ss-hero__visual {
+    padding: 2rem;
+  }
+  body.variant-split_screen .ss-hero h1 {
+    font-size: 2.5rem;
+  }
+  body.variant-split_screen .ss-featured-side {
+    flex: 0 0 200px;
+    max-width: 200px;
+  }
+  body.variant-split_screen .ss-featured-grid {
+    grid-template-columns: 1fr;
+  }
+  body.variant-split_screen .ss-detail-header__info {
+    padding: 2.5rem 2rem 2.5rem 3%;
+  }
+  body.variant-split_screen .ss-about-visual {
+    flex: 0 0 38%;
+    max-width: 38%;
+    padding: 2rem;
+  }
+  body.variant-split_screen .ss-about-content {
+    padding: 2.5rem;
+  }
+  body.variant-split_screen .ss-contact-info {
+    flex: 0 0 36%;
+    max-width: 36%;
+    padding: 2.5rem 2rem;
+  }
+}

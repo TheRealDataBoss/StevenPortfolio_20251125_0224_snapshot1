@@ -1,0 +1,85 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Home | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="executive_minimal"></div>
+
+{# ── HERO — pure white, massive type, ruled bottom ── #}
+<section class="em-hero">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="em-hero__inner">
+                    <span class="em-eyebrow">{{ settings.hero_label|default:"Personal Site" }}</span>
+                    <h1 class="em-display mb-3">{{ settings.hero_title|default:"Steven Wazlavek" }}</h1>
+                    {% if settings.hero_roles %}
+                        <p class="em-lead mb-2">{{ settings.hero_roles }}</p>
+                    {% endif %}
+                    <p class="em-lead">{{ settings.hero_subtitle|default:"Explore selected projects, resume highlights, and ways to contact me." }}</p>
+                    <div class="d-flex gap-3 flex-wrap mt-4">
+                        <a class="btn btn-outline-dark" href="{% url 'portfolio:project_list' %}">See Projects</a>
+                        {% if site_settings.resume_file %}
+                            <a class="btn btn-outline-secondary" href="{{ site_settings.resume_file.url }}"><i class="fas fa-download me-1"></i> Resume</a>
+                        {% endif %}
+                        <a class="btn btn-outline-secondary" href="{% url 'portfolio:contact' %}">Contact</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                {% if settings.hero_image %}
+                    <img src="{{ settings.hero_image.url }}" class="img-fluid em-hero__image" alt="Profile photo" style="max-height:400px;" />
+                {% else %}
+                    <div style="border:1px solid var(--em-border);border-radius:6px;padding:3.5rem 2rem;" class="text-center">
+                        <i class="fa-solid fa-user fa-3x d-block mb-3" style="color:var(--em-text-muted);opacity:0.4;"></i>
+                        <p class="mb-0" style="font-size:0.84rem;color:var(--em-text-muted);">Upload a hero image via Admin &rarr; Site settings.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── FEATURED PROJECTS — clean grid with hairline rule separator ── #}
+<section class="em-section">
+    <div class="container">
+        <div class="em-content">
+            <div class="d-flex justify-content-between align-items-baseline mb-1">
+                <h2>Featured</h2>
+                <a href="{% url 'portfolio:project_list' %}" class="em-btn-ghost">View all <i class="fas fa-arrow-right ms-1" style="font-size:0.7rem;"></i></a>
+            </div>
+            <hr class="em-rule">
+
+            {% if featured_projects %}
+                <div class="em-grid em-grid--3">
+                    {% for project in featured_projects %}
+                        <div class="em-project-card">
+                            {% if project.image %}
+                                {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+                            {% endif %}
+                            <div class="em-project-card__body">
+                                <div class="em-project-card__cat">{{ project.category.name }}</div>
+                                <h3 class="em-project-card__title">{{ project.title }}</h3>
+                                <p class="em-project-card__desc">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                                {% if project.tech_stack %}
+                                    <div class="mb-3">
+                                        {% for tech in project.tech_stack|split:"," %}
+                                            <span class="em-tag">{{ tech }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="mt-auto">
+                                    <a href="{{ project.get_absolute_url }}" class="em-project-card__link stretched-link">View details</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5" style="color:var(--em-text-muted);font-size:0.88rem;">
+                    No featured projects yet. Mark projects as Featured in Admin to display them here.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

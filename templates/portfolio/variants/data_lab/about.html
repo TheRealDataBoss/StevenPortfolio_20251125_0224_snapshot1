@@ -1,0 +1,62 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}About{% if site_settings and site_settings.full_name %} - {{ site_settings.full_name }}{% endif %} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="data_lab"></div>
+<section class="hero py-4">
+    <div class="container">
+        <p class="text-uppercase fw-semibold mb-1 small" style="font-family:monospace;letter-spacing:.15em;color:var(--accent-cyan,#00e5ff);">About</p>
+        <h1 class="display-3 fw-bold mb-0">The Analyst</h1>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4 overflow-hidden" style="border-radius:6px;">
+                    <div class="card-body text-center p-5">
+                        {% if site_settings and site_settings.headshot %}
+                            {% responsive_image image=site_settings.headshot variant="square" shape="circle" alt=site_settings.full_name|default:"Headshot" extra_class="mx-auto mb-4" %}
+                        {% elif site_settings and site_settings.hero_image %}
+                            {% media_img site_settings.hero_image ratio="landscape" fit="cover" alt="About image" shadow=True %}
+                        {% else %}
+                            <div class="bg-light border p-5 text-center text-muted mb-4" style="border-radius:6px;font-family:monospace;">Add a headshot in Site Settings.</div>
+                        {% endif %}
+                        {% if site_settings and site_settings.full_name %}
+                            <h2 class="display-5 fw-bold mb-1">{{ site_settings.full_name }}</h2>
+                        {% elif site_settings and site_settings.about_title %}
+                            <h2 class="display-5 fw-bold mb-1">{{ site_settings.about_title }}</h2>
+                        {% else %}
+                            <h2 class="display-5 fw-bold mb-1">About Me</h2>
+                        {% endif %}
+                        {% if site_settings and site_settings.headline %}
+                            <p class="text-muted lead mb-0" style="font-family:monospace;">{{ site_settings.headline }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="text-secondary mb-4">
+                    {% if site_settings and site_settings.bio_long %}
+                        {{ site_settings.bio_long|linebreaks }}
+                    {% elif site_settings and site_settings.about_body %}
+                        <p class="lead">{{ site_settings.about_body }}</p>
+                    {% else %}
+                        <p class="lead" style="font-family:monospace;">Use the admin Site Settings to add your bio and tell your story.</p>
+                    {% endif %}
+                </div>
+
+                {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+                    <div class="d-flex flex-wrap gap-3 justify-content-center">
+                        {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-primary btn-lg" style="border-radius:6px;"><i class="fab fa-linkedin me-1"></i> LinkedIn</a>
+                        {% endif %}
+                        {% if site_settings.github_url %}
+                            <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-lg" style="border-radius:6px;"><i class="fab fa-github me-1"></i> GitHub</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

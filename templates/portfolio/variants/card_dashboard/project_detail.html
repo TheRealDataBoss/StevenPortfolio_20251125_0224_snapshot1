@@ -1,0 +1,211 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}{{ project.title }} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+    .cd-dot--blue { background: #007bff; }
+    .cd-meta-row { padding: .5rem 0; border-bottom: 1px solid #f0f0f0; font-size: .85rem; }
+    .cd-meta-row:last-child { border-bottom: none; }
+    .cd-meta-label { color: #6c757d; font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .03em; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:project_list' %}" class="text-decoration-none">Projects</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ project.title|truncatewords:5 }}</li>
+                    </ol>
+                </nav>
+                <span class="badge bg-primary">{{ project.category.name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-3">
+            {# Main content column #}
+            <div class="col-lg-8">
+                {# Project overview card #}
+                <div class="cd-widget shadow-sm mb-3">
+                    <div class="widget-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-cube me-1"></i> Project Overview</span>
+                        {% if project.is_featured %}<span class="badge bg-success" style="font-size:.65rem;">Featured</span>{% endif %}
+                    </div>
+                    <div class="widget-body">
+                        {% if project.image %}
+                            {% responsive_image image=project.image variant="hero" alt=project.title extra_class="w-100 mb-3" %}
+                        {% endif %}
+                        <h5 class="fw-bold mb-2">{{ project.title }}</h5>
+                        <p class="text-muted cd-compact mb-3">{{ project.summary|default:project.description|truncatewords:30 }}</p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            {% if project.tags %}
+                                {% for tag in project.tags|split:"," %}
+                                    <span class="badge bg-secondary-subtle text-secondary" style="font-size:.7rem;">{{ tag }}</span>
+                                {% endfor %}
+                            {% endif %}
+                            {% if project.tech_stack %}
+                                {% for tech in project.tech_stack|split:"," %}
+                                    <span class="badge bg-primary-subtle text-primary" style="font-size:.7rem;">{{ tech }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <article class="text-secondary cd-compact">{{ project.description|linebreaks }}</article>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            {% if project.repo_url %}
+                                <a class="btn btn-sm btn-outline-dark" href="{{ project.repo_url }}" target="_blank" rel="noopener"><i class="fab fa-github me-1"></i> Source Code</a>
+                            {% endif %}
+                            {% if project.live_url %}
+                                <a class="btn btn-sm btn-primary" href="{{ project.live_url }}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt me-1"></i> Live Demo</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# Project notes card #}
+                {% if project.notes %}
+                <div class="cd-widget shadow-sm mb-3">
+                    <div class="widget-header"><i class="fas fa-sticky-note me-1"></i> Notes</div>
+                    <div class="widget-body cd-compact text-secondary">
+                        {{ project.notes|linebreaksbr }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Attachments card #}
+                {% if visible_attachments %}
+                <div class="cd-widget shadow-sm mb-3">
+                    <div class="widget-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-paperclip me-1"></i> Attachments</span>
+                        <span class="badge bg-secondary">{{ visible_attachments|length }}</span>
+                    </div>
+                    <div class="widget-body">
+                        {% for att in visible_attachments %}
+                            <div class="{% if not forloop.last %}mb-3 pb-3 border-bottom{% endif %}">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong class="cd-compact">{{ att }}</strong>
+                                    <span class="d-flex gap-1">
+                                        {% if att.file %}
+                                            {% if att.is_pdf %}
+                                                <a href="{% url 'portfolio:project_attachment_preview' att.pk %}" class="btn btn-sm btn-outline-primary" target="_blank"><i class="fas fa-eye me-1"></i>Preview</a>
+                                            {% endif %}
+                                            <a href="{% url 'portfolio:project_attachment_download' att.pk %}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-download me-1"></i>Download</a>
+                                        {% elif att.external_url %}
+                                            <a href="{{ att.external_url }}" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener"><i class="fas fa-external-link-alt me-1"></i>Open</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% if att.file %}
+                                    {% if att.preview_kind == "pdf" %}
+                                    <iframe src="{% url 'portfolio:project_attachment_pdf_inline' att.pk %}" class="w-100 border rounded" style="height:400px;" title="{{ att }}"></iframe>
+                                    {% elif att.preview_kind == "image" %}
+                                    <img src="{{ att.file.url }}" class="img-fluid rounded" alt="{{ att }}" style="max-height:400px;">
+                                    {% elif att.preview_kind == "notebook" %}
+                                    <iframe src="{% url 'portfolio:project_attachment_notebook_inline' att.pk %}" class="w-100 border rounded" style="height:400px;" title="{{ att }}"></iframe>
+                                    {% elif att.preview_kind == "audio" %}
+                                    <audio controls src="{{ att.file.url }}" class="w-100"></audio>
+                                    {% elif att.preview_kind == "video" %}
+                                    <video controls src="{{ att.file.url }}" class="w-100 rounded" style="max-height:400px;"></video>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% elif project.attachment %}
+                <div class="cd-widget shadow-sm mb-3">
+                    <div class="widget-header"><i class="fas fa-paperclip me-1"></i> Attachment</div>
+                    <div class="widget-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="cd-compact">{{ project.attachment.name|cut:"projects/files/" }}</strong>
+                            <a href="{% url 'portfolio:legacy_attachment_download' project.pk %}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-download me-1"></i>Download</a>
+                        </div>
+                        {% if legacy_preview_kind == "pdf" %}
+                        <iframe src="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="w-100 border rounded" style="height:400px;" title="Attachment"></iframe>
+                        {% elif legacy_preview_kind == "image" %}
+                        <img src="{{ project.attachment.url }}" class="img-fluid rounded" alt="Attachment" style="max-height:400px;">
+                        {% elif legacy_preview_kind == "notebook" %}
+                        <iframe src="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="w-100 border rounded" style="height:400px;" title="Attachment"></iframe>
+                        {% elif legacy_preview_kind == "audio" %}
+                        <audio controls src="{{ project.attachment.url }}" class="w-100"></audio>
+                        {% elif legacy_preview_kind == "video" %}
+                        <video controls src="{{ project.attachment.url }}" class="w-100 rounded" style="max-height:400px;"></video>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            {# Sidebar meta column #}
+            <div class="col-lg-4">
+                <div class="cd-widget shadow-sm mb-3">
+                    <div class="widget-header"><i class="fas fa-info-circle me-1"></i> Metadata</div>
+                    <div class="widget-body">
+                        <div class="cd-meta-row">
+                            <div class="cd-meta-label">Category</div>
+                            <div>{{ project.category.name }}</div>
+                        </div>
+                        {% if project.tech_stack %}
+                        <div class="cd-meta-row">
+                            <div class="cd-meta-label">Tech Stack</div>
+                            <div>{{ project.tech_stack }}</div>
+                        </div>
+                        {% endif %}
+                        <div class="cd-meta-row">
+                            <div class="cd-meta-label">Created</div>
+                            <div><i class="fas fa-calendar text-muted me-1" style="font-size:.75rem;"></i> {{ project.created_at|date:"M d, Y" }}</div>
+                        </div>
+                        <div class="cd-meta-row">
+                            <div class="cd-meta-label">Updated</div>
+                            <div><i class="fas fa-sync-alt text-muted me-1" style="font-size:.75rem;"></i> {{ project.updated_at|date:"M d, Y" }}</div>
+                        </div>
+                        {% if project.is_featured %}
+                        <div class="cd-meta-row">
+                            <div class="cd-meta-label">Status</div>
+                            <div><span class="cd-dot cd-dot--green me-1"></span> Featured</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Quick links widget #}
+                <div class="cd-widget shadow-sm">
+                    <div class="widget-header"><i class="fas fa-link me-1"></i> Links</div>
+                    <div class="widget-body cd-compact">
+                        {% if project.repo_url %}
+                        <a href="{{ project.repo_url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-dark me-2"><i class="fab fa-github"></i></span>
+                            Repository
+                            <i class="fas fa-external-link-alt ms-auto text-muted" style="font-size:.7rem;"></i>
+                        </a>
+                        {% endif %}
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" class="d-flex align-items-center text-decoration-none text-dark py-2 border-bottom" target="_blank" rel="noopener">
+                            <span class="badge bg-primary me-2"><i class="fas fa-globe"></i></span>
+                            Live Demo
+                            <i class="fas fa-external-link-alt ms-auto text-muted" style="font-size:.7rem;"></i>
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'portfolio:project_list' %}" class="d-flex align-items-center text-decoration-none text-dark py-2">
+                            <span class="badge bg-secondary me-2"><i class="fas fa-arrow-left"></i></span>
+                            Back to Projects
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

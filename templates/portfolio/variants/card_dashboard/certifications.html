@@ -1,0 +1,154 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Certifications | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Certifications",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for cert in all_certifications %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ cert.name|escapejs }}",
+        "description": "{{ cert.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ cert.issuer|escapejs }}"
+        }{% if cert.credential_url %},
+        "url": "{{ cert.credential_url|escapejs }}"{% endif %}{% if cert.credential_id %},
+        "credentialCategory": "{{ cert.credential_id|escapejs }}"{% endif %}{% if cert.issue_date %},
+        "dateCreated": "{{ cert.issue_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+    .cd-dot--blue { background: #007bff; }
+    .cd-dot--amber { background: #ffc107; }
+    .cd-group-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #6c757d; margin-bottom: .5rem; padding-bottom: .25rem; border-bottom: 2px solid #e0e3e8; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Certifications</li>
+                    </ol>
+                </nav>
+                <span class="badge bg-primary">{{ all_certifications|length }} credential{{ all_certifications|length|pluralize }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        {% for group_name, group_cat, certs in cert_groups %}
+            <div class="cd-group-label mt-3"><i class="fas fa-certificate me-1"></i> {{ group_name }}</div>
+            <div class="row g-3 mb-4">
+                {% for cert in certs %}
+                <div class="col-md-6 col-lg-6">
+                    <div class="cd-widget shadow-sm h-100">
+                        <div class="widget-header d-flex justify-content-between align-items-center">
+                            <span class="text-truncate">{{ cert.name }}</span>
+                            {% if cert.expires_date %}
+                                <span class="badge bg-warning-subtle text-warning" style="font-size:.6rem;">Exp {{ cert.expires_date|date:"M Y" }}</span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success" style="font-size:.6rem;">Active</span>
+                            {% endif %}
+                        </div>
+                        <div class="widget-body cd-compact">
+                            <div class="d-flex align-items-start mb-2">
+                                <span class="cd-dot cd-dot--green me-2 mt-1 flex-shrink-0"></span>
+                                <div>
+                                    <span class="fw-semibold">{{ cert.issuer }}</span>
+                                    {% if cert.credential_id %}<span class="text-muted"> &middot; ID: {{ cert.credential_id }}</span>{% endif %}
+                                </div>
+                            </div>
+                            {% if cert.issue_date %}
+                                <div class="text-muted mb-2" style="font-size:.78rem;"><i class="fas fa-calendar-check me-1"></i> Issued {{ cert.issue_date|date:"M Y" }}</div>
+                            {% endif %}
+                            {% if cert.description %}
+                                <p class="text-secondary mb-2" style="font-size:.82rem;">{{ cert.description|linebreaks }}</p>
+                            {% endif %}
+                            {% if cert.image %}
+                                <div class="mb-2">
+                                    <img src="{{ cert.image.url }}" alt="{{ cert.name }}" class="img-fluid rounded shadow-sm" style="max-height:160px;">
+                                </div>
+                            {% endif %}
+                            <div class="d-flex flex-wrap gap-1">
+                                {% if cert.credential_url %}
+                                    <a href="{{ cert.credential_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary" style="font-size:.7rem;"><i class="fas fa-external-link-alt me-1"></i> Verify</a>
+                                {% endif %}
+                                {% if cert.attachment %}
+                                    <a href="{{ cert.attachment.url }}" class="btn btn-sm btn-outline-secondary" style="font-size:.7rem;"><i class="fas fa-download me-1"></i> Download</a>
+                                    {% if cert.preview_kind == "pdf" %}
+                                        <a href="{% url 'portfolio:certification_preview' cert.pk %}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary" style="font-size:.7rem;"><i class="fas fa-file-pdf me-1"></i> Preview</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            {% if cert.preview_kind == "pdf" %}
+                                <div class="mt-2 ratio ratio-16x9 border rounded overflow-hidden cert-pdf-preview" data-cert-id="{{ cert.pk }}">
+                                    <iframe src="{% url 'portfolio:certification_inline' cert.pk %}" title="PDF preview: {{ cert.name }}" allowfullscreen></iframe>
+                                </div>
+                            {% elif cert.preview_kind == "image" %}
+                                <div class="mt-2 text-center">
+                                    <img src="{% url 'portfolio:certification_inline' cert.pk %}" alt="Attachment: {{ cert.name }}" class="img-fluid rounded shadow-sm" style="max-height:300px;">
+                                </div>
+                            {% elif cert.preview_kind == "text" %}
+                                <div class="mt-2 ratio ratio-16x9 border rounded overflow-hidden">
+                                    <iframe src="{% url 'portfolio:certification_inline' cert.pk %}" title="Text preview: {{ cert.name }}" style="background:#f8f9fa;"></iframe>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% empty %}
+            <div class="cd-widget shadow-sm">
+                <div class="widget-body text-center text-muted cd-compact py-4">
+                    <i class="fas fa-certificate fa-2x mb-2 d-block"></i>
+                    No certifications yet. Add them via the admin.
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if is_paginated %}
+        <nav aria-label="Certification pagination" class="mt-4">
+            <ul class="pagination pagination-sm justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

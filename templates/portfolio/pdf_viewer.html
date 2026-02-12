@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title|default:"PDF Viewer" }}</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #525659; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+#toolbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: #323639; color: #fff; padding: 6px 12px;
+  font-size: 13px; flex-wrap: wrap;
+}
+#toolbar button, #toolbar a.tb-btn {
+  background: #474a4d; color: #d4d4d4; border: 1px solid #5a5d60;
+  border-radius: 3px; padding: 4px 10px; cursor: pointer;
+  font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+}
+#toolbar button:hover, #toolbar a.tb-btn:hover { background: #5a5d60; color: #fff; }
+#toolbar button:disabled { opacity: .4; cursor: default; }
+#toolbar .sep { width: 1px; height: 20px; background: #5a5d60; }
+#pageInfo { user-select: none; }
+#pageNum {
+  width: 40px; text-align: center; background: #474a4d; color: #d4d4d4;
+  border: 1px solid #5a5d60; border-radius: 3px; padding: 2px 4px; font-size: 13px;
+}
+#viewer { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 8px; }
+#viewer canvas { box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #fff; }
+#loading { color: #ccc; padding: 40px; text-align: center; font-size: 16px; }
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <button id="prevBtn" title="Previous page" disabled>&lsaquo; Prev</button>
+  <span id="pageInfo">
+    <input type="number" id="pageNum" value="1" min="1"> / <span id="pageCount">-</span>
+  </span>
+  <button id="nextBtn" title="Next page" disabled>Next &rsaquo;</button>
+  <span class="sep"></span>
+  <button id="zoomOutBtn" title="Zoom out">&minus;</button>
+  <button id="zoomResetBtn" title="Reset zoom">Fit</button>
+  <button id="zoomInBtn" title="Zoom in">+</button>
+  <span class="sep"></span>
+  <a class="tb-btn" href="{{ pdf_url }}" target="_blank" rel="noopener" title="Open in new tab">&#x2197; New tab</a>
+  <button id="printBtn" title="Print">&#x1F5B6; Print</button>
+  <a class="tb-btn" href="{{ pdf_url }}" download title="Download PDF">&#x2B07; Download</a>
+</div>
+<div id="viewer">
+  <div id="loading">Loading PDF&hellip;</div>
+</div>
+
+<script type="module">
+import * as pdfjsLib from '{% static "pdfjs/pdf.min.mjs" %}';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '{% static "pdfjs/pdf.worker.min.mjs" %}';
+
+const pdfUrl = '{{ pdf_url }}';
+const viewer = document.getElementById('viewer');
+const loading = document.getElementById('loading');
+const pageNumInput = document.getElementById('pageNum');
+const pageCountSpan = document.getElementById('pageCount');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const zoomInBtn = document.getElementById('zoomInBtn');
+const zoomOutBtn = document.getElementById('zoomOutBtn');
+const zoomResetBtn = document.getElementById('zoomResetBtn');
+const printBtn = document.getElementById('printBtn');
+
+let pdfDoc = null;
+let currentPage = 1;
+let scale = 0;
+let baseFitScale = 1;
+const ZOOM_STEP = 0.2;
+const MIN_SCALE = 0.4;
+const MAX_SCALE = 4.0;
+
+async function loadPdf() {
+  try {
+    pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+    pageCountSpan.textContent = pdfDoc.numPages;
+    pageNumInput.max = pdfDoc.numPages;
+    loading.remove();
+    await renderAllPages();
+  } catch (err) {
+    loading.textContent = 'Failed to load PDF.';
+    console.error(err);
+  }
+}
+
+async function renderAllPages() {
+  viewer.querySelectorAll('canvas').forEach(c => c.remove());
+  for (let i = 1; i <= pdfDoc.numPages; i++) {
+    const page = await pdfDoc.getPage(i);
+    const vp0 = page.getViewport({ scale: 1 });
+    if (i === 1) baseFitScale = (viewer.clientWidth - 20) / vp0.width;
+    const effectiveScale = scale === 0 ? baseFitScale : scale;
+    const viewport = page.getViewport({ scale: effectiveScale });
+    const canvas = document.createElement('canvas');
+    canvas.dataset.page = i;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(viewport.width * dpr);
+    canvas.height = Math.floor(viewport.height * dpr);
+    canvas.style.width = Math.floor(viewport.width) + 'px';
+    canvas.style.height = Math.floor(viewport.height) + 'px';
+    ctx.scale(dpr, dpr);
+    viewer.appendChild(canvas);
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+  }
+  updateButtons();
+}
+
+function updateButtons() {
+  prevBtn.disabled = currentPage <= 1;
+  nextBtn.disabled = currentPage >= pdfDoc.numPages;
+  pageNumInput.value = currentPage;
+}
+
+function scrollToPage(num) {
+  currentPage = Math.max(1, Math.min(num, pdfDoc.numPages));
+  const canvas = viewer.querySelector('canvas[data-page="' + currentPage + '"]');
+  if (canvas) canvas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  updateButtons();
+}
+
+prevBtn.addEventListener('click', () => scrollToPage(currentPage - 1));
+nextBtn.addEventListener('click', () => scrollToPage(currentPage + 1));
+pageNumInput.addEventListener('change', () => scrollToPage(parseInt(pageNumInput.value, 10) || 1));
+zoomInBtn.addEventListener('click', () => { const eff = scale === 0 ? baseFitScale : scale; scale = Math.min(eff + ZOOM_STEP, MAX_SCALE); renderAllPages(); });
+zoomOutBtn.addEventListener('click', () => { const eff = scale === 0 ? baseFitScale : scale; scale = Math.max(eff - ZOOM_STEP, MIN_SCALE); renderAllPages(); });
+zoomResetBtn.addEventListener('click', () => { scale = 0; renderAllPages(); });
+printBtn.addEventListener('click', () => window.print());
+
+const observer = new IntersectionObserver(entries => {
+  for (const e of entries) {
+    if (e.isIntersecting) { currentPage = parseInt(e.target.dataset.page, 10); pageNumInput.value = currentPage; updateButtons(); }
+  }
+}, { root: null, threshold: 0.5 });
+
+new MutationObserver(() => {
+  viewer.querySelectorAll('canvas[data-page]').forEach(c => observer.observe(c));
+}).observe(viewer, { childList: true });
+
+window.addEventListener('resize', () => { if (scale === 0 && pdfDoc) renderAllPages(); });
+loadPdf();
+</script>
+</body>
+</html>

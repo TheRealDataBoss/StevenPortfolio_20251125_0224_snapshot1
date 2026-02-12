@@ -1,0 +1,412 @@
+/* =================================================================
+   Data Lab — dark technical aesthetic, dashboard-grade layout
+   Scoped entirely to body.variant-data_lab
+   Uses Design Token CSS vars with dark defaults:
+     --accent, --bg, --surface, --text, --text-muted, --border
+   ================================================================= */
+
+/* --- Token defaults (dark) — overridden by Design Tokens when set --- */
+body.variant-data_lab {
+  --dl-accent:     var(--accent, #38bdf8);
+  --dl-bg:         var(--bg, #0f172a);
+  --dl-surface:    var(--surface, #1e293b);
+  --dl-text:       var(--text, #e2e8f0);
+  --dl-text-muted: var(--text-muted, #94a3b8);
+  --dl-border:     var(--border, #334155);
+  --dl-glow:       color-mix(in srgb, var(--dl-accent) 18%, transparent);
+
+  background: var(--dl-bg);
+  color: var(--dl-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.65;
+  padding-top: 56px;
+}
+
+/* --- Grid background pattern (subtle) ------------------------------ */
+body.variant-data_lab::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--dl-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--dl-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.18;
+}
+
+/* --- Typography ---------------------------------------------------- */
+body.variant-data_lab h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--dl-text);
+}
+body.variant-data_lab h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--dl-text);
+}
+body.variant-data_lab h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--dl-text);
+}
+body.variant-data_lab h4,
+body.variant-data_lab h5,
+body.variant-data_lab h6 {
+  font-weight: 600;
+  color: var(--dl-text);
+}
+
+/* Monospace accent for metadata: badges, small, dates, tech stack */
+body.variant-data_lab .badge,
+body.variant-data_lab .card-text.text-muted,
+body.variant-data_lab small,
+body.variant-data_lab time {
+  font-family: "SF Mono", "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+/* --- Navbar — tight dashboard feel --------------------------------- */
+body.variant-data_lab .navbar {
+  background: var(--dl-surface) !important;
+  border-bottom: 1px solid var(--dl-border);
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+body.variant-data_lab .navbar .navbar-brand {
+  color: var(--dl-accent) !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: "SF Mono", "Cascadia Code", "Fira Code", "Consolas", monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+body.variant-data_lab .navbar .nav-link {
+  color: var(--dl-text-muted) !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-left: 0.85rem;
+  padding-right: 0.85rem;
+  transition: color 0.15s ease, background 0.15s ease;
+  border-radius: 4px;
+}
+
+body.variant-data_lab .navbar .nav-link:hover {
+  color: var(--dl-text) !important;
+  background: rgba(255,255,255,0.05);
+}
+body.variant-data_lab .navbar .nav-link.active {
+  color: var(--dl-accent) !important;
+  background: rgba(255,255,255,0.06);
+}
+
+body.variant-data_lab .navbar-toggler {
+  border-color: var(--dl-border);
+}
+body.variant-data_lab .navbar-toggler-icon {
+  filter: brightness(2);
+}
+
+body.variant-data_lab .dropdown-menu {
+  background: var(--dl-surface);
+  border: 1px solid var(--dl-border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  border-radius: 6px;
+}
+body.variant-data_lab .dropdown-item {
+  color: var(--dl-text-muted);
+}
+body.variant-data_lab .dropdown-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--dl-text);
+}
+body.variant-data_lab .dropdown-toggle::after {
+  opacity: 0.5;
+}
+
+/* --- Hero — grid-overlaid, contained ------------------------------- */
+body.variant-data_lab .hero {
+  background: linear-gradient(135deg, var(--dl-bg), var(--dl-surface)) !important;
+  color: var(--dl-text) !important;
+  padding: 3.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid overlay on hero only */
+body.variant-data_lab .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--dl-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--dl-accent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.04;
+}
+
+body.variant-data_lab .hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+body.variant-data_lab .hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--dl-text);
+}
+
+body.variant-data_lab .hero p {
+  color: var(--dl-text-muted);
+}
+
+body.variant-data_lab .hero .text-white-50,
+body.variant-data_lab .hero .text-white-75 {
+  color: var(--dl-text-muted) !important;
+}
+
+body.variant-data_lab .hero .text-uppercase {
+  font-family: "SF Mono", "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--dl-accent) !important;
+}
+
+/* Hero buttons: ghost with accent glow */
+body.variant-data_lab .hero .btn-light,
+body.variant-data_lab .hero .btn-outline-light {
+  background: transparent;
+  color: var(--dl-accent);
+  border: 1px solid var(--dl-accent);
+  font-weight: 500;
+  box-shadow: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-data_lab .hero .btn-light:hover,
+body.variant-data_lab .hero .btn-outline-light:hover {
+  background: var(--dl-accent);
+  color: var(--dl-bg);
+  box-shadow: 0 0 12px var(--dl-glow);
+}
+
+/* --- Cards — sharp module panels ----------------------------------- */
+body.variant-data_lab .card {
+  background: var(--dl-surface);
+  border: 1px solid var(--dl-border);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-data_lab .card:hover {
+  border-color: var(--dl-accent);
+  box-shadow: 0 0 0 1px var(--dl-glow), 0 4px 16px rgba(0,0,0,0.35);
+}
+
+body.variant-data_lab .card-body {
+  padding: 1.25rem;
+}
+body.variant-data_lab .card-title {
+  color: var(--dl-text);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+body.variant-data_lab .card-text.text-muted {
+  color: var(--dl-text-muted) !important;
+}
+
+body.variant-data_lab .shadow-sm {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25) !important;
+}
+
+/* --- Badges — monospace accent tint -------------------------------- */
+body.variant-data_lab .badge.bg-primary-subtle {
+  background: var(--dl-glow) !important;
+  color: var(--dl-accent) !important;
+  border: 1px solid color-mix(in srgb, var(--dl-accent) 30%, transparent);
+}
+body.variant-data_lab .badge.bg-secondary-subtle {
+  background: rgba(148,163,184,0.12) !important;
+  color: var(--dl-text-muted) !important;
+  border: 1px solid var(--dl-border);
+}
+body.variant-data_lab .badge.bg-success {
+  background: rgba(34,197,94,0.15) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(34,197,94,0.3);
+}
+body.variant-data_lab .badge.bg-primary {
+  background: var(--dl-accent) !important;
+  color: var(--dl-bg) !important;
+}
+
+/* --- Buttons ------------------------------------------------------- */
+body.variant-data_lab .btn-primary {
+  background: var(--dl-accent);
+  border-color: var(--dl-accent);
+  color: var(--dl-bg);
+  font-weight: 600;
+  box-shadow: none;
+}
+body.variant-data_lab .btn-primary:hover {
+  background: color-mix(in srgb, var(--dl-accent) 85%, white);
+  border-color: color-mix(in srgb, var(--dl-accent) 85%, white);
+  box-shadow: 0 0 10px var(--dl-glow);
+}
+
+body.variant-data_lab .btn-outline-primary {
+  color: var(--dl-accent);
+  border-color: var(--dl-accent);
+  font-weight: 500;
+  background: transparent;
+}
+body.variant-data_lab .btn-outline-primary:hover {
+  background: var(--dl-accent);
+  color: var(--dl-bg);
+}
+body.variant-data_lab .btn-outline-primary.active,
+body.variant-data_lab .btn-outline-primary:active {
+  background: var(--dl-accent) !important;
+  color: var(--dl-bg) !important;
+}
+
+body.variant-data_lab .btn-outline-secondary {
+  color: var(--dl-text-muted);
+  border-color: var(--dl-border);
+}
+body.variant-data_lab .btn-outline-secondary:hover {
+  background: var(--dl-surface);
+  color: var(--dl-text);
+  border-color: var(--dl-text-muted);
+}
+
+/* --- Focus states — strong visible ring ---------------------------- */
+body.variant-data_lab :focus-visible {
+  outline: 2px solid var(--dl-accent);
+  outline-offset: 2px;
+}
+body.variant-data_lab .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--dl-glow);
+}
+
+/* --- Links --------------------------------------------------------- */
+body.variant-data_lab a {
+  color: var(--dl-accent);
+}
+body.variant-data_lab a:hover {
+  color: color-mix(in srgb, var(--dl-accent) 80%, white);
+}
+body.variant-data_lab .stretched-link {
+  color: var(--dl-accent);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* --- Form controls ------------------------------------------------- */
+body.variant-data_lab .form-control {
+  background: var(--dl-bg);
+  border: 1px solid var(--dl-border);
+  color: var(--dl-text);
+}
+body.variant-data_lab .form-control::placeholder {
+  color: var(--dl-text-muted);
+}
+body.variant-data_lab .form-control:focus {
+  border-color: var(--dl-accent);
+  box-shadow: 0 0 0 3px var(--dl-glow);
+  background: var(--dl-bg);
+  color: var(--dl-text);
+}
+
+/* --- Sections ------------------------------------------------------ */
+body.variant-data_lab section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+body.variant-data_lab .bg-light {
+  background: var(--dl-bg) !important;
+}
+
+body.variant-data_lab .text-muted {
+  color: var(--dl-text-muted) !important;
+}
+
+/* --- Footer -------------------------------------------------------- */
+body.variant-data_lab .footer {
+  background: var(--dl-surface) !important;
+  color: var(--dl-text-muted);
+  border-top: 1px solid var(--dl-border);
+  padding: 1.5rem 0;
+}
+body.variant-data_lab .footer a {
+  color: var(--dl-text-muted) !important;
+}
+body.variant-data_lab .footer a:hover {
+  color: var(--dl-accent) !important;
+}
+
+/* --- Grid & spacing ------------------------------------------------ */
+body.variant-data_lab .featured-grid {
+  gap: 1.25rem;
+}
+
+/* --- Pagination ---------------------------------------------------- */
+body.variant-data_lab .page-link {
+  background: var(--dl-surface);
+  border-color: var(--dl-border);
+  color: var(--dl-text-muted);
+}
+body.variant-data_lab .page-link:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--dl-accent);
+  color: var(--dl-accent);
+}
+body.variant-data_lab .page-item.active .page-link {
+  background: var(--dl-accent);
+  border-color: var(--dl-accent);
+  color: var(--dl-bg);
+}
+body.variant-data_lab .page-item.disabled .page-link {
+  background: var(--dl-surface);
+  border-color: var(--dl-border);
+  color: rgba(148,163,184,0.4);
+}
+
+/* --- Scrollbar (Webkit) -------------------------------------------- */
+body.variant-data_lab::-webkit-scrollbar {
+  width: 8px;
+}
+body.variant-data_lab::-webkit-scrollbar-track {
+  background: var(--dl-bg);
+}
+body.variant-data_lab::-webkit-scrollbar-thumb {
+  background: var(--dl-border);
+  border-radius: 4px;
+}
+body.variant-data_lab::-webkit-scrollbar-thumb:hover {
+  background: var(--dl-text-muted);
+}
+
+/* --- Alerts -------------------------------------------------------- */
+body.variant-data_lab .alert {
+  background: var(--dl-surface);
+  border-color: var(--dl-border);
+  color: var(--dl-text);
+}
+
+/* --- Selection ----------------------------------------------------- */
+body.variant-data_lab ::selection {
+  background: var(--dl-accent);
+  color: var(--dl-bg);
+}

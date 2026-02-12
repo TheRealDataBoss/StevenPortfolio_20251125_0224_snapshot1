@@ -1,0 +1,69 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Home | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="data_lab"></div>
+<section class="hero py-5">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <p class="text-uppercase fw-semibold mb-2 small" style="font-family:monospace;letter-spacing:.15em;color:var(--accent-cyan,#00e5ff);">{{ settings.hero_label|default:"Data Lab" }}</p>
+                <h1 class="display-3 fw-bold mb-3">{{ settings.hero_title|default:"Steven Wazlavek" }}</h1>
+                {% if settings.hero_roles %}<p class="lead mb-2" style="opacity:.8;">{{ settings.hero_roles }}</p>{% endif %}
+                <p class="lead mb-4" style="opacity:.75;">{{ settings.hero_subtitle|default:"Explore selected projects, resume highlights, and ways to connect." }}</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a class="btn btn-primary btn-lg" href="{% url 'portfolio:project_list' %}"><i class="fas fa-flask me-1"></i> View Projects</a>
+                    {% if site_settings.resume_file %}
+                        <a class="btn btn-outline-primary btn-lg" href="{{ site_settings.resume_file.url }}"><i class="fas fa-download me-1"></i> Resume</a>
+                    {% endif %}
+                    <a class="btn btn-outline-primary btn-lg" href="{% url 'portfolio:contact' %}"><i class="fas fa-terminal me-1"></i> Contact</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                {% if settings.hero_image %}
+                    <img src="{{ settings.hero_image.url }}" class="img-fluid shadow-sm" alt="Profile photo" style="max-height:400px;border-radius:6px;" />
+                {% else %}
+                    <div class="card shadow-sm" style="border-radius:6px;">
+                        <div class="card-body p-5 text-center">
+                            <i class="fa-solid fa-chart-line fa-4x mb-3" style="color:var(--accent-cyan,#00e5ff);"></i>
+                            <p class="mb-0" style="font-family:monospace;">Upload a hero image via Admin &rarr; Site Settings.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0"><span style="font-family:monospace;color:var(--accent-cyan,#00e5ff);font-size:.6em;vertical-align:middle;">// </span>Featured Projects</h2>
+            <a href="{% url 'portfolio:project_list' %}" class="btn btn-outline-primary btn-sm">View All</a>
+        </div>
+        {% if featured_projects %}
+        <div class="featured-grid mb-4">
+            {% for project in featured_projects %}
+                <div class="card h-100 shadow-sm overflow-hidden" style="border-radius:6px;">
+                    {% if project.image %}
+                        {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge bg-primary-subtle text-primary mb-2" style="font-family:monospace;font-size:.7em;border-radius:3px;">{{ project.category.name }}</span>
+                        <h5 class="card-title fw-bold">{{ project.title }}</h5>
+                        <p class="card-text text-muted">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                        <a href="{{ project.get_absolute_url }}" class="stretched-link mt-auto" style="font-family:monospace;font-size:.85em;">$ open &rarr;</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <div class="card shadow-sm" style="border-radius:6px;">
+                <div class="card-body text-center text-muted py-5" style="font-family:monospace;">
+                    <i class="fas fa-database fa-2x mb-3 d-block" style="color:var(--accent-cyan,#00e5ff);"></i>
+                    No featured projects yet. Mark projects as Featured in Admin to display them here.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

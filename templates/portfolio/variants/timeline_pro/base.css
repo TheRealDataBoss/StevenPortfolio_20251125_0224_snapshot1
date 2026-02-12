@@ -1,0 +1,916 @@
+/* =================================================================
+   Timeline Pro — editorial career-timeline portfolio variant
+   Scoped entirely to body.variant-timeline_pro
+   Uses Design Token CSS vars with warm professional defaults:
+     --accent, --bg, --surface, --text, --text-muted, --border
+   ================================================================= */
+
+/* --- Token aliases (warm professional palette) ------------------- */
+body.variant-timeline_pro {
+  --tp-accent:     var(--accent, #2563eb);
+  --tp-bg:         var(--bg, #fafaf9);
+  --tp-surface:    var(--surface, #ffffff);
+  --tp-text:       var(--text, #1e293b);
+  --tp-text-muted: var(--text-muted, #64748b);
+  --tp-border:     var(--border, #e2e8f0);
+
+  /* Derived tokens */
+  --tp-accent-soft:  color-mix(in srgb, var(--tp-accent) 8%, var(--tp-bg));
+  --tp-accent-mid:   color-mix(in srgb, var(--tp-accent) 15%, var(--tp-bg));
+  --tp-rail:         color-mix(in srgb, var(--tp-accent) 22%, var(--tp-border));
+  --tp-node:         var(--tp-accent);
+  --tp-focus-ring:   color-mix(in srgb, var(--tp-accent) 30%, transparent);
+  --tp-hover-bg:     color-mix(in srgb, var(--tp-accent) 4%, var(--tp-surface));
+  --tp-heading-serif: "Georgia", "Cambria", "Times New Roman", serif;
+
+  background: var(--tp-bg);
+  color: var(--tp-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.75;
+  letter-spacing: 0.005em;
+  padding-top: 56px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =================================================================
+   TYPOGRAPHY — editorial with serif headings
+   ================================================================= */
+body.variant-timeline_pro h1 {
+  font-family: var(--tp-heading-serif);
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--tp-text);
+}
+body.variant-timeline_pro h2 {
+  font-family: var(--tp-heading-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--tp-text);
+}
+body.variant-timeline_pro h3 {
+  font-family: var(--tp-heading-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--tp-text);
+}
+body.variant-timeline_pro h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--tp-text-muted);
+}
+body.variant-timeline_pro h5 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--tp-text);
+}
+body.variant-timeline_pro p {
+  color: var(--tp-text-muted);
+  line-height: 1.75;
+}
+body.variant-timeline_pro .text-muted {
+  color: var(--tp-text-muted) !important;
+}
+body.variant-timeline_pro .text-secondary {
+  color: var(--tp-text-muted) !important;
+}
+body.variant-timeline_pro .text-primary {
+  color: var(--tp-accent) !important;
+}
+body.variant-timeline_pro a {
+  color: var(--tp-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+body.variant-timeline_pro a:hover {
+  color: color-mix(in srgb, var(--tp-accent) 70%, var(--tp-text));
+}
+body.variant-timeline_pro hr {
+  border-color: var(--tp-border);
+  opacity: 0.6;
+}
+
+/* =================================================================
+   NAVBAR — clean editorial bar
+   ================================================================= */
+body.variant-timeline_pro .navbar {
+  background: var(--tp-surface) !important;
+  border-bottom: 1px solid var(--tp-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  padding: 0.75rem 1.5rem;
+}
+body.variant-timeline_pro .navbar-brand {
+  font-family: var(--tp-heading-serif);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--tp-text) !important;
+  letter-spacing: -0.02em;
+}
+body.variant-timeline_pro .navbar .nav-link {
+  color: var(--tp-text-muted) !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.375rem;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+body.variant-timeline_pro .navbar .nav-link:hover,
+body.variant-timeline_pro .navbar .nav-link:focus {
+  color: var(--tp-text) !important;
+  background: var(--tp-hover-bg);
+}
+body.variant-timeline_pro .navbar .nav-link.active {
+  color: var(--tp-accent) !important;
+  background: var(--tp-accent-soft);
+}
+
+/* Dropdown */
+body.variant-timeline_pro .dropdown-menu {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  padding: 0.35rem;
+}
+body.variant-timeline_pro .dropdown-item {
+  color: var(--tp-text-muted);
+  border-radius: 0.375rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+body.variant-timeline_pro .dropdown-item:hover,
+body.variant-timeline_pro .dropdown-item:focus {
+  color: var(--tp-text);
+  background: var(--tp-hover-bg);
+}
+
+/* Mobile toggler */
+body.variant-timeline_pro .navbar-toggler {
+  border-color: var(--tp-border);
+}
+body.variant-timeline_pro .navbar-toggler-icon {
+  filter: none;
+}
+
+/* =================================================================
+   HERO — editorial gradient
+   ================================================================= */
+body.variant-timeline_pro .hero {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--tp-accent) 85%, #000),
+    color-mix(in srgb, var(--tp-accent) 55%, #1e293b));
+  color: #ffffff;
+  padding: 5.5rem 0 4.5rem;
+  position: relative;
+  overflow: hidden;
+}
+body.variant-timeline_pro .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(255,255,255,0.015) 1px,
+    rgba(255,255,255,0.015) 2px
+  );
+  pointer-events: none;
+}
+body.variant-timeline_pro .hero .display-4 {
+  font-family: var(--tp-heading-serif);
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+}
+body.variant-timeline_pro .hero .lead {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: 400;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+body.variant-timeline_pro .hero .text-uppercase {
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+}
+body.variant-timeline_pro .hero .btn-light {
+  background: #ffffff;
+  color: var(--tp-accent);
+  border: none;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+body.variant-timeline_pro .hero .btn-light:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+body.variant-timeline_pro .hero .btn-outline-light {
+  color: rgba(255,255,255,0.9);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  background: transparent;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+body.variant-timeline_pro .hero .btn-outline-light:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* =================================================================
+   SECTIONS & BACKGROUNDS
+   ================================================================= */
+body.variant-timeline_pro .bg-light {
+  background: var(--tp-bg) !important;
+}
+body.variant-timeline_pro section.py-5 {
+  padding-top: 3.5rem !important;
+  padding-bottom: 3.5rem !important;
+}
+
+/* =================================================================
+   CARDS — clean editorial panels
+   ================================================================= */
+body.variant-timeline_pro .card {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: 0.625rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+body.variant-timeline_pro .card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  transform: translateY(-1px);
+}
+body.variant-timeline_pro .card-body {
+  padding: 1.5rem;
+}
+body.variant-timeline_pro .card-title {
+  font-family: var(--tp-heading-serif);
+  color: var(--tp-text);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+body.variant-timeline_pro .card-text {
+  color: var(--tp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+body.variant-timeline_pro .card-footer {
+  background: transparent;
+  border-top: 1px solid var(--tp-border);
+}
+body.variant-timeline_pro .card .card-img-top {
+  border-bottom: 1px solid var(--tp-border);
+}
+
+/* =================================================================
+   ★ TIMELINE SYSTEM — vertical rail with dated nodes
+   Applied to education & certifications (cards are direct children
+   of .container without grid wrappers)
+   ================================================================= */
+
+/* --- Shift timeline elements right to make room for rail --- */
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4,
+body.variant-timeline_pro section.py-5 > .container > h4.text-muted {
+  margin-left: 2.5rem;
+  position: relative;
+}
+
+/* --- Rail line segments (::after on each element) --- */
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4::after {
+  content: "";
+  position: absolute;
+  left: -1.75rem;
+  top: 0;
+  bottom: -2rem;
+  width: 2px;
+  background: var(--tp-rail);
+  z-index: 0;
+  pointer-events: none;
+}
+body.variant-timeline_pro section.py-5 > .container > h4.text-muted::after {
+  content: "";
+  position: absolute;
+  left: -1.75rem;
+  top: 0;
+  bottom: -1.5rem;
+  width: 2px;
+  background: var(--tp-rail);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* --- Node dots on entry cards --- */
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.75rem - 5px);
+  top: 1.5rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--tp-node);
+  border: 3px solid var(--tp-surface);
+  box-shadow: 0 0 0 2px var(--tp-rail);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* --- Diamond markers on group headers --- */
+body.variant-timeline_pro section.py-5 > .container > h4.text-muted::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.75rem - 4px);
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--tp-accent-mid);
+  border: 2px solid var(--tp-surface);
+  box-shadow: 0 0 0 2px var(--tp-rail);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* --- Timeline card enhancements --- */
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4 {
+  border-left: 3px solid var(--tp-accent-mid);
+  border-radius: 0 0.625rem 0.625rem 0;
+}
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4:hover {
+  border-left-color: var(--tp-accent);
+}
+
+/* Date text in timeline cards — make prominent */
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4 .text-muted.small {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--tp-accent) !important;
+  white-space: nowrap;
+}
+
+/* Institution text in timeline cards */
+body.variant-timeline_pro section.py-5 > .container > .card.mb-4 .card-body > .d-flex > div > .text-muted.mb-0 {
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* =================================================================
+   BADGES
+   ================================================================= */
+body.variant-timeline_pro .badge.bg-primary {
+  background: var(--tp-accent) !important;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 0.3em 0.7em;
+  border-radius: 0.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+body.variant-timeline_pro .badge.bg-secondary,
+body.variant-timeline_pro .badge.bg-secondary-subtle {
+  background: var(--tp-bg) !important;
+  color: var(--tp-text-muted) !important;
+  font-weight: 500;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--tp-border);
+  border-radius: 0.25rem;
+  font-size: 0.78rem;
+}
+body.variant-timeline_pro .badge.bg-primary-subtle {
+  background: var(--tp-accent-soft) !important;
+  color: var(--tp-accent) !important;
+  border: 1px solid color-mix(in srgb, var(--tp-accent) 15%, transparent);
+  border-radius: 0.25rem;
+  font-size: 0.78rem;
+}
+body.variant-timeline_pro .badge.bg-success {
+  background: #059669 !important;
+  color: #ffffff;
+  border-radius: 0.25rem;
+  font-size: 0.78rem;
+}
+
+/* =================================================================
+   BUTTONS — solid, professional
+   ================================================================= */
+body.variant-timeline_pro .btn-primary {
+  background: var(--tp-accent);
+  border: 1px solid var(--tp-accent);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.55rem 1.3rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+body.variant-timeline_pro .btn-primary:hover {
+  background: color-mix(in srgb, var(--tp-accent) 85%, #000);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+}
+body.variant-timeline_pro .btn-outline-primary {
+  color: var(--tp-accent);
+  border: 1.5px solid color-mix(in srgb, var(--tp-accent) 50%, transparent);
+  background: transparent;
+  font-weight: 600;
+  padding: 0.55rem 1.3rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+body.variant-timeline_pro .btn-outline-primary:hover {
+  background: var(--tp-accent-soft);
+  border-color: var(--tp-accent);
+  color: var(--tp-accent);
+}
+body.variant-timeline_pro .btn-outline-secondary {
+  color: var(--tp-text-muted);
+  border: 1.5px solid var(--tp-border);
+  background: transparent;
+  font-weight: 500;
+  padding: 0.55rem 1.3rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+body.variant-timeline_pro .btn-outline-secondary:hover {
+  background: var(--tp-hover-bg);
+  color: var(--tp-text);
+}
+body.variant-timeline_pro .btn-outline-dark {
+  color: var(--tp-text);
+  border: 1.5px solid var(--tp-border);
+  background: transparent;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+body.variant-timeline_pro .btn-outline-dark:hover {
+  background: var(--tp-hover-bg);
+  color: var(--tp-text);
+}
+body.variant-timeline_pro .btn-sm {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  border-radius: 0.375rem;
+}
+
+/* =================================================================
+   HOME PAGE — featured grid
+   ================================================================= */
+body.variant-timeline_pro .featured-grid .card {
+  border-top: 3px solid var(--tp-accent);
+  border-radius: 0 0 0.625rem 0.625rem;
+}
+body.variant-timeline_pro .featured-grid .card-title {
+  font-family: var(--tp-heading-serif);
+}
+body.variant-timeline_pro .featured-grid .card a.stretched-link {
+  color: var(--tp-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Section header */
+body.variant-timeline_pro .d-flex.justify-content-between h2 {
+  font-family: var(--tp-heading-serif);
+}
+
+/* =================================================================
+   PROJECT LIST — milestone-style cards
+   ================================================================= */
+body.variant-timeline_pro .row.g-4 > .col-md-4 .card {
+  border-top: 3px solid var(--tp-accent-mid);
+  border-radius: 0 0 0.625rem 0.625rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+body.variant-timeline_pro .row.g-4 > .col-md-4 .card:hover {
+  border-top-color: var(--tp-accent);
+}
+
+/* Search form */
+body.variant-timeline_pro .d-flex.gap-2 .form-control {
+  border: 1.5px solid var(--tp-border);
+  border-radius: 0.5rem;
+  padding: 0.55rem 1rem;
+  background: var(--tp-surface);
+  color: var(--tp-text);
+}
+body.variant-timeline_pro .d-flex.gap-2 .form-control::placeholder {
+  color: var(--tp-text-muted);
+}
+
+/* Category filter buttons */
+body.variant-timeline_pro .d-flex.flex-wrap.gap-2 > .btn.btn-sm {
+  border-radius: 0.375rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* =================================================================
+   PROJECT DETAIL — editorial layout
+   ================================================================= */
+body.variant-timeline_pro article {
+  color: var(--tp-text-muted);
+  line-height: 1.85;
+  font-size: 1.02rem;
+}
+body.variant-timeline_pro article p {
+  margin-bottom: 1.25rem;
+}
+
+/* Meta sidebar card */
+body.variant-timeline_pro .col-lg-5 .card {
+  border-top: 3px solid var(--tp-accent);
+  border-radius: 0 0 0.625rem 0.625rem;
+}
+body.variant-timeline_pro .col-lg-5 .card .card-title {
+  font-family: var(--tp-heading-serif);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--tp-text-muted);
+}
+body.variant-timeline_pro .col-lg-5 .card strong {
+  color: var(--tp-text);
+  font-weight: 600;
+}
+
+/* Attachment cards */
+body.variant-timeline_pro iframe.border {
+  border-color: var(--tp-border) !important;
+  border-radius: 0.5rem;
+}
+
+/* =================================================================
+   ABOUT PAGE
+   ================================================================= */
+body.variant-timeline_pro .img-shape-circle {
+  box-shadow: 0 0 0 4px var(--tp-surface), 0 0 0 6px var(--tp-accent-mid);
+}
+body.variant-timeline_pro .about-bio {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--tp-text-muted);
+}
+
+/* =================================================================
+   EDUCATION & CERTIFICATIONS — enhanced timeline cards
+   ================================================================= */
+body.variant-timeline_pro .edu-pdf-preview,
+body.variant-timeline_pro .cert-pdf-preview {
+  border-color: var(--tp-border);
+  border-radius: 0.5rem;
+}
+
+/* =================================================================
+   RESUME PAGE
+   ================================================================= */
+body.variant-timeline_pro .btn-group .btn {
+  border-radius: 0.375rem;
+  margin-right: 0.2rem;
+}
+
+/* =================================================================
+   CONTACT FORM — polished inputs
+   ================================================================= */
+body.variant-timeline_pro .form-label {
+  color: var(--tp-text);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+body.variant-timeline_pro .form-control {
+  background: var(--tp-surface);
+  border: 1.5px solid var(--tp-border);
+  color: var(--tp-text);
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-timeline_pro .form-control::placeholder {
+  color: color-mix(in srgb, var(--tp-text-muted) 60%, transparent);
+}
+body.variant-timeline_pro .form-control:focus {
+  border-color: var(--tp-accent);
+  box-shadow: 0 0 0 3px var(--tp-focus-ring);
+  outline: none;
+}
+body.variant-timeline_pro textarea.form-control {
+  min-height: 140px;
+}
+body.variant-timeline_pro .form-select {
+  background-color: var(--tp-surface);
+  border: 1.5px solid var(--tp-border);
+  color: var(--tp-text);
+  border-radius: 0.5rem;
+}
+body.variant-timeline_pro .form-select:focus {
+  border-color: var(--tp-accent);
+  box-shadow: 0 0 0 3px var(--tp-focus-ring);
+}
+
+/* Error states */
+body.variant-timeline_pro .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+}
+body.variant-timeline_pro .errorlist li {
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-timeline_pro .alert {
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+  font-size: 0.95rem;
+}
+body.variant-timeline_pro .alert-success {
+  background: color-mix(in srgb, #059669 6%, var(--tp-surface));
+  border-left-color: #059669;
+  color: #065f46;
+}
+body.variant-timeline_pro .alert-danger {
+  background: color-mix(in srgb, #dc2626 6%, var(--tp-surface));
+  border-left-color: #dc2626;
+  color: #991b1b;
+}
+body.variant-timeline_pro .alert-warning {
+  background: color-mix(in srgb, #d97706 6%, var(--tp-surface));
+  border-left-color: #d97706;
+  color: #92400e;
+}
+body.variant-timeline_pro .alert-info {
+  background: var(--tp-accent-soft);
+  border-left-color: var(--tp-accent);
+  color: var(--tp-accent);
+}
+
+/* =================================================================
+   FOOTER
+   ================================================================= */
+body.variant-timeline_pro footer,
+body.variant-timeline_pro .footer {
+  background: var(--tp-text);
+  color: color-mix(in srgb, var(--tp-text-muted) 50%, #ffffff);
+  padding: 2.5rem 0;
+  border-top: 3px solid var(--tp-accent);
+}
+body.variant-timeline_pro footer a {
+  color: color-mix(in srgb, var(--tp-text-muted) 50%, #ffffff);
+}
+body.variant-timeline_pro footer a:hover {
+  color: #ffffff;
+}
+
+/* =================================================================
+   PAGINATION
+   ================================================================= */
+body.variant-timeline_pro .pagination .page-link {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  color: var(--tp-text-muted);
+  border-radius: 0.375rem;
+  margin: 0 0.1rem;
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+body.variant-timeline_pro .pagination .page-link:hover {
+  background: var(--tp-hover-bg);
+  color: var(--tp-text);
+  border-color: color-mix(in srgb, var(--tp-accent) 30%, var(--tp-border));
+}
+body.variant-timeline_pro .pagination .page-item.active .page-link {
+  background: var(--tp-accent);
+  border-color: var(--tp-accent);
+  color: #ffffff;
+}
+body.variant-timeline_pro .pagination .page-item.disabled .page-link {
+  background: transparent;
+  border-color: var(--tp-border);
+  color: color-mix(in srgb, var(--tp-text-muted) 40%, transparent);
+}
+
+/* =================================================================
+   IMAGES — media component overrides
+   ================================================================= */
+body.variant-timeline_pro .img-hero,
+body.variant-timeline_pro .img-card,
+body.variant-timeline_pro .img-square,
+body.variant-timeline_pro .img-portrait {
+  border-radius: 0.5rem;
+}
+body.variant-timeline_pro .img-hover-scale {
+  transition: transform 0.3s ease;
+}
+body.variant-timeline_pro .img-hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* =================================================================
+   TABLES
+   ================================================================= */
+body.variant-timeline_pro .table {
+  color: var(--tp-text);
+  --bs-table-bg: transparent;
+}
+body.variant-timeline_pro .table th {
+  color: var(--tp-text);
+  border-color: var(--tp-border);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+body.variant-timeline_pro .table td {
+  color: var(--tp-text-muted);
+  border-color: var(--tp-border);
+}
+
+/* =================================================================
+   FOCUS & ACCESSIBILITY
+   ================================================================= */
+body.variant-timeline_pro :focus-visible {
+  outline: 2px solid var(--tp-accent);
+  outline-offset: 2px;
+}
+body.variant-timeline_pro .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--tp-focus-ring);
+}
+body.variant-timeline_pro .form-control:focus-visible,
+body.variant-timeline_pro .form-select:focus-visible {
+  outline: none;
+}
+
+/* Skip-link */
+body.variant-timeline_pro .skip-link:focus {
+  background: var(--tp-accent);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 9999;
+}
+
+/* =================================================================
+   REDUCED MOTION — @media & .no-motion class
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-timeline_pro,
+  body.variant-timeline_pro * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  body.variant-timeline_pro .card:hover {
+    transform: none;
+  }
+  body.variant-timeline_pro .img-hover-scale:hover {
+    transform: none;
+  }
+  body.variant-timeline_pro .btn:hover {
+    transform: none;
+  }
+  body.variant-timeline_pro .hero .btn-light:hover {
+    transform: none;
+  }
+}
+
+body.variant-timeline_pro.no-motion,
+body.variant-timeline_pro.no-motion * {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}
+body.variant-timeline_pro.no-motion .card:hover {
+  transform: none;
+}
+body.variant-timeline_pro.no-motion .img-hover-scale:hover {
+  transform: none;
+}
+body.variant-timeline_pro.no-motion .btn:hover {
+  transform: none;
+}
+body.variant-timeline_pro.no-motion .hero .btn-light:hover {
+  transform: none;
+}
+
+/* =================================================================
+   RESPONSIVE — tablet (≤992px)
+   ================================================================= */
+@media (max-width: 992px) {
+  body.variant-timeline_pro .hero {
+    padding: 4rem 0 3.5rem;
+  }
+  body.variant-timeline_pro .hero .display-4 {
+    font-size: 2.3rem;
+  }
+  body.variant-timeline_pro h1 {
+    font-size: 1.85rem;
+  }
+  body.variant-timeline_pro h2 {
+    font-size: 1.4rem;
+  }
+
+  /* Timeline: reduce indent */
+  body.variant-timeline_pro section.py-5 > .container > .card.mb-4,
+  body.variant-timeline_pro section.py-5 > .container > h4.text-muted {
+    margin-left: 2rem;
+  }
+  body.variant-timeline_pro section.py-5 > .container > .card.mb-4::after,
+  body.variant-timeline_pro section.py-5 > .container > h4.text-muted::after {
+    left: -1.375rem;
+  }
+  body.variant-timeline_pro section.py-5 > .container > .card.mb-4::before {
+    left: calc(-1.375rem - 5px);
+  }
+  body.variant-timeline_pro section.py-5 > .container > h4.text-muted::before {
+    left: calc(-1.375rem - 4px);
+  }
+}
+
+/* =================================================================
+   RESPONSIVE — mobile (≤576px)
+   ================================================================= */
+@media (max-width: 576px) {
+  body.variant-timeline_pro {
+    padding-top: 48px;
+  }
+  body.variant-timeline_pro .hero {
+    padding: 3rem 0 2.5rem;
+  }
+  body.variant-timeline_pro .hero .display-4 {
+    font-size: 1.75rem;
+  }
+  body.variant-timeline_pro .hero .lead {
+    font-size: 1rem;
+  }
+  body.variant-timeline_pro .hero .btn-light,
+  body.variant-timeline_pro .hero .btn-outline-light {
+    padding: 0.45rem 1rem;
+    font-size: 0.9rem;
+  }
+  body.variant-timeline_pro h1 {
+    font-size: 1.5rem;
+  }
+  body.variant-timeline_pro h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Timeline: collapse to left-border mode */
+  body.variant-timeline_pro section.py-5 > .container > .card.mb-4,
+  body.variant-timeline_pro section.py-5 > .container > h4.text-muted {
+    margin-left: 0;
+  }
+  /* Remove rail + nodes */
+  body.variant-timeline_pro section.py-5 > .container > .card.mb-4::after,
+  body.variant-timeline_pro section.py-5 > .container > .card.mb-4::before,
+  body.variant-timeline_pro section.py-5 > .container > h4.text-muted::after,
+  body.variant-timeline_pro section.py-5 > .container > h4.text-muted::before {
+    display: none;
+  }
+  /* Keep the left accent bar on cards (already has border-left: 3px) */
+
+  body.variant-timeline_pro .card-body {
+    padding: 1.15rem;
+  }
+  body.variant-timeline_pro .btn-primary,
+  body.variant-timeline_pro .btn-outline-primary,
+  body.variant-timeline_pro .btn-outline-secondary {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  body.variant-timeline_pro .navbar {
+    padding: 0.5rem 1rem;
+  }
+}

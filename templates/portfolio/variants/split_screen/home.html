@@ -1,0 +1,74 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Home | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="split_screen"></div>
+
+{# ── HERO: Asymmetric split — content left, image right ── #}
+<div class="ss-hero">
+    <div class="ss-hero__content">
+        <span class="ss-eyebrow">{{ settings.hero_label|default:"Personal Site" }}</span>
+        <h1>{{ settings.hero_title|default:"Steven Wazlavek" }}</h1>
+        {% if settings.hero_roles %}<p class="ss-hero__roles">{{ settings.hero_roles }}</p>{% endif %}
+        <p class="ss-hero__subtitle">{{ settings.hero_subtitle|default:"Explore selected projects, resume highlights, and ways to contact me." }}</p>
+        <div class="ss-hero__actions">
+            <a class="ss-btn-primary" href="{% url 'portfolio:project_list' %}">
+                <i class="fas fa-th-large"></i> See Projects
+            </a>
+            {% if site_settings.resume_file %}
+                <a class="ss-btn-ghost" href="{{ site_settings.resume_file.url }}">
+                    <i class="fas fa-download"></i> Resume
+                </a>
+            {% endif %}
+            <a class="ss-btn-ghost" href="{% url 'portfolio:contact' %}">
+                <i class="fas fa-envelope"></i> Contact
+            </a>
+        </div>
+    </div>
+    <div class="ss-hero__visual">
+        {% if settings.hero_image %}
+            <img src="{{ settings.hero_image.url }}" alt="Profile photo">
+        {% else %}
+            <div class="ss-hero__placeholder">
+                <i class="fa-solid fa-user fa-3x mb-3" style="opacity:0.4;"></i>
+                <p class="mb-0">Upload a hero image via Admin &rarr; Site settings.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# ── FEATURED PROJECTS: Split composition ── #}
+<div class="ss-featured">
+    <div class="ss-featured-inner">
+        <div class="ss-featured-side">
+            <span class="ss-eyebrow">Selected Work</span>
+            <h2>Featured Projects</h2>
+            <p class="text-muted" style="font-size:0.9rem;line-height:1.6;">A curated selection of recent work and highlights from the portfolio.</p>
+            <a href="{% url 'portfolio:project_list' %}" class="btn btn-outline-primary btn-sm mt-2">View all &rarr;</a>
+        </div>
+        {% if featured_projects %}
+        <div class="ss-featured-grid">
+            {% for project in featured_projects %}
+                <div class="card h-100 border-0 overflow-hidden">
+                    {% if project.image %}
+                        {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <span class="ss-badge-cat mb-2">{{ project.category.name }}</span>
+                        <h5 class="card-title mb-1">{{ project.title }}</h5>
+                        <p class="card-text text-muted">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                        <div class="mt-auto">
+                            <a href="{{ project.get_absolute_url }}" class="stretched-link">View details &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <div class="flex-grow-1 d-flex align-items-center justify-content-center text-muted" style="min-height:200px;">
+                No featured projects yet. Mark projects as Featured in Admin to display them here.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

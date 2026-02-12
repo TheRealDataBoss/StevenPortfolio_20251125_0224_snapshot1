@@ -1,0 +1,172 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Resume - Steven Wazlavek | Data Analyst{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="Steven Wazlavek - Data Analyst transitioning to Data Scientist. Resume with experience in Python, SQL, data visualization, machine learning. Kennesaw State University, MIT IDSS, Harvard Business School Online, Wharton.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Wazlavek",
+  "jobTitle": "Data Analyst (transitioning to Data Scientist)",
+  "url": "/",
+  "sameAs": [
+    "https://github.com/TheRealDataBoss",
+    "https://www.linkedin.com/in/databoss/"
+  ],
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "Kennesaw State University"},
+    {"@type": "CollegeOrUniversity", "name": "University of Alabama Manderson Graduate School of Business"},
+    {"@type": "CollegeOrUniversity", "name": "MIT Institute for Data, Systems, and Society (IDSS)"},
+    {"@type": "CollegeOrUniversity", "name": "Harvard Business School Online"},
+    {"@type": "CollegeOrUniversity", "name": "The Wharton School, University of Pennsylvania"}
+  ]{% if has_pdf %},
+  "mainEntityOfPage": {
+    "@type": "MediaObject",
+    "contentUrl": "{% url 'portfolio:resume_pdf_inline' %}",
+    "encodingFormat": "application/pdf",
+    "name": "Steven Wazlavek Resume"
+  }{% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-widget { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+    .cd-widget .widget-header { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; padding: .75rem 1rem; border-bottom: 1px solid #e0e3e8; }
+    .cd-widget .widget-body { padding: 1rem; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+    .cd-dot--blue { background: #007bff; }
+    .cd-dot--amber { background: #ffc107; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Resume</li>
+                    </ol>
+                </nav>
+                {% if primary_resume %}<span class="badge bg-success" style="font-size:.7rem;"><i class="fas fa-check me-1"></i>On File</span>{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-3">
+            {# Download actions card #}
+            <div class="col-md-6 col-lg-3">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-download me-1"></i> Downloads</div>
+                    <div class="widget-body cd-compact">
+                        {% if download_primary_url %}
+                            <a class="btn btn-sm btn-primary w-100 mb-2" href="{{ download_primary_url }}" target="_blank" rel="noopener">
+                                <i class="fas fa-download me-1"></i> Download Resume
+                            </a>
+                        {% elif site_settings.resume_file %}
+                            <a class="btn btn-sm btn-primary w-100 mb-2" href="{{ site_settings.resume_file.url }}" target="_blank" rel="noopener">
+                                <i class="fas fa-download me-1"></i> Download Resume
+                            </a>
+                        {% endif %}
+                        {% if download_pdf_url and download_pdf_url != download_primary_url %}
+                            <a class="btn btn-sm btn-outline-primary w-100" href="{{ download_pdf_url }}" target="_blank" rel="noopener">
+                                <i class="fas fa-file-pdf me-1"></i> Download PDF
+                            </a>
+                        {% endif %}
+                        {% if not download_primary_url and not site_settings.resume_file %}
+                            <p class="text-muted mb-0" style="font-size:.8rem;"><span class="cd-dot cd-dot--amber me-1"></span> No resume uploaded yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Resume metadata card #}
+            <div class="col-md-6 col-lg-3">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header"><i class="fas fa-info-circle me-1"></i> Details</div>
+                    <div class="widget-body cd-compact">
+                        {% if primary_resume %}
+                            <div class="mb-2">
+                                <div style="font-size:.75rem;color:#6c757d;text-transform:uppercase;font-weight:600;">Title</div>
+                                <div>{{ primary_resume.title }}</div>
+                            </div>
+                            <div class="mb-2">
+                                <div style="font-size:.75rem;color:#6c757d;text-transform:uppercase;font-weight:600;">Category</div>
+                                <div>{{ primary_resume.category|title }}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:#6c757d;text-transform:uppercase;font-weight:600;">Last Updated</div>
+                                <div>{{ primary_resume.updated_at|date:"M d, Y" }}</div>
+                            </div>
+                        {% else %}
+                            <p class="text-muted mb-0" style="font-size:.8rem;">Add a resume in <a href="/admin/portfolio/resume/add/">Admin &rarr; Resumes</a> and mark it as primary.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# History card #}
+            <div class="col-md-12 col-lg-6">
+                <div class="cd-widget shadow-sm h-100">
+                    <div class="widget-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-history me-1"></i> History</span>
+                        <span class="badge bg-secondary">{{ resume_entries|length }}</span>
+                    </div>
+                    <div class="widget-body cd-compact">
+                        {% for resume in resume_entries %}
+                            <div class="d-flex justify-content-between align-items-center py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                                <div class="d-flex align-items-center">
+                                    <span class="cd-dot cd-dot--blue me-2"></span>
+                                    <span>{{ resume.title }}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-muted" style="font-size:.75rem;">{{ resume.updated_at|date:"M d, Y" }}</span>
+                                    <a href="{{ resume.file.url }}" class="btn btn-sm btn-outline-secondary" style="font-size:.7rem;">Download</a>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted mb-0" style="font-size:.8rem;">Upload your first resume to populate this list.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Inline PDF viewer #}
+        {% if has_pdf %}
+        <div class="row g-3 mt-1">
+            <div class="col-12">
+                <div class="cd-widget shadow-sm">
+                    <div class="widget-header"><i class="fas fa-file-pdf me-1"></i> Preview</div>
+                    <div class="widget-body p-0">
+                        <iframe id="resumePdfFrame" src="{% url 'portfolio:resume_viewer' %}" width="100%" height="800" style="border:none;border-radius:0 0 .5rem .5rem;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% elif primary_resume %}
+        <div class="row g-3 mt-1">
+            <div class="col-12">
+                <div class="cd-widget shadow-sm">
+                    <div class="widget-header"><i class="fas fa-file-pdf me-1"></i> Preview</div>
+                    <div class="widget-body text-center text-muted cd-compact py-4">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Upload a PDF in <a href="/admin/portfolio/resume/">Admin &rarr; Resumes</a> to enable inline display.
+                        {% if download_primary_url %}The download is available above.{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

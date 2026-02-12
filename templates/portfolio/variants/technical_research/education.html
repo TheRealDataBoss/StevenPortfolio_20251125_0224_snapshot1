@@ -1,0 +1,145 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Education | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Education",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for entry in all_education %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ entry.title|escapejs }}",
+        "description": "{{ entry.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ entry.institution|escapejs }}"
+        }{% if entry.url %},
+        "url": "{{ entry.url|escapejs }}"{% endif %}{% if entry.start_date %},
+        "dateCreated": "{{ entry.start_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; }
+    .tr-paper .tr-subtitle { text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 2rem; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-group-heading { font-size: 0.9rem; font-weight: 600; color: #555; margin-top: 1.5rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper .tr-footnote a { color: #555; text-decoration: underline; }
+    .tr-paper table.tr-meta-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1rem; }
+    .tr-paper table.tr-meta-table th { text-align: left; font-weight: 600; width: 28%; padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; color: #555; font-size: 0.82rem; vertical-align: top; }
+    .tr-paper table.tr-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+    .tr-paper table.tr-meta-table tr:last-child th, .tr-paper table.tr-meta-table tr:last-child td { border-bottom: none; }
+    .tr-paper .tr-entry { border-bottom: 1px solid #e8e8e8; padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+    .tr-paper .tr-entry:last-child { border-bottom: none; }
+    .tr-paper .tr-body-text p { margin-bottom: 0.5rem; font-size: 0.9rem; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="tr-paper">
+            <h1 class="tr-title">3. Education</h1>
+            <p class="tr-subtitle">Academic credentials and institutional affiliations.</p>
+
+            {% for group_name, group_cat, entries in education_groups %}
+                <h2 class="tr-section-heading">3.{{ forloop.counter }} {{ group_name }}</h2>
+
+                {% for entry in entries %}
+                <div class="tr-entry">
+                    <table class="tr-meta-table">
+                        <tr>
+                            <th>Program</th>
+                            <td><strong>{{ entry.title }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Institution</th>
+                            <td>{{ entry.institution }}{% if entry.location %} &mdash; {{ entry.location }}{% endif %}</td>
+                        </tr>
+                        {% if entry.start_date or entry.end_date %}
+                        <tr>
+                            <th>Period</th>
+                            <td>{% if entry.start_date %}{{ entry.start_date|date:"M Y" }}{% endif %}{% if entry.start_date and entry.end_date %} &ndash; {% endif %}{% if entry.end_date %}{{ entry.end_date|date:"M Y" }}{% endif %}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+
+                    {% if entry.description %}
+                    <div class="tr-body-text">
+                        {{ entry.description|linebreaks }}
+                    </div>
+                    {% endif %}
+
+                    {% if entry.image %}
+                    <div class="text-center my-3">
+                        <img src="{{ entry.image.url }}" alt="{{ entry.title }}" class="img-fluid rounded border" style="max-height:220px;">
+                        <p class="tr-footnote mt-1"><em>Figure.</em> {{ entry.title }}.</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-wrap gap-3 mt-2">
+                        {% if entry.url %}
+                            <span class="tr-footnote">[<a href="{{ entry.url }}" target="_blank" rel="noopener">Website</a>]</span>
+                        {% endif %}
+                        {% if entry.attachment %}
+                            <span class="tr-footnote">[<a href="{% url 'portfolio:education_download' entry.pk %}">Download</a>]</span>
+                            {% if entry.preview_kind == "pdf" %}
+                                <span class="tr-footnote">[<a href="{% url 'portfolio:education_preview' entry.pk %}" target="_blank" rel="noopener">Preview PDF</a>]</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    {% if entry.preview_kind == "pdf" %}
+                        <div class="mt-3 ratio ratio-16x9 border rounded overflow-hidden edu-pdf-preview" data-entry-id="{{ entry.pk }}">
+                            <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="PDF preview: {{ entry.title }}" allowfullscreen></iframe>
+                        </div>
+                    {% elif entry.preview_kind == "image" %}
+                        <div class="mt-3 text-center">
+                            <img src="{% url 'portfolio:education_inline' entry.pk %}" alt="Attachment: {{ entry.title }}" class="img-fluid rounded border" style="max-height:400px;">
+                        </div>
+                    {% elif entry.preview_kind == "text" %}
+                        <div class="mt-3 ratio ratio-16x9 border rounded overflow-hidden">
+                            <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="Text preview: {{ entry.title }}" style="background:#f8f9fa;"></iframe>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+            {% empty %}
+                <p class="text-muted" style="font-size:0.9rem;">No education entries yet. Add them via the admin.</p>
+            {% endfor %}
+
+            {# ── Pagination ── #}
+            {% if is_paginated %}
+            <nav aria-label="Education pagination" class="mt-4">
+                <ul class="pagination justify-content-center" style="font-family:Georgia,serif; font-size:0.85rem;">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

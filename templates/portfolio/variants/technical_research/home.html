@@ -1,0 +1,91 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Home | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3, .tr-paper h4 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; }
+    .tr-paper .tr-author { text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .tr-paper .tr-date { text-align: center; color: #888; font-size: 0.8rem; font-style: italic; margin-bottom: 1.5rem; }
+    .tr-paper .tr-abstract { border-left: 3px solid #ccc; padding: 0.75rem 1rem; margin-bottom: 2rem; background: #fafafa; font-size: 0.9rem; color: #444; }
+    .tr-paper .tr-abstract strong { display: block; margin-bottom: 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #333; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper .tr-footnote a { color: #555; }
+    .tr-paper code, .tr-paper .tr-mono { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; }
+    .tr-paper table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1rem; }
+    .tr-paper table th { text-align: left; font-weight: 600; border-bottom: 2px solid #333; padding: 0.4rem 0.5rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .tr-paper table td { border-bottom: 1px solid #e0e0e0; padding: 0.5rem 0.5rem; vertical-align: top; }
+    .tr-paper table tr:last-child td { border-bottom: none; }
+    .tr-paper .tr-links { margin-top: 1rem; }
+    .tr-paper .tr-links a { font-size: 0.85rem; color: #555; text-decoration: underline; margin-right: 1.25rem; }
+</style>
+
+<section class="py-5 mt-3">
+    <div class="container">
+        <div class="tr-paper">
+            {# ── Paper Header ── #}
+            <h1 class="tr-title">{{ settings.hero_title|default:"Steven Wazlavek" }}</h1>
+            <p class="tr-author">{{ settings.hero_label|default:"Personal Site" }}{% if settings.hero_roles %} &mdash; {{ settings.hero_roles }}{% endif %}</p>
+            <p class="tr-date">{% now "F Y" %}</p>
+
+            {# ── Abstract ── #}
+            <div class="tr-abstract">
+                <strong>Abstract</strong>
+                {{ settings.hero_subtitle|default:"Explore selected projects, resume highlights, and ways to contact me." }}
+            </div>
+
+            {# ── 1. Introduction ── #}
+            <h2 class="tr-section-heading">1. Introduction</h2>
+            <p>This portfolio presents a curated selection of technical projects spanning data analysis, software engineering, and applied research. Each entry below is accompanied by metadata including technology stack, category, and a brief description of objectives and outcomes.</p>
+
+            <div class="tr-links">
+                <a href="{% url 'portfolio:project_list' %}">View all projects</a>
+                {% if site_settings.resume_file %}
+                    <a href="{{ site_settings.resume_file.url }}">Download resume</a>
+                {% endif %}
+                <a href="{% url 'portfolio:contact' %}">Contact the author</a>
+            </div>
+
+            {# ── 2. Featured Projects ── #}
+            <h2 class="tr-section-heading">2. Featured Projects</h2>
+
+            {% if featured_projects %}
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:5%;">#</th>
+                        <th style="width:30%;">Title</th>
+                        <th style="width:20%;">Category</th>
+                        <th style="width:45%;">Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in featured_projects %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{{ project.get_absolute_url }}" class="text-decoration-none" style="color:#333;">{{ project.title }}</a></td>
+                        <td class="text-muted" style="font-size:0.85rem;">{{ project.category.name }}</td>
+                        <td style="font-size:0.88rem;">{{ project.summary|default:project.description|truncatewords:20 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p class="tr-footnote"><em>Table 1.</em> Featured projects, ordered by relevance. <a href="{% url 'portfolio:project_list' %}">See full listing &rarr;</a></p>
+            {% else %}
+            <p class="text-muted" style="font-size:0.9rem;">No featured projects yet. Mark projects as Featured in Admin to display them here.</p>
+            {% endif %}
+
+            {# ── Figure (hero image) ── #}
+            {% if settings.hero_image %}
+            <div class="text-center my-4">
+                {% responsive_image image=settings.hero_image variant="card" shape="rounded" alt="Author photograph" %}
+                <p class="tr-footnote mt-2"><em>Figure 1.</em> Author photograph.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Projects | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+    .tr-paper .tr-subtitle { text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 2rem; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper code, .tr-paper .tr-mono { font-family: "Courier New", Courier, monospace; font-size: 0.82rem; }
+    .tr-paper table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 0.75rem; }
+    .tr-paper table th { text-align: left; font-weight: 600; border-bottom: 2px solid #333; padding: 0.4rem 0.5rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .tr-paper table td { border-bottom: 1px solid #e0e0e0; padding: 0.5rem 0.5rem; vertical-align: top; }
+    .tr-paper table tr:last-child td { border-bottom: none; }
+    .tr-paper .tr-search-bar { max-width: 400px; margin: 0 auto 1.5rem; }
+    .tr-paper .tr-cat-list { font-size: 0.85rem; text-align: center; margin-bottom: 1.5rem; color: #555; }
+    .tr-paper .tr-cat-list a { color: #555; text-decoration: underline; margin: 0 0.4rem; }
+    .tr-paper .tr-cat-list a.active { color: #000; font-weight: 600; }
+    .tr-paper .tr-entry { border-bottom: 1px solid #e8e8e8; padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+    .tr-paper .tr-entry:last-child { border-bottom: none; }
+    .tr-paper .tr-entry-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.15rem; }
+    .tr-paper .tr-entry-title a { color: #222; text-decoration: none; }
+    .tr-paper .tr-entry-title a:hover { text-decoration: underline; }
+    .tr-paper .tr-entry-meta { font-size: 0.82rem; color: #888; margin-bottom: 0.35rem; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="tr-paper">
+            <h1 class="tr-title">2. Projects</h1>
+            <p class="tr-subtitle">A comprehensive index of completed and ongoing work.</p>
+
+            {# ── Search ── #}
+            <div class="tr-search-bar">
+                <form method="get" class="d-flex gap-2">
+                    <input type="text" name="q" value="{{ search_term }}" class="form-control form-control-sm" placeholder="Search projects..." style="font-family:Georgia,serif; font-size:0.85rem;">
+                    {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                    <button class="btn btn-outline-dark btn-sm" type="submit" style="font-family:Georgia,serif; font-size:0.82rem;">Search</button>
+                </form>
+            </div>
+
+            {# ── Category Filter ── #}
+            <div class="tr-cat-list">
+                <a href="{% url 'portfolio:project_list' %}" class="{% if not current_category %}active{% endif %}">All</a>
+                {% for category in categories %}
+                    <a href="{% url 'portfolio:project_list' %}?category={{ category.slug }}" class="{% if current_category == category.slug %}active{% endif %}">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+
+            {# ── Project Entries ── #}
+            <h2 class="tr-section-heading">2.1 Entries</h2>
+
+            {% for project in projects %}
+            <div class="tr-entry">
+                <div class="tr-entry-title">
+                    <span class="text-muted" style="font-size:0.82rem;">[{{ forloop.counter }}]</span>
+                    <a href="{{ project.get_absolute_url }}">{{ project.title }}</a>
+                    {% if project.is_featured %}<span class="badge bg-light text-dark border" style="font-size:0.7rem; font-weight:400; vertical-align:middle;">featured</span>{% endif %}
+                </div>
+                <div class="tr-entry-meta">
+                    {{ project.category.name }}{% if project.created_at %} &middot; {{ project.created_at|date:"Y" }}{% endif %}
+                </div>
+                <p style="font-size:0.9rem; margin-bottom:0.35rem;">{{ project.summary|default:project.description|truncatewords:25 }}</p>
+                {% if project.tech_stack %}
+                    <p class="tr-mono text-muted" style="margin-bottom:0;">
+                        {% for tech in project.tech_stack|split:"," %}{{ tech }}{% if not forloop.last %} &middot; {% endif %}{% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+            {% empty %}
+            <p class="text-muted" style="font-size:0.9rem;">No projects found. Add some via the admin panel.</p>
+            {% endfor %}
+
+            {% if projects %}
+            <p class="tr-footnote"><em>Table 2.</em> Project entries{% if current_category %} filtered by category "{{ current_category }}"{% endif %}{% if search_term %}, query: "{{ search_term }}"{% endif %}.</p>
+            {% endif %}
+
+            {# ── Pagination ── #}
+            {% if is_paginated %}
+            <nav aria-label="Project pages" class="mt-4">
+                <ul class="pagination justify-content-center" style="font-family:Georgia,serif; font-size:0.85rem;">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">&laquo; Prev</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
+                    {% endif %}
+                    {% for num in paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">Next &raquo;</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

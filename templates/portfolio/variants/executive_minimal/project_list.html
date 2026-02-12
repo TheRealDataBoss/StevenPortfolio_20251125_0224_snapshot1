@@ -1,0 +1,96 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Projects | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="executive_minimal"></div>
+
+<section class="em-section">
+    <div class="container">
+        <div class="em-content">
+
+            {# ── Page Header ── #}
+            <div class="em-section-header">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
+                    <div>
+                        <span class="em-eyebrow">Portfolio</span>
+                        <h1>Projects</h1>
+                    </div>
+                    <form method="get" class="d-flex gap-2 mb-1">
+                        <input type="text" name="q" value="{{ search_term }}" class="form-control form-control-sm" placeholder="Search projects..." style="min-width:200px;">
+                        {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                        <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
+                    </form>
+                </div>
+                <hr class="em-rule">
+            </div>
+
+            {# ── Category Filters ── #}
+            <div class="em-filter-bar">
+                <a class="em-filter-btn {% if not current_category %}em-filter-btn--active{% endif %}" href="{% url 'portfolio:project_list' %}">All</a>
+                {% for category in categories %}
+                    <a class="em-filter-btn {% if current_category == category.slug %}em-filter-btn--active{% endif %}" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}">{% if category.image %}<img src="{{ category.image.url }}" alt="" class="em-cat-icon">{% endif %}{{ category.name }}</a>
+                {% endfor %}
+            </div>
+
+            {# ── Project Grid ── #}
+            <div class="em-grid em-grid--3">
+                {% for project in projects %}
+                    <div class="em-project-card">
+                        {% if project.image %}
+                            {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+                        {% endif %}
+                        <div class="em-project-card__body">
+                            <div class="em-project-card__cat">{{ project.category.name }}</div>
+                            <h3 class="em-project-card__title">{{ project.title }}</h3>
+                            <p class="em-project-card__desc">{{ project.summary|default:project.description|truncatewords:20 }}</p>
+                            {% if project.tech_stack %}
+                                <div class="mb-2">
+                                    {% for tech in project.tech_stack|split:"," %}
+                                        <span class="em-tag">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <a href="{{ project.get_absolute_url }}" class="em-project-card__link stretched-link">View details</a>
+                                {% if project.is_featured %}
+                                    <span style="font-size:0.75rem;color:var(--em-text-muted);"><span class="em-featured-dot"></span>Featured</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="text-center py-5" style="grid-column:1/-1;color:var(--em-text-muted);font-size:0.88rem;">
+                        No projects found. Add some in the admin panel.
+                    </div>
+                {% endfor %}
+            </div>
+
+            {# ── Pagination ── #}
+            {% if is_paginated %}
+                <nav aria-label="Project pages" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">&laquo; Prev</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&laquo; Prev</span></li>
+                        {% endif %}
+                        {% for num in paginator.page_range %}
+                            {% if num == page_obj.number %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">Next &raquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+        </div>
+    </div>
+</section>
+{% endblock %}

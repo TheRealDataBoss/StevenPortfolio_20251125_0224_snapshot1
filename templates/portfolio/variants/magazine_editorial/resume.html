@@ -1,0 +1,114 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Resume - Steven Wazlavek | Data Analyst{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="Steven Wazlavek - Data Analyst transitioning to Data Scientist. Resume with experience in Python, SQL, data visualization, machine learning. Kennesaw State University, MIT IDSS, Harvard Business School Online, Wharton.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Wazlavek",
+  "jobTitle": "Data Analyst (transitioning to Data Scientist)",
+  "url": "/",
+  "sameAs": [
+    "https://github.com/TheRealDataBoss",
+    "https://www.linkedin.com/in/databoss/"
+  ],
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "Kennesaw State University"},
+    {"@type": "CollegeOrUniversity", "name": "University of Alabama Manderson Graduate School of Business"},
+    {"@type": "CollegeOrUniversity", "name": "MIT Institute for Data, Systems, and Society (IDSS)"},
+    {"@type": "CollegeOrUniversity", "name": "Harvard Business School Online"},
+    {"@type": "CollegeOrUniversity", "name": "The Wharton School, University of Pennsylvania"}
+  ]{% if has_pdf %},
+  "mainEntityOfPage": {
+    "@type": "MediaObject",
+    "contentUrl": "{% url 'portfolio:resume_pdf_inline' %}",
+    "encodingFormat": "application/pdf",
+    "name": "Steven Wazlavek Resume"
+  }{% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="magazine_editorial"></div>
+
+<!-- Resume header -->
+<section style="background: #faf8f5; border-bottom: 3px double #2c2c2c; padding: 3.5rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            <div class="d-flex flex-wrap justify-content-between align-items-end">
+                <div>
+                    <p class="text-uppercase mb-1" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; color: #999;">Curriculum Vitae</p>
+                    <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem;">Resume</h1>
+                    <p style="font-family: Georgia, serif; font-size: 1rem; font-style: italic; color: #666;">Steven Wazlavek</p>
+                </div>
+                <div class="d-flex gap-3 mt-2 mt-md-0">
+                    {% if download_primary_url %}
+                    <a href="{{ download_primary_url }}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-download me-1"></i> Download</a>
+                    {% elif site_settings.resume_file %}
+                    <a href="{{ site_settings.resume_file.url }}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-download me-1"></i> Download</a>
+                    {% endif %}
+                    {% if download_pdf_url and download_pdf_url != download_primary_url %}
+                    <a href="{{ download_pdf_url }}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-file-pdf me-1"></i> PDF</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Resume body -->
+<section style="background: #fff; padding: 3rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            <!-- Resume metadata -->
+            {% if primary_resume %}
+            <div style="border-top: 3px solid #1a1a1a; padding: 1rem 0; margin-bottom: 2rem;">
+                <h6 style="font-family: Georgia, serif; font-weight: 700; margin-bottom: 0.25rem;">{{ primary_resume.title }}</h6>
+                <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #999; margin-bottom: 0;">
+                    {{ primary_resume.category|title }} &middot; Last updated {{ primary_resume.updated_at|date:"F j, Y" }}
+                </p>
+            </div>
+            {% elif not site_settings.resume_file %}
+            <div style="border-top: 3px solid #1a1a1a; padding: 1rem 0; margin-bottom: 2rem;">
+                <p style="font-family: Georgia, serif; font-style: italic; color: #999;">
+                    No resume uploaded yet. Add one in <a href="/admin/portfolio/resume/add/" style="color: #555;">Admin &rarr; Resumes</a> and mark it as primary.
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- Inline PDF preview -->
+            {% if has_pdf %}
+            <div class="mb-4">
+                <iframe id="resumePdfFrame" src="{% url 'portfolio:resume_viewer' %}" width="100%" height="900" style="border: 1px solid #ddd;"></iframe>
+            </div>
+            {% elif primary_resume %}
+            <div style="border-left: 3px solid #1a1a1a; padding: 1rem 1.5rem; background: #faf8f5; margin-bottom: 2rem;">
+                <p style="font-family: Georgia, serif; font-size: 0.95rem; color: #555; margin-bottom: 0;">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Upload a PDF preview in <a href="/admin/portfolio/resume/" style="color: #555;">Admin &rarr; Resumes</a> to enable inline display.
+                    {% if download_primary_url %}The download is still available above.{% endif %}
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- Resume history -->
+            <hr style="border: none; border-top: 3px double #2c2c2c; margin: 2rem 0 1.5rem;">
+            <p class="text-uppercase mb-3" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; color: #999;">Archive</p>
+            {% for resume in resume_entries %}
+            <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px solid #eee;">
+                <span style="font-family: Georgia, serif; font-size: 0.9rem; color: #333;">{{ resume.title }}</span>
+                <div class="d-flex align-items-center gap-3">
+                    <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #999;">{{ resume.updated_at|date:"M d, Y" }}</span>
+                    <a href="{{ resume.file.url }}" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #555; text-decoration: underline;">Download</a>
+                </div>
+            </div>
+            {% empty %}
+            <p style="font-family: Georgia, serif; font-style: italic; color: #999; font-size: 0.9rem;">Upload your first resume to populate this list.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

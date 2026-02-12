@@ -1,0 +1,1099 @@
+/* =================================================================
+   Modern SaaS — Premium ThemeForest Quality
+   Inspired by Linear.app, Vercel, Stripe
+   Scoped entirely to body.variant-modern_saas
+   ================================================================= */
+
+/* --- Design Tokens ------------------------------------------------ */
+body.variant-modern_saas {
+  --ms-accent:      var(--accent, #2563eb);
+  --ms-bg:          var(--bg, #ffffff);
+  --ms-surface:     var(--surface, #f8fafc);
+  --ms-text:        var(--text, #0f172a);
+  --ms-text-muted:  var(--text-muted, #64748b);
+  --ms-border:      var(--border, #e2e8f0);
+  --ms-glow:        color-mix(in srgb, var(--ms-accent) 14%, transparent);
+  --ms-accent-soft: color-mix(in srgb, var(--ms-accent) 7%, white);
+  --ms-accent-mid:  color-mix(in srgb, var(--ms-accent) 12%, white);
+  --ms-gradient:    linear-gradient(135deg, var(--ms-accent), color-mix(in srgb, var(--ms-accent) 70%, #7c3aed));
+  --ms-gradient-subtle: linear-gradient(135deg, color-mix(in srgb, var(--ms-accent) 4%, white), color-mix(in srgb, var(--ms-accent) 8%, white));
+  --ms-radius:      12px;
+  --ms-radius-lg:   16px;
+  --ms-radius-pill: 9999px;
+  --ms-shadow-sm:   0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
+  --ms-shadow-md:   0 4px 12px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.03);
+  --ms-shadow-lg:   0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.03);
+  --ms-shadow-xl:   0 20px 48px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.04);
+
+  background: var(--ms-bg);
+  color: var(--ms-text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  padding-top: 72px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =================================================================
+   TYPOGRAPHY
+   ================================================================= */
+body.variant-modern_saas h1 {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ms-text);
+}
+body.variant-modern_saas h2 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--ms-text);
+}
+body.variant-modern_saas h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ms-text);
+}
+body.variant-modern_saas h4 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ms-text);
+}
+body.variant-modern_saas h5,
+body.variant-modern_saas h6 {
+  font-weight: 600;
+  color: var(--ms-text);
+}
+
+/* Eyebrow labels */
+body.variant-modern_saas .ms-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.75rem;
+}
+body.variant-modern_saas .ms-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+body.variant-modern_saas .text-secondary,
+body.variant-modern_saas .text-muted {
+  color: var(--ms-text-muted) !important;
+}
+
+/* =================================================================
+   NAVBAR — Frosted glass, floating
+   ================================================================= */
+body.variant-modern_saas .navbar {
+  background: color-mix(in srgb, var(--ms-bg) 82%, transparent) !important;
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border-bottom: 1px solid color-mix(in srgb, var(--ms-border) 60%, transparent);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+body.variant-modern_saas .navbar .navbar-brand {
+  color: var(--ms-text) !important;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+body.variant-modern_saas .navbar .nav-link {
+  color: var(--ms-text-muted) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+body.variant-modern_saas .navbar .nav-link:hover {
+  color: var(--ms-text) !important;
+  background: var(--ms-surface);
+}
+body.variant-modern_saas .navbar .nav-link.active {
+  color: var(--ms-accent) !important;
+  font-weight: 600;
+  background: var(--ms-accent-soft);
+}
+body.variant-modern_saas .navbar-toggler {
+  border-color: var(--ms-border);
+  padding: 0.35rem 0.6rem;
+}
+body.variant-modern_saas .navbar-toggler-icon {
+  filter: invert(0.4);
+}
+body.variant-modern_saas .dropdown-menu {
+  background: var(--ms-bg);
+  border: 1px solid var(--ms-border);
+  box-shadow: var(--ms-shadow-lg);
+  border-radius: var(--ms-radius);
+  padding: 0.4rem;
+  margin-top: 0.35rem;
+  animation: ms-dropdown-in 0.15s ease;
+}
+@keyframes ms-dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+body.variant-modern_saas .dropdown-item {
+  color: var(--ms-text-muted);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+body.variant-modern_saas .dropdown-item:hover {
+  background: var(--ms-surface);
+  color: var(--ms-text);
+}
+body.variant-modern_saas .dropdown-toggle::after {
+  opacity: 0.45;
+}
+
+/* =================================================================
+   HERO — Premium SaaS gradient with dot-grid overlay
+   ================================================================= */
+body.variant-modern_saas .hero {
+  background: var(--ms-gradient) !important;
+  color: #fff !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Radial dot grid overlay */
+body.variant-modern_saas .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Soft glow orb */
+body.variant-modern_saas .hero::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 50%;
+  height: 140%;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+body.variant-modern_saas .hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Full hero (home page) */
+body.variant-modern_saas .hero--full {
+  padding: 5rem 0 5.5rem !important;
+}
+
+/* Compact hero (inner pages) */
+body.variant-modern_saas .hero--compact {
+  padding: 3rem 0 3.5rem !important;
+}
+
+body.variant-modern_saas .hero h1 {
+  font-size: 3.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+body.variant-modern_saas .hero .ms-hero-subtitle {
+  color: rgba(255,255,255,0.8) !important;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-width: 540px;
+}
+
+body.variant-modern_saas .hero .text-white-50 {
+  color: rgba(255,255,255,0.55) !important;
+}
+body.variant-modern_saas .hero .text-white-75 {
+  color: rgba(255,255,255,0.82) !important;
+}
+
+/* Chip label in hero */
+body.variant-modern_saas .ms-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(4px);
+  border-radius: var(--ms-radius-pill);
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.92);
+  margin-bottom: 1.25rem;
+}
+body.variant-modern_saas .ms-chip i {
+  font-size: 0.65rem;
+  opacity: 0.7;
+}
+
+/* Hero image — 3D perspective tilt */
+body.variant-modern_saas .ms-hero-image-wrap {
+  perspective: 1200px;
+}
+body.variant-modern_saas .ms-hero-image-wrap img,
+body.variant-modern_saas .ms-hero-image-wrap .media-img {
+  border-radius: var(--ms-radius-lg);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.08),
+    0 24px 48px rgba(0,0,0,0.14),
+    0 0 0 1px rgba(255,255,255,0.1) inset;
+  transform: rotateY(-3deg) rotateX(1.5deg);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--ms-bg);
+  max-height: 420px;
+  object-fit: cover;
+}
+body.variant-modern_saas .ms-hero-image-wrap img:hover,
+body.variant-modern_saas .ms-hero-image-wrap .media-img:hover {
+  transform: rotateY(0) rotateX(0) scale(1.02);
+}
+
+/* Hero placeholder */
+body.variant-modern_saas .ms-hero-placeholder {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px dashed rgba(255,255,255,0.2) !important;
+  color: rgba(255,255,255,0.6);
+  border-radius: var(--ms-radius-lg);
+  padding: 3.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+}
+body.variant-modern_saas .ms-hero-placeholder i {
+  opacity: 0.5;
+}
+
+/* Hero buttons — glass-effect */
+body.variant-modern_saas .hero .btn-light,
+body.variant-modern_saas .ms-btn-hero-primary {
+  background: #fff;
+  color: var(--ms-accent);
+  border: 1px solid #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,255,255,0.15) inset;
+  transition: all 0.2s ease;
+}
+body.variant-modern_saas .hero .btn-light:hover,
+body.variant-modern_saas .ms-btn-hero-primary:hover {
+  background: var(--ms-surface);
+  color: color-mix(in srgb, var(--ms-accent) 85%, black);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+}
+
+body.variant-modern_saas .hero .btn-outline-light,
+body.variant-modern_saas .ms-btn-hero-glass {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+body.variant-modern_saas .hero .btn-outline-light:hover,
+body.variant-modern_saas .ms-btn-hero-glass:hover {
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.45);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* =================================================================
+   SECTIONS — Alternating backgrounds with generous spacing
+   ================================================================= */
+body.variant-modern_saas .ms-section {
+  padding: 4.5rem 0;
+}
+body.variant-modern_saas .ms-section--surface {
+  background: var(--ms-surface);
+}
+body.variant-modern_saas .ms-section--white {
+  background: var(--ms-bg);
+}
+
+body.variant-modern_saas section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+body.variant-modern_saas .bg-light {
+  background: var(--ms-surface) !important;
+}
+
+/* Section header with title + action */
+body.variant-modern_saas .ms-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+body.variant-modern_saas .ms-section-header h2 {
+  margin-bottom: 0;
+}
+
+/* =================================================================
+   CARDS — Elevated with hover lift
+   ================================================================= */
+body.variant-modern_saas .card {
+  background: var(--ms-bg);
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius);
+  box-shadow: var(--ms-shadow-sm);
+  transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+body.variant-modern_saas .card:hover {
+  box-shadow: var(--ms-shadow-lg);
+  transform: translateY(-3px);
+}
+
+/* Static cards (sidebar, meta, form) — no hover lift */
+body.variant-modern_saas .ms-card-static {
+  transition: none;
+}
+body.variant-modern_saas .ms-card-static:hover {
+  box-shadow: var(--ms-shadow-sm);
+  transform: none;
+}
+
+body.variant-modern_saas .card-body {
+  padding: 1.5rem;
+}
+body.variant-modern_saas .card-title {
+  color: var(--ms-text);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+}
+body.variant-modern_saas .card-text.text-muted {
+  color: var(--ms-text-muted) !important;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+/* Card images — flush top radius */
+body.variant-modern_saas .card .media-img,
+body.variant-modern_saas .card .card-img-top {
+  border-radius: var(--ms-radius) var(--ms-radius) 0 0;
+}
+
+/* Gradient accent bar on top of card */
+body.variant-modern_saas .ms-card-accent {
+  position: relative;
+  overflow: hidden;
+}
+body.variant-modern_saas .ms-card-accent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--ms-gradient);
+  z-index: 1;
+}
+
+/* =================================================================
+   FEATURED GRID (Home page)
+   ================================================================= */
+body.variant-modern_saas .featured-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px)  {
+  body.variant-modern_saas .featured-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 992px)  {
+  body.variant-modern_saas .featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =================================================================
+   BADGES — Soft-filled pills
+   ================================================================= */
+body.variant-modern_saas .badge {
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+}
+body.variant-modern_saas .badge.bg-primary-subtle {
+  background: var(--ms-accent-soft) !important;
+  color: var(--ms-accent) !important;
+  border: 1px solid color-mix(in srgb, var(--ms-accent) 15%, transparent);
+  padding: 0.3em 0.75em;
+  border-radius: var(--ms-radius-pill);
+}
+body.variant-modern_saas .badge.bg-secondary-subtle {
+  background: var(--ms-surface) !important;
+  color: var(--ms-text-muted) !important;
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius-pill);
+}
+body.variant-modern_saas .badge.bg-success {
+  background: rgba(34,197,94,0.08) !important;
+  color: #16a34a !important;
+  border: 1px solid rgba(34,197,94,0.18);
+  border-radius: var(--ms-radius-pill);
+}
+body.variant-modern_saas .badge.bg-primary {
+  background: var(--ms-accent) !important;
+  color: #fff !important;
+  border-radius: var(--ms-radius-pill);
+}
+body.variant-modern_saas .badge.bg-light {
+  background: var(--ms-surface) !important;
+  color: var(--ms-text-muted) !important;
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius-pill);
+}
+
+/* Tech/tag pill badges */
+body.variant-modern_saas .ms-tech-badge {
+  display: inline-block;
+  background: var(--ms-accent-soft);
+  color: var(--ms-accent);
+  border: 1px solid color-mix(in srgb, var(--ms-accent) 12%, transparent);
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.25em 0.65em;
+  border-radius: var(--ms-radius-pill);
+  letter-spacing: 0.01em;
+}
+
+/* =================================================================
+   BUTTONS — Crisp, with glow shadows
+   ================================================================= */
+body.variant-modern_saas .btn {
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.5rem 1.15rem;
+}
+
+body.variant-modern_saas .btn-primary {
+  background: var(--ms-accent);
+  border-color: var(--ms-accent);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px var(--ms-glow);
+}
+body.variant-modern_saas .btn-primary:hover {
+  background: color-mix(in srgb, var(--ms-accent) 88%, black);
+  border-color: color-mix(in srgb, var(--ms-accent) 88%, black);
+  box-shadow: 0 4px 16px var(--ms-glow), 0 2px 4px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+
+body.variant-modern_saas .btn-outline-primary {
+  color: var(--ms-accent);
+  border-color: color-mix(in srgb, var(--ms-accent) 40%, transparent);
+  background: transparent;
+}
+body.variant-modern_saas .btn-outline-primary:hover {
+  background: var(--ms-accent);
+  border-color: var(--ms-accent);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--ms-glow);
+}
+body.variant-modern_saas .btn-outline-primary.active,
+body.variant-modern_saas .btn-outline-primary:active {
+  background: var(--ms-accent) !important;
+  color: #fff !important;
+  border-color: var(--ms-accent) !important;
+}
+
+body.variant-modern_saas .btn-outline-secondary {
+  color: var(--ms-text-muted);
+  border-color: var(--ms-border);
+}
+body.variant-modern_saas .btn-outline-secondary:hover {
+  background: var(--ms-surface);
+  color: var(--ms-text);
+  border-color: color-mix(in srgb, var(--ms-text-muted) 40%, transparent);
+}
+
+body.variant-modern_saas .btn-outline-dark {
+  color: var(--ms-text);
+  border-color: var(--ms-border);
+}
+body.variant-modern_saas .btn-outline-dark:hover {
+  background: var(--ms-text);
+  border-color: var(--ms-text);
+  color: var(--ms-bg);
+}
+
+body.variant-modern_saas .btn-dark {
+  background: var(--ms-text);
+  border-color: var(--ms-text);
+  color: var(--ms-bg);
+}
+body.variant-modern_saas .btn-dark:hover {
+  background: color-mix(in srgb, var(--ms-text) 85%, var(--ms-bg));
+  border-color: color-mix(in srgb, var(--ms-text) 85%, var(--ms-bg));
+}
+
+/* Pill-style filter chips */
+body.variant-modern_saas .ms-filter-chip {
+  border-radius: var(--ms-radius-pill) !important;
+  padding: 0.35rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid var(--ms-border);
+  background: var(--ms-bg);
+  color: var(--ms-text-muted);
+  transition: all 0.15s ease;
+}
+body.variant-modern_saas .ms-filter-chip:hover {
+  border-color: var(--ms-accent);
+  color: var(--ms-accent);
+  background: var(--ms-accent-soft);
+}
+body.variant-modern_saas .ms-filter-chip.active,
+body.variant-modern_saas .ms-filter-chip--active {
+  background: var(--ms-accent) !important;
+  border-color: var(--ms-accent) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px var(--ms-glow);
+}
+
+body.variant-modern_saas .btn-lg {
+  padding: 0.65rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* =================================================================
+   FOCUS STATES
+   ================================================================= */
+body.variant-modern_saas :focus-visible {
+  outline: 2px solid var(--ms-accent);
+  outline-offset: 2px;
+}
+body.variant-modern_saas .btn:focus-visible {
+  outline: 2px solid var(--ms-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--ms-glow);
+}
+
+/* =================================================================
+   LINKS
+   ================================================================= */
+body.variant-modern_saas a {
+  color: var(--ms-accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+body.variant-modern_saas a:hover {
+  color: color-mix(in srgb, var(--ms-accent) 75%, black);
+}
+body.variant-modern_saas .stretched-link {
+  color: var(--ms-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+body.variant-modern_saas .ms-link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ms-accent);
+}
+body.variant-modern_saas .ms-link-arrow i {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+body.variant-modern_saas .ms-link-arrow:hover i {
+  transform: translateX(3px);
+}
+
+/* =================================================================
+   FORM CONTROLS — Rounded with accent glow
+   ================================================================= */
+body.variant-modern_saas .form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ms-text);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+body.variant-modern_saas .form-control {
+  background: var(--ms-bg);
+  border: 1px solid var(--ms-border);
+  color: var(--ms-text);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-modern_saas .form-control::placeholder {
+  color: color-mix(in srgb, var(--ms-text-muted) 65%, transparent);
+}
+body.variant-modern_saas .form-control:focus {
+  border-color: var(--ms-accent);
+  box-shadow: 0 0 0 3px var(--ms-glow);
+  background: var(--ms-bg);
+  color: var(--ms-text);
+}
+
+body.variant-modern_saas textarea.form-control {
+  min-height: 130px;
+  resize: vertical;
+}
+
+/* Error messages */
+body.variant-modern_saas .errorlist {
+  color: #dc2626;
+  font-size: 0.78rem;
+  margin-top: 0.3rem;
+  list-style: none;
+  padding: 0;
+  font-weight: 500;
+}
+
+/* =================================================================
+   PROJECT DETAIL — Sidebar with accent bar
+   ================================================================= */
+body.variant-modern_saas .ms-sidebar-card {
+  position: sticky;
+  top: 88px;
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius);
+  box-shadow: var(--ms-shadow-sm);
+  overflow: hidden;
+}
+body.variant-modern_saas .ms-sidebar-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--ms-gradient);
+}
+body.variant-modern_saas .ms-sidebar-card .card-body {
+  padding: 1.75rem;
+}
+body.variant-modern_saas .ms-sidebar-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ms-text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Article text in project detail */
+body.variant-modern_saas article.text-secondary,
+body.variant-modern_saas .ms-article-text {
+  color: var(--ms-text-muted) !important;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+body.variant-modern_saas .ms-article-text p {
+  margin-bottom: 1.25rem;
+}
+
+/* =================================================================
+   EDUCATION & CERTIFICATIONS
+   ================================================================= */
+body.variant-modern_saas .ms-group-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ms-accent) !important;
+  position: relative;
+  padding-left: 1.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+body.variant-modern_saas .ms-group-heading::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.1rem;
+  height: 2px;
+  background: var(--ms-accent);
+  border-radius: 2px;
+}
+
+/* Entry cards — hover gradient top bar */
+body.variant-modern_saas .ms-entry-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ms-border) !important;
+}
+body.variant-modern_saas .ms-entry-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--ms-border);
+  transition: background 0.3s ease, height 0.3s ease;
+}
+body.variant-modern_saas .ms-entry-card:hover::before {
+  background: var(--ms-gradient);
+  height: 3px;
+}
+
+/* Date text styling */
+body.variant-modern_saas .ms-date-text {
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ms-text-muted);
+}
+
+/* Preview containers */
+body.variant-modern_saas .ratio.ratio-16x9 {
+  border-color: var(--ms-border) !important;
+  border-radius: var(--ms-radius);
+  overflow: hidden;
+}
+
+/* =================================================================
+   ABOUT PAGE
+   ================================================================= */
+body.variant-modern_saas .ms-headshot-wrap .img-shape-circle,
+body.variant-modern_saas .ms-headshot-wrap img {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 0 0 4px var(--ms-bg), 0 0 0 5px var(--ms-border);
+}
+
+body.variant-modern_saas .ms-bio-text {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--ms-text-muted);
+}
+body.variant-modern_saas .ms-bio-text p {
+  margin-bottom: 1.25rem;
+}
+
+/* =================================================================
+   RESUME PAGE
+   ================================================================= */
+body.variant-modern_saas .ms-resume-meta {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ms-border) !important;
+}
+body.variant-modern_saas .ms-resume-meta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--ms-gradient);
+}
+
+body.variant-modern_saas iframe#resumePdfFrame {
+  border-color: var(--ms-border) !important;
+  border-radius: var(--ms-radius) !important;
+  box-shadow: var(--ms-shadow-md);
+}
+
+/* Resume history list */
+body.variant-modern_saas .list-group-item {
+  background: var(--ms-bg);
+  border-color: var(--ms-border);
+  padding: 1rem 1.25rem;
+  transition: background 0.15s ease;
+}
+body.variant-modern_saas .list-group-item:hover {
+  background: var(--ms-surface);
+}
+body.variant-modern_saas .list-group-flush > .list-group-item:first-child {
+  border-top: 1px solid var(--ms-border);
+}
+
+body.variant-modern_saas .ms-history-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ms-text-muted);
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+/* =================================================================
+   CONTACT PAGE
+   ================================================================= */
+body.variant-modern_saas .ms-contact-card {
+  border: 1px solid var(--ms-border) !important;
+}
+body.variant-modern_saas .ms-contact-card .card-body {
+  padding: 2.25rem;
+}
+
+/* Social link buttons (contact & about) */
+body.variant-modern_saas .ms-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--ms-radius-pill);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-modern_saas .alert {
+  background: var(--ms-surface);
+  border: 1px solid var(--ms-border);
+  color: var(--ms-text);
+  border-radius: var(--ms-radius);
+  font-size: 0.9rem;
+}
+body.variant-modern_saas .alert-info {
+  border-left: 3px solid var(--ms-accent);
+}
+body.variant-modern_saas .alert-secondary {
+  border-left: 3px solid var(--ms-text-muted);
+}
+body.variant-modern_saas .alert-success {
+  border-left: 3px solid #16a34a;
+}
+
+/* =================================================================
+   FOOTER — Dark inverted
+   ================================================================= */
+body.variant-modern_saas .footer {
+  background: var(--ms-text) !important;
+  color: color-mix(in srgb, var(--ms-bg) 60%, transparent);
+  border-top: none;
+  padding: 2.5rem 0;
+}
+body.variant-modern_saas .footer a {
+  color: color-mix(in srgb, var(--ms-bg) 50%, transparent) !important;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+body.variant-modern_saas .footer a:hover {
+  color: var(--ms-bg) !important;
+}
+
+/* =================================================================
+   PAGINATION — Pill-style page links
+   ================================================================= */
+body.variant-modern_saas .pagination {
+  gap: 0.25rem;
+}
+body.variant-modern_saas .page-link {
+  background: var(--ms-bg);
+  border: 1px solid var(--ms-border);
+  color: var(--ms-text-muted);
+  border-radius: 8px !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.85rem;
+  transition: all 0.15s ease;
+}
+body.variant-modern_saas .page-link:hover {
+  background: var(--ms-accent-soft);
+  border-color: var(--ms-accent);
+  color: var(--ms-accent);
+}
+body.variant-modern_saas .page-item.active .page-link {
+  background: var(--ms-accent);
+  border-color: var(--ms-accent);
+  color: #fff;
+  box-shadow: 0 2px 8px var(--ms-glow);
+}
+body.variant-modern_saas .page-item.disabled .page-link {
+  background: var(--ms-surface);
+  border-color: var(--ms-border);
+  color: color-mix(in srgb, var(--ms-text-muted) 35%, transparent);
+}
+body.variant-modern_saas .page-item + .page-item .page-link {
+  margin-left: 0;
+}
+
+/* =================================================================
+   CATEGORY ICON IN FILTER BAR
+   ================================================================= */
+body.variant-modern_saas .category-icon {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: text-bottom;
+}
+
+/* =================================================================
+   SELECTION & SCROLLBAR
+   ================================================================= */
+body.variant-modern_saas ::selection {
+  background: var(--ms-accent);
+  color: #fff;
+}
+
+body.variant-modern_saas::-webkit-scrollbar {
+  width: 8px;
+}
+body.variant-modern_saas::-webkit-scrollbar-track {
+  background: var(--ms-surface);
+}
+body.variant-modern_saas::-webkit-scrollbar-thumb {
+  background: var(--ms-border);
+  border-radius: 4px;
+}
+body.variant-modern_saas::-webkit-scrollbar-thumb:hover {
+  background: var(--ms-text-muted);
+}
+
+/* =================================================================
+   REDUCED MOTION
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-modern_saas,
+  body.variant-modern_saas * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  body.variant-modern_saas .card:hover {
+    transform: none;
+  }
+  body.variant-modern_saas .ms-hero-image-wrap img,
+  body.variant-modern_saas .ms-hero-image-wrap .media-img {
+    transform: none;
+  }
+  body.variant-modern_saas .ms-hero-image-wrap img:hover,
+  body.variant-modern_saas .ms-hero-image-wrap .media-img:hover {
+    transform: none;
+  }
+  body.variant-modern_saas .hero .btn-light:hover,
+  body.variant-modern_saas .hero .btn-outline-light:hover,
+  body.variant-modern_saas .btn-primary:hover {
+    transform: none;
+  }
+}
+
+body.no-motion.variant-modern_saas .card:hover {
+  transform: none;
+}
+body.no-motion.variant-modern_saas .ms-hero-image-wrap img,
+body.no-motion.variant-modern_saas .ms-hero-image-wrap .media-img {
+  transform: none;
+}
+body.no-motion.variant-modern_saas .hero .btn-light:hover,
+body.no-motion.variant-modern_saas .hero .btn-outline-light:hover,
+body.no-motion.variant-modern_saas .btn-primary:hover {
+  transform: none;
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 767.98px) {
+  body.variant-modern_saas .hero--full {
+    padding: 3rem 0 3.5rem !important;
+  }
+  body.variant-modern_saas .hero--compact {
+    padding: 2.25rem 0 2.5rem !important;
+  }
+  body.variant-modern_saas .hero h1 {
+    font-size: 2.1rem;
+  }
+  body.variant-modern_saas .ms-hero-image-wrap img,
+  body.variant-modern_saas .ms-hero-image-wrap .media-img {
+    transform: none;
+    max-height: 280px;
+    margin-top: 1.5rem;
+  }
+  body.variant-modern_saas section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  body.variant-modern_saas .ms-section {
+    padding: 2.5rem 0;
+  }
+  body.variant-modern_saas .ms-sidebar-card {
+    position: static;
+  }
+  body.variant-modern_saas .ms-contact-card .card-body {
+    padding: 1.5rem;
+  }
+  body.variant-modern_saas .ms-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  body.variant-modern_saas h1 {
+    font-size: 2rem;
+  }
+  body.variant-modern_saas h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  body.variant-modern_saas .hero h1 {
+    font-size: 2.6rem;
+  }
+  body.variant-modern_saas .ms-hero-image-wrap img,
+  body.variant-modern_saas .ms-hero-image-wrap .media-img {
+    transform: rotateY(-1.5deg);
+  }
+}
+
+@media (min-width: 992px) {
+  body.variant-modern_saas .hero h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  body.variant-modern_saas .hero--full h1 {
+    font-size: 3.8rem;
+  }
+}

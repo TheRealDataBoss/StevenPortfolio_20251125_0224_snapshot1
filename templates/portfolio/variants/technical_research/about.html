@@ -1,0 +1,108 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}About{% if site_settings.full_name %} - {{ site_settings.full_name }}{% endif %} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; }
+    .tr-paper .tr-author { text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper .tr-footnote a { color: #555; text-decoration: underline; }
+    .tr-paper .tr-body-text p { margin-bottom: 0.75rem; }
+    .tr-paper table.tr-meta-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1rem; }
+    .tr-paper table.tr-meta-table th { text-align: left; font-weight: 600; width: 30%; padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; color: #555; font-size: 0.82rem; vertical-align: top; }
+    .tr-paper table.tr-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+    .tr-paper table.tr-meta-table tr:last-child th, .tr-paper table.tr-meta-table tr:last-child td { border-bottom: none; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="tr-paper">
+            {# ── Paper Header ── #}
+            <h1 class="tr-title">About the Author</h1>
+            {% if site_settings and site_settings.headline %}
+                <p class="tr-author">{{ site_settings.headline }}</p>
+            {% else %}
+                <p class="tr-author">Curriculum Vitae</p>
+            {% endif %}
+
+            {# ── Headshot as Figure ── #}
+            {% if site_settings and site_settings.headshot %}
+            <div class="text-center my-4">
+                {% responsive_image image=site_settings.headshot variant="square" shape="circle" alt=site_settings.full_name|default:"Headshot" extra_class="mx-auto" %}
+                <style>.media-img--square{max-width:140px;margin:0 auto;}</style>
+                <p class="tr-footnote mt-2"><em>Figure 1.</em> Author photograph.</p>
+            </div>
+            {% elif site_settings and site_settings.hero_image %}
+            <div class="text-center my-4">
+                {% media_img site_settings.hero_image ratio="landscape" fit="cover" alt="About image" shadow=False %}
+                <p class="tr-footnote mt-2"><em>Figure 1.</em> Profile image.</p>
+            </div>
+            {% else %}
+            <div class="text-center my-4">
+                <div class="border rounded p-4 text-center text-muted mx-auto" style="max-width:140px;">
+                    <i class="fa-solid fa-user fa-2x"></i>
+                </div>
+            </div>
+            {% endif %}
+
+            {# ── 1. Overview ── #}
+            <h2 class="tr-section-heading">1. Overview</h2>
+            <table class="tr-meta-table">
+                {% if site_settings and site_settings.full_name %}
+                <tr>
+                    <th>Name</th>
+                    <td>{{ site_settings.full_name }}</td>
+                </tr>
+                {% endif %}
+                {% if site_settings and site_settings.headline %}
+                <tr>
+                    <th>Title</th>
+                    <td>{{ site_settings.headline }}</td>
+                </tr>
+                {% endif %}
+                {% if site_settings and site_settings.linkedin_url %}
+                <tr>
+                    <th>LinkedIn</th>
+                    <td><a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" style="color:#555; text-decoration:underline;">{{ site_settings.linkedin_url }}</a></td>
+                </tr>
+                {% endif %}
+                {% if site_settings and site_settings.github_url %}
+                <tr>
+                    <th>GitHub</th>
+                    <td><a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" style="color:#555; text-decoration:underline;">{{ site_settings.github_url }}</a></td>
+                </tr>
+                {% endif %}
+            </table>
+
+            {# ── 2. Biography ── #}
+            <h2 class="tr-section-heading">2. Biography</h2>
+            <div class="tr-body-text">
+                {% if site_settings and site_settings.bio_long %}
+                    {{ site_settings.bio_long|linebreaks }}
+                {% elif site_settings and site_settings.about_body %}
+                    <p>{{ site_settings.about_body }}</p>
+                {% else %}
+                    <p class="text-muted">Use the admin Site Settings to provide biographical information.</p>
+                {% endif %}
+            </div>
+
+            {# ── Footnotes ── #}
+            {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+            <div class="mt-4 pt-3" style="border-top: 1px solid #ddd;">
+                <p class="tr-footnote mb-1"><strong>External Links</strong></p>
+                {% if site_settings.linkedin_url %}
+                    <p class="tr-footnote mb-0">[1] LinkedIn: <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener">{{ site_settings.linkedin_url }}</a></p>
+                {% endif %}
+                {% if site_settings.github_url %}
+                    <p class="tr-footnote mb-0">[{% if site_settings.linkedin_url %}2{% else %}1{% endif %}] GitHub: <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener">{{ site_settings.github_url }}</a></p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

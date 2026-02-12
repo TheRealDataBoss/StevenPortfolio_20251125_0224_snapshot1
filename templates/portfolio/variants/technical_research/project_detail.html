@@ -1,0 +1,179 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}{{ project.title }} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="technical_research"></div>
+<style>
+    .tr-paper { max-width: 720px; margin: 0 auto; font-family: Georgia, "Times New Roman", Times, serif; font-size: 0.95rem; line-height: 1.7; color: #222; }
+    .tr-paper h1, .tr-paper h2, .tr-paper h3 { font-family: Georgia, "Times New Roman", Times, serif; }
+    .tr-paper .tr-title { font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 0.25rem; }
+    .tr-paper .tr-pub-meta { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 0.25rem; }
+    .tr-paper .tr-abstract { border-left: 3px solid #ccc; padding: 0.75rem 1rem; margin: 1.5rem 0; background: #fafafa; font-size: 0.9rem; color: #444; }
+    .tr-paper .tr-abstract strong { display: block; margin-bottom: 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #333; }
+    .tr-paper .tr-section-heading { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #ddd; }
+    .tr-paper .tr-footnote { font-size: 0.8rem; color: #666; }
+    .tr-paper .tr-footnote a { color: #555; }
+    .tr-paper code, .tr-paper .tr-mono { font-family: "Courier New", Courier, monospace; font-size: 0.85rem; }
+    .tr-paper table.tr-meta-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 1rem; }
+    .tr-paper table.tr-meta-table th { text-align: left; font-weight: 600; width: 30%; padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; color: #555; font-size: 0.82rem; vertical-align: top; }
+    .tr-paper table.tr-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+    .tr-paper table.tr-meta-table tr:last-child th, .tr-paper table.tr-meta-table tr:last-child td { border-bottom: none; }
+    .tr-paper .tr-ref-list { list-style: none; padding: 0; margin: 0; font-size: 0.85rem; }
+    .tr-paper .tr-ref-list li { margin-bottom: 0.4rem; color: #555; }
+    .tr-paper .tr-ref-list li a { color: #555; text-decoration: underline; }
+    .tr-paper .tr-body-text p { margin-bottom: 0.75rem; }
+</style>
+
+<section class="py-5">
+    <div class="container">
+        <div class="tr-paper">
+            {# ── Paper Header ── #}
+            <h1 class="tr-title">{{ project.title }}</h1>
+            <p class="tr-pub-meta">
+                {{ project.category.name }}
+                &middot; Published {{ project.created_at|date:"F j, Y" }}
+                {% if project.updated_at and project.updated_at != project.created_at %}
+                    &middot; Revised {{ project.updated_at|date:"F j, Y" }}
+                {% endif %}
+            </p>
+
+            {# ── Abstract ── #}
+            {% if project.summary %}
+            <div class="tr-abstract">
+                <strong>Abstract</strong>
+                {{ project.summary }}
+            </div>
+            {% endif %}
+
+            {# ── Figure (project image) ── #}
+            {% if project.image %}
+            <div class="text-center my-4">
+                {% responsive_image image=project.image variant="hero" alt=project.title extra_class="img-fluid" %}
+                <p class="tr-footnote mt-2"><em>Figure 1.</em> {{ project.title }}.</p>
+            </div>
+            {% endif %}
+
+            {# ── 1. Metadata ── #}
+            <h2 class="tr-section-heading">1. Metadata</h2>
+            <table class="tr-meta-table">
+                <tr>
+                    <th>Category</th>
+                    <td>{{ project.category.name }}</td>
+                </tr>
+                {% if project.tags %}
+                <tr>
+                    <th>Keywords</th>
+                    <td>{% for tag in project.tags|split:"," %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                </tr>
+                {% endif %}
+                {% if project.tech_stack %}
+                <tr>
+                    <th>Technology Stack</th>
+                    <td class="tr-mono">{% for tech in project.tech_stack|split:"," %}{{ tech }}{% if not forloop.last %} &middot; {% endif %}{% endfor %}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Date Published</th>
+                    <td>{{ project.created_at|date:"Y-m-d" }}</td>
+                </tr>
+                <tr>
+                    <th>Last Revised</th>
+                    <td>{{ project.updated_at|date:"Y-m-d" }}</td>
+                </tr>
+            </table>
+
+            {# ── 2. Description ── #}
+            <h2 class="tr-section-heading">2. Description</h2>
+            <div class="tr-body-text">
+                {{ project.description|linebreaks }}
+            </div>
+
+            {# ── 3. Notes ── #}
+            {% if project.notes %}
+            <h2 class="tr-section-heading">3. Notes</h2>
+            <div class="tr-body-text" style="font-size:0.9rem;">
+                {{ project.notes|linebreaksbr }}
+            </div>
+            {% endif %}
+
+            {# ── 4. Attachments (Supplementary Materials) ── #}
+            {% if visible_attachments %}
+            <h2 class="tr-section-heading">{% if project.notes %}4{% else %}3{% endif %}. Supplementary Materials</h2>
+            {% for att in visible_attachments %}
+                <div class="border rounded mb-3">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="small" style="font-family:Georgia,serif;">{{ att }}</strong>
+                            <span class="d-flex gap-2">
+                                {% if att.file %}
+                                    {% if att.is_pdf %}
+                                        <a href="{% url 'portfolio:project_attachment_preview' att.pk %}" class="btn btn-sm btn-outline-secondary" target="_blank" style="font-size:0.78rem;">Preview</a>
+                                    {% endif %}
+                                    <a href="{% url 'portfolio:project_attachment_download' att.pk %}" class="btn btn-sm btn-outline-secondary" style="font-size:0.78rem;">Download</a>
+                                {% elif att.external_url %}
+                                    <a href="{{ att.external_url }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener" style="font-size:0.78rem;">Open</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% if att.file %}
+                            {% if att.preview_kind == "pdf" %}
+                            <iframe src="{% url 'portfolio:project_attachment_pdf_inline' att.pk %}" class="w-100 border rounded" style="height:500px;" title="{{ att }}"></iframe>
+                            {% elif att.preview_kind == "image" %}
+                            <img src="{{ att.file.url }}" class="img-fluid rounded" alt="{{ att }}" style="max-height:500px;">
+                            {% elif att.preview_kind == "notebook" %}
+                            <iframe src="{% url 'portfolio:project_attachment_notebook_inline' att.pk %}" class="w-100 border rounded" style="height:500px;" title="{{ att }}"></iframe>
+                            {% elif att.preview_kind == "audio" %}
+                            <audio controls src="{{ att.file.url }}" class="w-100"></audio>
+                            {% elif att.preview_kind == "video" %}
+                            <video controls src="{{ att.file.url }}" class="w-100 rounded" style="max-height:500px;"></video>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            {# ── Legacy Attachment fallback ── #}
+            {% elif project.attachment %}
+            <h2 class="tr-section-heading">{% if project.notes %}4{% else %}3{% endif %}. Supplementary Materials</h2>
+            <div class="border rounded mb-3">
+                <div class="p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="small" style="font-family:Georgia,serif;">{{ project.attachment.name|cut:"projects/files/" }}</strong>
+                        <a href="{% url 'portfolio:legacy_attachment_download' project.pk %}" class="btn btn-sm btn-outline-secondary" style="font-size:0.78rem;">Download</a>
+                    </div>
+                    {% if legacy_preview_kind == "pdf" %}
+                    <iframe src="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="w-100 border rounded" style="height:500px;" title="Attachment"></iframe>
+                    {% elif legacy_preview_kind == "image" %}
+                    <img src="{{ project.attachment.url }}" class="img-fluid rounded" alt="Attachment" style="max-height:500px;">
+                    {% elif legacy_preview_kind == "notebook" %}
+                    <iframe src="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="w-100 border rounded" style="height:500px;" title="Attachment"></iframe>
+                    {% elif legacy_preview_kind == "audio" %}
+                    <audio controls src="{{ project.attachment.url }}" class="w-100"></audio>
+                    {% elif legacy_preview_kind == "video" %}
+                    <video controls src="{{ project.attachment.url }}" class="w-100 rounded" style="max-height:500px;"></video>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {# ── References ── #}
+            {% if project.repo_url or project.live_url %}
+            <h2 class="tr-section-heading">References</h2>
+            <ol class="tr-ref-list">
+                {% if project.repo_url %}
+                <li>[1] Source repository: <a href="{{ project.repo_url }}" target="_blank" rel="noopener">{{ project.repo_url }}</a></li>
+                {% endif %}
+                {% if project.live_url %}
+                <li>[{% if project.repo_url %}2{% else %}1{% endif %}] Live deployment: <a href="{{ project.live_url }}" target="_blank" rel="noopener">{{ project.live_url }}</a></li>
+                {% endif %}
+            </ol>
+            {% endif %}
+
+            {# ── Back link ── #}
+            <div class="mt-4 pt-3" style="border-top: 1px solid #ddd;">
+                <a href="{% url 'portfolio:project_list' %}" class="text-muted" style="font-size:0.85rem; text-decoration:underline;">&larr; Return to project index</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

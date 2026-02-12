@@ -1,0 +1,134 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}{{ project.title }} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="data_lab"></div>
+<section class="hero py-4">
+    <div class="container">
+        {% if project.image %}
+            {% responsive_image image=project.image variant="hero" alt=project.title extra_class="img-fluid w-100 shadow-sm" %}
+        {% endif %}
+    </div>
+</section>
+<section class="py-5">
+    <div class="container">
+        <p class="text-uppercase fw-semibold mb-1 small" style="font-family:monospace;letter-spacing:.15em;color:var(--accent-cyan,#00e5ff);">Project Detail</p>
+        <h1 class="display-4 fw-bold mb-3">{{ project.title }}</h1>
+        <p class="lead text-muted mb-3">{{ project.summary|default:project.description|truncatewords:30 }}</p>
+
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="badge bg-primary px-3 py-2" style="border-radius:3px;font-family:monospace;">{{ project.category.name }}</span>
+            {% if project.tags %}
+                {% for tag in project.tags|split:"," %}
+                    <span class="badge bg-secondary-subtle text-secondary px-3 py-2" style="border-radius:3px;">{{ tag }}</span>
+                {% endfor %}
+            {% endif %}
+            {% if project.tech_stack %}
+                {% for tech in project.tech_stack|split:"," %}
+                    <span class="badge bg-primary-subtle text-primary px-3 py-2" style="border-radius:3px;font-family:monospace;">{{ tech }}</span>
+                {% endfor %}
+            {% endif %}
+            <span class="badge bg-light text-muted px-3 py-2" style="border-radius:3px;font-family:monospace;"><i class="fas fa-calendar me-1"></i> {{ project.created_at|date:"Y-m-d" }}</span>
+            <span class="badge bg-light text-muted px-3 py-2" style="border-radius:3px;font-family:monospace;"><i class="fas fa-sync-alt me-1"></i> {{ project.updated_at|date:"Y-m-d" }}</span>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <article class="text-secondary">{{ project.description|linebreaks }}</article>
+
+                <div class="mt-4 d-flex flex-wrap gap-2">
+                    {% if project.repo_url %}
+                        <a class="btn btn-outline-primary btn-lg" style="border-radius:6px;" href="{{ project.repo_url }}" target="_blank" rel="noopener"><i class="fab fa-github me-1"></i> Source Code</a>
+                    {% endif %}
+                    {% if project.live_url %}
+                        <a class="btn btn-primary btn-lg" style="border-radius:6px;" href="{{ project.live_url }}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt me-1"></i> Live Demo</a>
+                    {% endif %}
+                </div>
+
+                {% if project.notes %}
+                <div class="mt-4">
+                    <h5 class="fw-bold" style="font-family:monospace;"><span style="color:var(--accent-cyan,#00e5ff);">#</span> Notes</h5>
+                    <div class="card shadow-sm mb-3" style="border-radius:6px;">
+                        <div class="card-body text-secondary" style="font-family:monospace;font-size:.9em;">
+                            {{ project.notes|linebreaksbr }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if visible_attachments %}
+                <div class="mt-4">
+                    <h5 class="fw-bold" style="font-family:monospace;"><span style="color:var(--accent-cyan,#00e5ff);">#</span> Attachments</h5>
+                    {% for att in visible_attachments %}
+                        <div class="card shadow-sm mb-3" style="border-radius:6px;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong style="font-family:monospace;">{{ att }}</strong>
+                                    <span class="d-flex gap-2">
+                                        {% if att.file %}
+                                            {% if att.is_pdf %}
+                                                <a href="{% url 'portfolio:project_attachment_preview' att.pk %}" class="btn btn-sm btn-outline-primary" style="border-radius:3px;" target="_blank"><i class="fas fa-eye me-1"></i>Preview</a>
+                                            {% endif %}
+                                            <a href="{% url 'portfolio:project_attachment_download' att.pk %}" class="btn btn-sm btn-outline-secondary" style="border-radius:3px;"><i class="fas fa-download me-1"></i>Download</a>
+                                        {% elif att.external_url %}
+                                            <a href="{{ att.external_url }}" class="btn btn-sm btn-outline-primary" style="border-radius:3px;" target="_blank" rel="noopener"><i class="fas fa-external-link-alt me-1"></i>Open</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% if att.file %}
+                                    {% if att.preview_kind == "pdf" %}
+                                    <iframe src="{% url 'portfolio:project_attachment_pdf_inline' att.pk %}" class="w-100 border" style="height:500px;border-radius:6px;" title="{{ att }}"></iframe>
+                                    {% elif att.preview_kind == "image" %}
+                                    <img src="{{ att.file.url }}" class="img-fluid" alt="{{ att }}" style="max-height:500px;border-radius:6px;">
+                                    {% elif att.preview_kind == "notebook" %}
+                                    <iframe src="{% url 'portfolio:project_attachment_notebook_inline' att.pk %}" class="w-100 border" style="height:500px;border-radius:6px;" title="{{ att }}"></iframe>
+                                    {% elif att.preview_kind == "audio" %}
+                                    <audio controls src="{{ att.file.url }}" class="w-100"></audio>
+                                    {% elif att.preview_kind == "video" %}
+                                    <video controls src="{{ att.file.url }}" class="w-100" style="max-height:500px;border-radius:6px;"></video>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% elif project.attachment %}
+                <div class="mt-4">
+                    <h5 class="fw-bold" style="font-family:monospace;"><span style="color:var(--accent-cyan,#00e5ff);">#</span> Attachment</h5>
+                    <div class="card shadow-sm mb-3" style="border-radius:6px;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong style="font-family:monospace;">{{ project.attachment.name|cut:"projects/files/" }}</strong>
+                                <a href="{% url 'portfolio:legacy_attachment_download' project.pk %}" class="btn btn-sm btn-outline-secondary" style="border-radius:3px;"><i class="fas fa-download me-1"></i>Download</a>
+                            </div>
+                            {% if legacy_preview_kind == "pdf" %}
+                            <iframe src="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="w-100 border" style="height:500px;border-radius:6px;" title="Attachment"></iframe>
+                            {% elif legacy_preview_kind == "image" %}
+                            <img src="{{ project.attachment.url }}" class="img-fluid" alt="Attachment" style="max-height:500px;border-radius:6px;">
+                            {% elif legacy_preview_kind == "notebook" %}
+                            <iframe src="{% url 'portfolio:legacy_attachment_inline' project.pk %}" class="w-100 border" style="height:500px;border-radius:6px;" title="Attachment"></iframe>
+                            {% elif legacy_preview_kind == "audio" %}
+                            <audio controls src="{{ project.attachment.url }}" class="w-100"></audio>
+                            {% elif legacy_preview_kind == "video" %}
+                            <video controls src="{{ project.attachment.url }}" class="w-100" style="max-height:500px;border-radius:6px;"></video>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4" style="border-radius:6px;">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold" style="font-family:monospace;"><span style="color:var(--accent-cyan,#00e5ff);">&gt;</span> Meta</h5>
+                        <p class="mb-1" style="font-family:monospace;font-size:.9em;"><strong>category:</strong> {{ project.category.name }}</p>
+                        {% if project.tech_stack %}<p class="mb-1" style="font-family:monospace;font-size:.9em;"><strong>stack:</strong> {{ project.tech_stack }}</p>{% endif %}
+                        <p class="mb-1" style="font-family:monospace;font-size:.9em;"><strong>created:</strong> {{ project.created_at|date:"Y-m-d" }}</p>
+                        <p class="mb-0" style="font-family:monospace;font-size:.9em;"><strong>updated:</strong> {{ project.updated_at|date:"Y-m-d" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

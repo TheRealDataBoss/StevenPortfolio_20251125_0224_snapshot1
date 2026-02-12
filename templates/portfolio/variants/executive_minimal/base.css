@@ -1,0 +1,1126 @@
+/* =================================================================
+   Executive Minimal — Ultra-minimal Swiss design portfolio
+   Dieter Rams meets Swiss typography: restrained, premium, high whitespace
+   Scoped entirely to body.variant-executive_minimal
+   ================================================================= */
+
+/* --- Design Tokens ------------------------------------------------ */
+body.variant-executive_minimal {
+  --em-accent:       var(--accent, #1a1a1a);
+  --em-bg:           var(--bg, #ffffff);
+  --em-surface:      var(--surface, #fafafa);
+  --em-text:         var(--text, #1a1a1a);
+  --em-text-muted:   var(--text-muted, #6b6b6b);
+  --em-border:       var(--border, #e5e5e5);
+
+  /* Derived */
+  --em-accent-soft:  color-mix(in srgb, var(--em-accent) 5%, var(--em-bg));
+  --em-rule:         color-mix(in srgb, var(--em-border) 55%, transparent);
+  --em-focus-ring:   color-mix(in srgb, var(--em-accent) 20%, transparent);
+  --em-hover-bg:     color-mix(in srgb, var(--em-accent) 3%, var(--em-bg));
+  --em-border-hover: color-mix(in srgb, var(--em-border) 70%, var(--em-accent));
+  --em-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.04);
+  --em-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --em-radius:       4px;
+  --em-radius-sm:    3px;
+
+  background: var(--em-bg);
+  color: var(--em-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.75;
+  letter-spacing: 0.005em;
+  padding-top: 56px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =================================================================
+   TYPOGRAPHY — tight tracking, generous weight contrast
+   ================================================================= */
+body.variant-executive_minimal h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--em-text);
+  margin-bottom: 0.5rem;
+}
+body.variant-executive_minimal h2 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--em-text);
+}
+body.variant-executive_minimal h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--em-text);
+}
+body.variant-executive_minimal h4,
+body.variant-executive_minimal h5,
+body.variant-executive_minimal h6 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--em-text);
+}
+
+/* Display headings — massive, impactful */
+body.variant-executive_minimal .em-display {
+  font-size: 3.25rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color: var(--em-text);
+}
+
+/* Eyebrow labels — restrained uppercase micro-text */
+body.variant-executive_minimal .em-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--em-text-muted);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+/* General uppercase override */
+body.variant-executive_minimal .text-uppercase {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--em-text-muted);
+}
+
+/* Muted and secondary text */
+body.variant-executive_minimal .text-muted,
+body.variant-executive_minimal .text-secondary {
+  color: var(--em-text-muted) !important;
+}
+
+/* Lead text — elegant, slightly enlarged */
+body.variant-executive_minimal .em-lead {
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--em-text-muted);
+  max-width: 640px;
+}
+
+/* =================================================================
+   NAVBAR — crisp white bar, ruled bottom, zero shadow
+   ================================================================= */
+body.variant-executive_minimal .navbar {
+  background: var(--em-bg) !important;
+  border-bottom: 1px solid var(--em-border);
+  padding: 0.6rem 0;
+  box-shadow: none;
+  transition: background 0.2s ease;
+}
+body.variant-executive_minimal .navbar .navbar-brand {
+  color: var(--em-text) !important;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+body.variant-executive_minimal .navbar .nav-link {
+  color: var(--em-text-muted) !important;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 0.9rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+body.variant-executive_minimal .navbar .nav-link:hover,
+body.variant-executive_minimal .navbar .nav-link.active {
+  color: var(--em-text) !important;
+}
+
+/* Subtle underline indicator on hover/active */
+body.variant-executive_minimal .navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 60%;
+  height: 1.5px;
+  background: var(--em-accent);
+  transition: transform 0.25s ease;
+  transform-origin: center;
+}
+body.variant-executive_minimal .navbar .nav-link:hover::after,
+body.variant-executive_minimal .navbar .nav-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Dropdown — flat, crisp */
+body.variant-executive_minimal .dropdown-menu {
+  background: var(--em-bg);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 0.35rem 0;
+  margin-top: 0.25rem;
+}
+body.variant-executive_minimal .dropdown-item {
+  font-size: 0.84rem;
+  padding: 0.4rem 1rem;
+  color: var(--em-text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+body.variant-executive_minimal .dropdown-item:hover,
+body.variant-executive_minimal .dropdown-item:focus {
+  background: var(--em-hover-bg);
+  color: var(--em-text);
+}
+body.variant-executive_minimal .dropdown-toggle::after {
+  opacity: 0.4;
+}
+
+/* Mobile toggler */
+body.variant-executive_minimal .navbar-toggler {
+  border-color: var(--em-border);
+  padding: 0.3rem 0.55rem;
+}
+body.variant-executive_minimal .navbar-toggler-icon {
+  filter: invert(1) grayscale(100%) brightness(0.3);
+}
+
+/* =================================================================
+   HERO — pure white, ruled bottom, massive typography
+   ================================================================= */
+body.variant-executive_minimal .em-hero {
+  background: var(--em-bg);
+  padding: 5.5rem 0 4.5rem;
+  border-bottom: 1px solid var(--em-border);
+}
+body.variant-executive_minimal .em-hero .em-hero__inner {
+  max-width: 900px;
+}
+body.variant-executive_minimal .em-hero__image {
+  border-radius: 6px;
+  border: 1px solid var(--em-border);
+  box-shadow: var(--em-shadow-sm);
+}
+
+/* Legacy hero class overrides */
+body.variant-executive_minimal .hero {
+  background: var(--em-bg) !important;
+  color: var(--em-text) !important;
+  padding: 5rem 0 4rem;
+  border-bottom: 1px solid var(--em-border);
+}
+body.variant-executive_minimal .hero .container {
+  max-width: 960px;
+}
+body.variant-executive_minimal .hero h1,
+body.variant-executive_minimal .hero .display-4 {
+  color: var(--em-text);
+}
+body.variant-executive_minimal .hero p {
+  color: var(--em-text-muted);
+}
+body.variant-executive_minimal .hero .text-uppercase {
+  color: var(--em-text-muted);
+}
+body.variant-executive_minimal .hero .text-white-50,
+body.variant-executive_minimal .hero .text-white-75 {
+  color: var(--em-text-muted) !important;
+}
+body.variant-executive_minimal .hero .fw-bold {
+  color: var(--em-text) !important;
+}
+
+/* =================================================================
+   SECTIONS — generous vertical rhythm, hairline separators
+   ================================================================= */
+body.variant-executive_minimal .em-section {
+  padding: 4.5rem 0;
+}
+body.variant-executive_minimal .em-section + .em-section {
+  border-top: 1px solid var(--em-border);
+}
+body.variant-executive_minimal .em-section--surface {
+  background: var(--em-surface);
+}
+body.variant-executive_minimal section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+body.variant-executive_minimal .bg-light {
+  background: var(--em-surface) !important;
+}
+
+/* Section rule — thin line below section headings */
+body.variant-executive_minimal .em-rule {
+  border: 0;
+  border-top: 1px solid var(--em-border);
+  margin: 1.25rem 0 2rem;
+  opacity: 0.6;
+}
+
+/* Section heading combo: heading + rule */
+body.variant-executive_minimal .em-section-header {
+  margin-bottom: 2.5rem;
+}
+body.variant-executive_minimal .em-section-header h2 {
+  margin-bottom: 0.25rem;
+}
+
+/* Content max-width constraint */
+body.variant-executive_minimal .em-content {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body.variant-executive_minimal .em-content--narrow {
+  max-width: 720px;
+}
+body.variant-executive_minimal .em-content--article {
+  max-width: 680px;
+}
+
+/* =================================================================
+   CARDS — hairline border, zero shadow at rest, premium hover
+   ================================================================= */
+body.variant-executive_minimal .card {
+  background: var(--em-bg);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius);
+  box-shadow: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-executive_minimal .card:hover {
+  border-color: var(--em-border-hover);
+  box-shadow: var(--em-shadow-hover);
+}
+body.variant-executive_minimal .card-body {
+  padding: 1.75rem;
+}
+
+/* Override Bootstrap shadows completely */
+body.variant-executive_minimal .shadow,
+body.variant-executive_minimal .shadow-sm,
+body.variant-executive_minimal .shadow-lg {
+  box-shadow: none !important;
+}
+
+body.variant-executive_minimal .card-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--em-text);
+}
+body.variant-executive_minimal .card-text {
+  color: var(--em-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* Meta card — used in sidebar and detail pages */
+body.variant-executive_minimal .em-meta-card {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius);
+  padding: 1.75rem;
+  background: var(--em-bg);
+}
+body.variant-executive_minimal .em-meta-card:hover {
+  border-color: var(--em-border);
+  box-shadow: none;
+}
+body.variant-executive_minimal .em-meta-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--em-text-muted);
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--em-rule);
+}
+body.variant-executive_minimal .em-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  font-size: 0.88rem;
+}
+body.variant-executive_minimal .em-meta-row + .em-meta-row {
+  border-top: 1px solid color-mix(in srgb, var(--em-border) 40%, transparent);
+}
+body.variant-executive_minimal .em-meta-key {
+  color: var(--em-text-muted);
+  font-size: 0.82rem;
+}
+body.variant-executive_minimal .em-meta-val {
+  color: var(--em-text);
+  font-weight: 500;
+  font-size: 0.88rem;
+}
+
+/* =================================================================
+   BADGES — muted, flat, barely-there
+   ================================================================= */
+body.variant-executive_minimal .badge {
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  padding: 0.3em 0.65em;
+  border-radius: var(--em-radius-sm);
+}
+body.variant-executive_minimal .badge.bg-primary,
+body.variant-executive_minimal .badge.bg-primary-subtle {
+  background: var(--em-accent-soft) !important;
+  color: var(--em-text) !important;
+}
+body.variant-executive_minimal .badge.bg-secondary-subtle {
+  background: color-mix(in srgb, var(--em-border) 45%, transparent) !important;
+  color: var(--em-text-muted) !important;
+}
+body.variant-executive_minimal .badge.bg-success {
+  background: color-mix(in srgb, #059669 10%, var(--em-bg)) !important;
+  color: #059669 !important;
+}
+
+/* Flat pill badges for tech/tags */
+body.variant-executive_minimal .em-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.25em 0.6em;
+  border-radius: var(--em-radius-sm);
+  background: var(--em-surface);
+  color: var(--em-text-muted);
+  border: 1px solid var(--em-rule);
+}
+
+/* =================================================================
+   BUTTONS — clean lines, outlined default, fill on hover
+   ================================================================= */
+body.variant-executive_minimal .btn {
+  border-radius: var(--em-radius-sm);
+  font-weight: 500;
+  font-size: 0.87rem;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 1.25rem;
+  box-shadow: none;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+body.variant-executive_minimal .btn-primary {
+  background: var(--em-accent);
+  color: var(--em-bg);
+  border: 1px solid var(--em-accent);
+}
+body.variant-executive_minimal .btn-primary:hover {
+  background: color-mix(in srgb, var(--em-accent) 80%, #000);
+  border-color: color-mix(in srgb, var(--em-accent) 80%, #000);
+  color: var(--em-bg);
+}
+body.variant-executive_minimal .btn-outline-primary {
+  background: transparent;
+  color: var(--em-accent);
+  border: 1px solid var(--em-accent);
+}
+body.variant-executive_minimal .btn-outline-primary:hover {
+  background: var(--em-accent);
+  color: var(--em-bg);
+}
+body.variant-executive_minimal .btn-outline-secondary,
+body.variant-executive_minimal .btn-outline-dark {
+  background: transparent;
+  color: var(--em-text-muted);
+  border: 1px solid var(--em-border);
+}
+body.variant-executive_minimal .btn-outline-secondary:hover,
+body.variant-executive_minimal .btn-outline-dark:hover {
+  background: var(--em-accent);
+  color: var(--em-bg);
+  border-color: var(--em-accent);
+}
+body.variant-executive_minimal .btn-dark {
+  background: var(--em-accent);
+  color: var(--em-bg);
+  border: 1px solid var(--em-accent);
+}
+body.variant-executive_minimal .btn-dark:hover {
+  background: color-mix(in srgb, var(--em-accent) 80%, #000);
+  border-color: color-mix(in srgb, var(--em-accent) 80%, #000);
+}
+
+/* Small buttons */
+body.variant-executive_minimal .btn-sm {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.85rem;
+}
+
+/* Ghost button — ultra-minimal, no border */
+body.variant-executive_minimal .em-btn-ghost {
+  background: transparent;
+  color: var(--em-text-muted);
+  border: none;
+  padding: 0.35rem 0;
+  font-size: 0.84rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+body.variant-executive_minimal .em-btn-ghost:hover {
+  color: var(--em-text);
+  text-decoration: none;
+}
+
+/* =================================================================
+   FORMS — clean inputs, uppercase labels, accent focus
+   ================================================================= */
+body.variant-executive_minimal .form-control {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.88rem;
+  color: var(--em-text);
+  background: var(--em-bg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-executive_minimal .form-control:focus {
+  border-color: var(--em-accent);
+  box-shadow: 0 0 0 3px var(--em-focus-ring);
+  outline: none;
+}
+body.variant-executive_minimal .form-control::placeholder {
+  color: color-mix(in srgb, var(--em-text-muted) 55%, transparent);
+}
+body.variant-executive_minimal .form-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--em-text-muted);
+  margin-bottom: 0.4rem;
+}
+body.variant-executive_minimal textarea.form-control {
+  min-height: 140px;
+  resize: vertical;
+}
+body.variant-executive_minimal .form-control-sm {
+  font-size: 0.84rem;
+  padding: 0.4rem 0.75rem;
+}
+
+/* Error styling */
+body.variant-executive_minimal .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  color: #b91c1c;
+}
+body.variant-executive_minimal .errorlist.nonfield {
+  background: color-mix(in srgb, #b91c1c 6%, var(--em-bg));
+  border: 1px solid color-mix(in srgb, #b91c1c 18%, var(--em-bg));
+  border-radius: var(--em-radius-sm);
+  padding: 0.65rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.84rem;
+}
+
+/* =================================================================
+   ARTICLE TYPOGRAPHY — generous line-height for readability
+   ================================================================= */
+body.variant-executive_minimal article {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--em-text-muted);
+}
+body.variant-executive_minimal article p {
+  margin-bottom: 1.35rem;
+}
+
+/* Bio / long-form text styling */
+body.variant-executive_minimal .em-prose {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--em-text-muted);
+}
+body.variant-executive_minimal .em-prose p {
+  margin-bottom: 1.25rem;
+}
+
+/* =================================================================
+   PROJECT CARDS GRID
+   ================================================================= */
+body.variant-executive_minimal .em-grid {
+  display: grid;
+  gap: 1.75rem;
+}
+body.variant-executive_minimal .em-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+body.variant-executive_minimal .em-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Project card */
+body.variant-executive_minimal .em-project-card {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius);
+  overflow: hidden;
+  background: var(--em-bg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+body.variant-executive_minimal .em-project-card:hover {
+  border-color: var(--em-border-hover);
+  box-shadow: var(--em-shadow-hover);
+}
+body.variant-executive_minimal .em-project-card__body {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+body.variant-executive_minimal .em-project-card__cat {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--em-text-muted);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+body.variant-executive_minimal .em-project-card__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--em-text);
+  margin-bottom: 0.5rem;
+}
+body.variant-executive_minimal .em-project-card__desc {
+  font-size: 0.9rem;
+  color: var(--em-text-muted);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  flex: 1;
+}
+body.variant-executive_minimal .em-project-card__link {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--em-accent);
+  text-decoration: none;
+}
+body.variant-executive_minimal .em-project-card__link:hover {
+  text-decoration: underline;
+}
+
+/* Featured badge indicator */
+body.variant-executive_minimal .em-featured-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--em-accent);
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+/* =================================================================
+   CATEGORY FILTERS — flat, monochrome
+   ================================================================= */
+body.variant-executive_minimal .em-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+body.variant-executive_minimal .em-filter-btn {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--em-radius-sm);
+  border: 1px solid var(--em-border);
+  background: transparent;
+  color: var(--em-text-muted);
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+body.variant-executive_minimal .em-filter-btn:hover {
+  border-color: var(--em-border-hover);
+  color: var(--em-text);
+  text-decoration: none;
+}
+body.variant-executive_minimal .em-filter-btn--active {
+  background: var(--em-accent);
+  border-color: var(--em-accent);
+  color: var(--em-bg);
+}
+body.variant-executive_minimal .em-filter-btn--active:hover {
+  background: color-mix(in srgb, var(--em-accent) 85%, #000);
+  border-color: color-mix(in srgb, var(--em-accent) 85%, #000);
+  color: var(--em-bg);
+}
+
+/* Category icon inside filter */
+body.variant-executive_minimal .em-cat-icon {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: text-bottom;
+  margin-right: 0.3rem;
+}
+
+/* =================================================================
+   CREDENTIAL CARDS — education & certifications
+   ================================================================= */
+body.variant-executive_minimal .em-credential {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius);
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+  background: var(--em-bg);
+  transition: border-color 0.2s ease;
+}
+body.variant-executive_minimal .em-credential:hover {
+  border-color: var(--em-border-hover);
+}
+body.variant-executive_minimal .em-credential__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--em-rule);
+  margin-bottom: 0.85rem;
+}
+body.variant-executive_minimal .em-credential__title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--em-text);
+  margin-bottom: 0.2rem;
+}
+body.variant-executive_minimal .em-credential__org {
+  font-size: 0.82rem;
+  color: var(--em-text-muted);
+}
+body.variant-executive_minimal .em-credential__date {
+  font-size: 0.78rem;
+  color: var(--em-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 0.15rem;
+}
+body.variant-executive_minimal .em-credential__desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--em-text-muted);
+  margin-bottom: 0.75rem;
+}
+body.variant-executive_minimal .em-credential__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+body.variant-executive_minimal .em-credential__actions a {
+  font-size: 0.8rem;
+  color: var(--em-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+body.variant-executive_minimal .em-credential__actions a:hover {
+  color: var(--em-text);
+  text-decoration: underline;
+}
+
+/* Group heading for credential sections */
+body.variant-executive_minimal .em-group-heading {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--em-text-muted);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--em-rule);
+  margin: 2.5rem 0 1.25rem;
+}
+body.variant-executive_minimal .em-group-heading:first-of-type {
+  margin-top: 0;
+}
+
+/* =================================================================
+   RESUME — clean, hierarchical
+   ================================================================= */
+body.variant-executive_minimal .em-resume-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+body.variant-executive_minimal .em-resume-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+body.variant-executive_minimal .em-resume-actions a {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--em-text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+body.variant-executive_minimal .em-resume-actions a:hover {
+  color: var(--em-text);
+  text-decoration: underline;
+}
+
+/* Resume history list */
+body.variant-executive_minimal .em-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--em-rule);
+  font-size: 0.88rem;
+}
+body.variant-executive_minimal .em-history-item:last-child {
+  border-bottom: none;
+}
+body.variant-executive_minimal .em-history-item a {
+  font-size: 0.82rem;
+  color: var(--em-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+body.variant-executive_minimal .em-history-item a:hover {
+  color: var(--em-text);
+  text-decoration: underline;
+}
+
+/* =================================================================
+   ABOUT — centered, generous spacing
+   ================================================================= */
+body.variant-executive_minimal .em-headshot {
+  width: 160px;
+  height: 160px;
+  border-radius: 9999px;
+  object-fit: cover;
+  border: 2px solid var(--em-border);
+  display: block;
+  margin: 0 auto;
+}
+body.variant-executive_minimal .img-shape-circle {
+  border: 2px solid var(--em-border);
+}
+body.variant-executive_minimal .em-social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+body.variant-executive_minimal .em-social-link {
+  font-size: 0.88rem;
+  color: var(--em-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+body.variant-executive_minimal .em-social-link:hover {
+  border-color: var(--em-border-hover);
+  color: var(--em-text);
+  text-decoration: none;
+}
+
+/* =================================================================
+   CONTACT — clean form card
+   ================================================================= */
+body.variant-executive_minimal .em-form-card {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius);
+  padding: 2.25rem;
+  background: var(--em-bg);
+  max-width: 580px;
+  margin: 0 auto;
+}
+body.variant-executive_minimal .em-form-card .btn-primary {
+  min-width: 140px;
+  padding: 0.55rem 1.5rem;
+}
+
+/* =================================================================
+   ATTACHMENTS — project detail file previews
+   ================================================================= */
+body.variant-executive_minimal .em-attachment {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+body.variant-executive_minimal .em-attachment__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--em-rule);
+}
+body.variant-executive_minimal .em-attachment__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--em-text);
+}
+body.variant-executive_minimal .em-attachment__body {
+  padding: 1rem 1.5rem;
+}
+body.variant-executive_minimal iframe {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+}
+
+/* =================================================================
+   PAGINATION — flat, minimal
+   ================================================================= */
+body.variant-executive_minimal .pagination .page-link {
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  color: var(--em-text-muted);
+  font-size: 0.82rem;
+  padding: 0.35rem 0.75rem;
+  margin: 0 0.15rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+body.variant-executive_minimal .pagination .page-link:hover {
+  background: var(--em-hover-bg);
+  color: var(--em-text);
+  border-color: var(--em-border);
+}
+body.variant-executive_minimal .pagination .page-item.active .page-link {
+  background: var(--em-accent);
+  border-color: var(--em-accent);
+  color: var(--em-bg);
+}
+body.variant-executive_minimal .pagination .page-item.disabled .page-link {
+  background: transparent;
+  color: color-mix(in srgb, var(--em-text-muted) 35%, transparent);
+  border-color: var(--em-rule);
+}
+
+/* =================================================================
+   LINKS — understated
+   ================================================================= */
+body.variant-executive_minimal a {
+  color: var(--em-accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+body.variant-executive_minimal a:hover {
+  color: color-mix(in srgb, var(--em-accent) 70%, #000);
+  text-decoration: underline;
+}
+body.variant-executive_minimal .stretched-link {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.87rem;
+  color: var(--em-accent);
+}
+body.variant-executive_minimal .stretched-link:hover {
+  text-decoration: underline;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-executive_minimal .alert {
+  border-radius: var(--em-radius-sm);
+  border: 1px solid var(--em-border);
+  font-size: 0.88rem;
+}
+
+/* =================================================================
+   IMAGES & MEDIA
+   ================================================================= */
+body.variant-executive_minimal .img-fluid {
+  border-radius: var(--em-radius);
+}
+body.variant-executive_minimal .media-img--rounded {
+  border-radius: var(--em-radius);
+}
+body.variant-executive_minimal .card .img-card,
+body.variant-executive_minimal .card .img-hero {
+  border-radius: var(--em-radius) var(--em-radius) 0 0;
+}
+/* Images inside our custom card should also clip top */
+body.variant-executive_minimal .em-project-card .img-card,
+body.variant-executive_minimal .em-project-card .img-hero {
+  border-radius: var(--em-radius) var(--em-radius) 0 0;
+}
+body.variant-executive_minimal .media-img--square {
+  max-width: 160px;
+  margin: 0 auto;
+}
+
+/* List group flush clean-up */
+body.variant-executive_minimal .list-group-flush .list-group-item {
+  border-color: var(--em-rule);
+}
+
+/* =================================================================
+   FOOTER — white, ruled top, quiet type
+   ================================================================= */
+body.variant-executive_minimal .footer {
+  background: var(--em-bg) !important;
+  color: var(--em-text-muted);
+  border-top: 1px solid var(--em-border);
+  padding: 2rem 0;
+  font-size: 0.8rem;
+}
+body.variant-executive_minimal .footer a {
+  color: var(--em-text-muted) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+body.variant-executive_minimal .footer a:hover {
+  color: var(--em-text) !important;
+}
+
+/* =================================================================
+   FOCUS — accessibility ring
+   ================================================================= */
+body.variant-executive_minimal *:focus-visible {
+  outline: 2px solid var(--em-accent);
+  outline-offset: 2px;
+}
+body.variant-executive_minimal .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--em-focus-ring);
+  outline: none;
+}
+
+/* =================================================================
+   REDUCED MOTION
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-executive_minimal,
+  body.variant-executive_minimal *,
+  body.variant-executive_minimal *::before,
+  body.variant-executive_minimal *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+body.variant-executive_minimal.no-motion,
+body.variant-executive_minimal.no-motion *,
+body.variant-executive_minimal.no-motion *::before,
+body.variant-executive_minimal.no-motion *::after {
+  transition-duration: 0.01ms !important;
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+
+/* Large tablets / small desktop */
+@media (max-width: 991.98px) {
+  body.variant-executive_minimal .em-hero {
+    padding: 3.5rem 0 3rem;
+    text-align: center;
+  }
+  body.variant-executive_minimal .em-display {
+    font-size: 2.5rem;
+  }
+  body.variant-executive_minimal .em-hero .em-hero__inner {
+    max-width: 100%;
+  }
+  body.variant-executive_minimal .em-grid--3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  body.variant-executive_minimal section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  body.variant-executive_minimal .card-body {
+    padding: 1.35rem;
+  }
+  body.variant-executive_minimal .em-project-card__body {
+    padding: 1.35rem;
+  }
+  body.variant-executive_minimal .em-credential {
+    padding: 1.35rem;
+  }
+  body.variant-executive_minimal .em-credential__header {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  body.variant-executive_minimal .em-resume-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Mobile */
+@media (max-width: 575.98px) {
+  body.variant-executive_minimal {
+    line-height: 1.65;
+  }
+  body.variant-executive_minimal h1 {
+    font-size: 1.75rem;
+  }
+  body.variant-executive_minimal h2 {
+    font-size: 1.4rem;
+  }
+  body.variant-executive_minimal .em-display {
+    font-size: 2rem;
+  }
+  body.variant-executive_minimal .em-hero {
+    padding: 2.5rem 0 2rem;
+  }
+  body.variant-executive_minimal section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  body.variant-executive_minimal .em-grid--3,
+  body.variant-executive_minimal .em-grid--2 {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  body.variant-executive_minimal .card-body {
+    padding: 1.15rem;
+  }
+  body.variant-executive_minimal .em-project-card__body {
+    padding: 1.15rem;
+  }
+  body.variant-executive_minimal .em-credential {
+    padding: 1.15rem;
+  }
+  body.variant-executive_minimal .em-form-card {
+    padding: 1.5rem;
+  }
+  body.variant-executive_minimal .em-meta-card {
+    padding: 1.25rem;
+  }
+  body.variant-executive_minimal .em-social-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  body.variant-executive_minimal .footer {
+    text-align: center;
+  }
+  body.variant-executive_minimal .footer .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  body.variant-executive_minimal .em-filter-bar {
+    gap: 0.35rem;
+  }
+}

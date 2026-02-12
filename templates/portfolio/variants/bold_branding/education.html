@@ -1,0 +1,135 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+
+{% block title %}Education{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Education",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for entry in all_education %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ entry.title|escapejs }}",
+        "description": "{{ entry.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ entry.institution|escapejs }}"
+        }{% if entry.url %},
+        "url": "{{ entry.url|escapejs }}"{% endif %}{% if entry.start_date %},
+        "dateCreated": "{{ entry.start_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO BANNER
+     ============================================================ -->
+<section class="bb-hero bb-hero--banner">
+  <div class="container position-relative">
+    <span class="bb-eyebrow" style="letter-spacing: 0.35em; font-size: 0.78rem;">Academic</span>
+    <h1 class="display-2 text-uppercase mb-3">Education</h1>
+    <span class="bb-accent-bar--lg"></span>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     EDUCATION GROUPS
+     ============================================================ -->
+<section class="bb-section bb-section--surface">
+  <div class="container">
+    {% for group_name, group_cat, entries in education_groups %}
+    <div class="mb-5">
+      <!-- Group Header -->
+      <div class="bb-group-header">
+        <div class="bb-group-header__bar"></div>
+        <h2 class="h3 text-uppercase mb-0" style="letter-spacing: 0.1em;">{{ group_name }}</h2>
+      </div>
+
+      {% for entry in entries %}
+      <div class="bb-credential {% cycle '' 'bb-credential--alt' %}">
+        <div class="row align-items-start g-4">
+          {% if entry.image %}
+          <div class="col-md-2 col-lg-1">
+            {% responsive_image image=entry.image variant="square" shape="rect" alt=entry.title %}
+          </div>
+          {% endif %}
+          <div class="{% if entry.image %}col-md-10 col-lg-11{% else %}col-12{% endif %}">
+            <div class="d-flex flex-wrap justify-content-between align-items-start mb-2">
+              <div>
+                <h3 class="bb-credential__title">{{ entry.title }}</h3>
+                <span class="bb-credential__org">{{ entry.institution }}</span>
+              </div>
+              <div class="text-end">
+                {% if entry.start_date %}
+                <span class="bb-credential__date">
+                  {{ entry.start_date|date:"Y" }}{% if entry.end_date %} &ndash; {{ entry.end_date|date:"Y" }}{% endif %}
+                </span>
+                {% endif %}
+                {% if entry.location %}
+                <span class="d-block text-muted small">{{ entry.location }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if entry.description %}
+            <p class="bb-credential__desc">{{ entry.description|truncatewords:50 }}</p>
+            {% endif %}
+
+            <div class="d-flex flex-wrap gap-2">
+              {% if entry.url %}
+              <a href="{{ entry.url }}" class="btn btn-sm btn-dark" target="_blank" rel="noopener">Visit</a>
+              {% endif %}
+              {% if entry.attachment %}
+                {% if entry.preview_kind %}
+                <a href="{% url 'portfolio:education_preview' entry.pk %}" class="btn btn-sm btn-outline-dark" target="_blank">Preview</a>
+                <a href="{% url 'portfolio:education_inline' entry.pk %}" class="btn btn-sm btn-outline-dark" target="_blank">View</a>
+                {% endif %}
+                <a href="{% url 'portfolio:education_download' entry.pk %}" class="btn btn-sm btn-warning">Download</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a>
+        </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

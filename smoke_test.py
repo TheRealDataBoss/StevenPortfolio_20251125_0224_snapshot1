@@ -26,6 +26,8 @@ def run_smoke_tests():
         ('/projects/', 'Project List'),
         ('/about/', 'About'),
         ('/resume/', 'Resume'),
+        ('/education/', 'Education'),
+        ('/certifications/', 'Certifications'),
         ('/contact/', 'Contact GET'),
     ]
 

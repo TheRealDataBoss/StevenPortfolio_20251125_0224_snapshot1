@@ -1,0 +1,120 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Projects | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="card_dashboard"></div>
+<style>
+    .cd-page { background: #f4f6f8; min-height: 100vh; }
+    .cd-header { background: #fff; border-bottom: 1px solid #e0e3e8; padding: .75rem 0; }
+    .cd-header .breadcrumb { margin-bottom: 0; font-size: .85rem; }
+    .cd-compact { font-size: .875rem; line-height: 1.4; }
+    .cd-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cd-dot--green { background: #28a745; }
+    .cd-dot--blue { background: #007bff; }
+    .cd-project-row { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; transition: box-shadow .15s; }
+    .cd-project-row:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+    .cd-filter-bar { background: #fff; border: 1px solid #e0e3e8; border-radius: .5rem; }
+</style>
+<div class="cd-page">
+    <div class="cd-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'portfolio:home' %}" class="text-decoration-none"><i class="fas fa-th-large me-1"></i> Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Projects</li>
+                    </ol>
+                </nav>
+                <span class="badge bg-primary">{{ projects|length }} item{{ projects|length|pluralize }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        {# Filter / search bar #}
+        <div class="cd-filter-bar shadow-sm p-3 mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="text-muted" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Filter:</span>
+                    <a class="btn btn-sm {% if not current_category %}btn-primary{% else %}btn-outline-secondary{% endif %}" href="{% url 'portfolio:project_list' %}">All</a>
+                    {% for category in categories %}
+                        <a class="btn btn-sm {% if current_category == category.slug %}btn-primary{% else %}btn-outline-secondary{% endif %}" href="{% url 'portfolio:project_list' %}?category={{ category.slug }}">
+                            {% if category.image %}<img src="{{ category.image.url }}" alt="" style="height:14px;width:14px;border-radius:50%;object-fit:cover;vertical-align:text-bottom;" class="me-1">{% endif %}{{ category.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <form method="get" class="d-flex gap-2" style="min-width:240px;">
+                    <input type="text" name="q" value="{{ search_term }}" class="form-control form-control-sm" placeholder="Search projects...">
+                    {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+                    <button class="btn btn-sm btn-primary px-3" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+
+        {# Project cards - dense grid #}
+        <div class="row g-3">
+            {% for project in projects %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="cd-project-row shadow-sm h-100">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-100" style="height:120px;object-fit:cover;border-radius:.5rem .5rem 0 0;">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height:120px;border-radius:.5rem .5rem 0 0;">
+                                <i class="fas fa-cube fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        <div class="p-3 cd-compact">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <h6 class="fw-bold mb-0 text-truncate" style="font-size:.85rem;">{{ project.title }}</h6>
+                                {% if project.is_featured %}<span class="cd-dot cd-dot--green flex-shrink-0 ms-1" title="Featured"></span>{% endif %}
+                            </div>
+                            <span class="badge bg-light text-muted mb-2" style="font-size:.65rem;">{{ project.category.name }}</span>
+                            <p class="text-muted mb-2" style="font-size:.78rem;">{{ project.summary|default:project.description|truncatewords:12 }}</p>
+                            {% if project.tech_stack %}
+                                <div class="mb-2">
+                                    {% for tech in project.tech_stack|split:"," %}
+                                        <span class="badge bg-primary-subtle text-primary" style="font-size:.65rem;">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <a href="{{ project.get_absolute_url }}" class="btn btn-sm btn-outline-primary w-100" style="font-size:.75rem;"><i class="fas fa-arrow-right me-1"></i> Open</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="bg-white border rounded p-4 text-center text-muted cd-compact">
+                        <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                        No projects found. Add some in the admin.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% if is_paginated %}
+        <nav aria-label="Project pages" class="mt-4">
+            <ul class="pagination pagination-sm justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">&laquo;</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                {% endif %}
+                {% for num in paginator.page_range %}
+                    {% if num == page_obj.number %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_term %}&q={{ search_term }}{% endif %}">&raquo;</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

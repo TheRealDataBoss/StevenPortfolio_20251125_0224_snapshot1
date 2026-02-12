@@ -1,0 +1,131 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Certifications | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Certifications",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for cert in all_certifications %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ cert.name|escapejs }}",
+        "description": "{{ cert.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ cert.issuer|escapejs }}"
+        }{% if cert.credential_url %},
+        "url": "{{ cert.credential_url|escapejs }}"{% endif %}{% if cert.credential_id %},
+        "credentialCategory": "{{ cert.credential_id|escapejs }}"{% endif %}{% if cert.issue_date %},
+        "dateCreated": "{{ cert.issue_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="magazine_editorial"></div>
+
+<!-- Certifications header -->
+<section style="background: #faf8f5; border-bottom: 3px double #2c2c2c; padding: 3.5rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            <p class="text-uppercase mb-1" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; color: #999;">Professional Credentials</p>
+            <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem;">Certifications</h1>
+            <p style="font-family: Georgia, serif; font-size: 1rem; font-style: italic; color: #666;">Industry certifications and professional development.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Certifications body -->
+<section style="background: #fff; padding: 3rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            {% for group_name, group_cat, certs in cert_groups %}
+            <div class="mb-4">
+                <p class="text-uppercase mb-2" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; color: #999;">{{ group_name }}</p>
+                <hr style="border: none; border-top: 1px solid #ddd; margin-bottom: 1.5rem;">
+
+                {% for cert in certs %}
+                <div style="border-top: 3px solid #1a1a1a; padding: 1.25rem 0; margin-bottom: 1.5rem;">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-2">
+                        <div>
+                            <h3 style="font-family: Georgia, serif; font-size: 1.15rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem;">{{ cert.name }}</h3>
+                            <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 0;">{{ cert.issuer }}{% if cert.credential_id %} &middot; ID: {{ cert.credential_id }}{% endif %}</p>
+                        </div>
+                        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #999; white-space: nowrap; margin-top: 0.25rem;">
+                            {% if cert.issue_date %}Issued {{ cert.issue_date|date:"M Y" }}{% endif %}{% if cert.expires_date %} &middot; Expires {{ cert.expires_date|date:"M Y" }}{% endif %}
+                        </div>
+                    </div>
+
+                    {% if cert.description %}
+                    <div style="font-family: Georgia, serif; font-size: 0.95rem; color: #555; line-height: 1.7; margin-top: 0.75rem;">
+                        {{ cert.description|linebreaks }}
+                    </div>
+                    {% endif %}
+
+                    {% if cert.image %}
+                    <div class="mt-2 mb-2">
+                        <img src="{{ cert.image.url }}" alt="{{ cert.name }}" class="img-fluid" style="max-height:240px; border: 1px solid #ddd;">
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-wrap gap-3 mt-2">
+                        {% if cert.credential_url %}
+                        <a href="{{ cert.credential_url }}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-external-link-alt me-1"></i> Verify</a>
+                        {% endif %}
+                        {% if cert.attachment %}
+                        <a href="{{ cert.attachment.url }}" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-download me-1"></i> Download</a>
+                            {% if cert.preview_kind == "pdf" %}
+                        <a href="{% url 'portfolio:certification_preview' cert.pk %}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-file-pdf me-1"></i> Preview PDF</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    {% if cert.preview_kind == "pdf" %}
+                    <div class="mt-3 ratio ratio-16x9 overflow-hidden cert-pdf-preview" data-cert-id="{{ cert.pk }}" style="border: 1px solid #ddd;">
+                        <iframe src="{% url 'portfolio:certification_inline' cert.pk %}" title="PDF preview: {{ cert.name }}" allowfullscreen></iframe>
+                    </div>
+                    {% elif cert.preview_kind == "image" %}
+                    <div class="mt-3 text-center">
+                        <img src="{% url 'portfolio:certification_inline' cert.pk %}" alt="Attachment: {{ cert.name }}" class="img-fluid" style="max-height:400px; border: 1px solid #ddd;">
+                    </div>
+                    {% elif cert.preview_kind == "text" %}
+                    <div class="mt-3 ratio ratio-16x9 overflow-hidden" style="border: 1px solid #ddd;">
+                        <iframe src="{% url 'portfolio:certification_inline' cert.pk %}" title="Text preview: {{ cert.name }}" style="background:#faf8f5;"></iframe>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% empty %}
+            <p style="font-family: Georgia, serif; font-style: italic; color: #999;">No certifications yet. Add them via the admin.</p>
+            {% endfor %}
+
+            {% if is_paginated %}
+            <nav aria-label="Certification pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" style="border-radius: 0; font-family: Georgia, serif;">Previous</a></li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}" style="border-radius: 0; font-family: Georgia, serif;">{{ num }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}" style="border-radius: 0; font-family: Georgia, serif;">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Certifications | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Certifications",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for cert in all_certifications %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ cert.name|escapejs }}",
+        "description": "{{ cert.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ cert.issuer|escapejs }}"
+        }{% if cert.credential_url %},
+        "url": "{{ cert.credential_url|escapejs }}"{% endif %}{% if cert.credential_id %},
+        "credentialCategory": "{{ cert.credential_id|escapejs }}"{% endif %}{% if cert.issue_date %},
+        "dateCreated": "{{ cert.issue_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="timeline_pro"></div>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            <p class="text-uppercase text-primary fw-semibold small mb-1" style="letter-spacing:.1em;">Credentials</p>
+            <h1 class="mb-4" style="font-family:Georgia,'Times New Roman',serif; font-weight:700;">Certifications</h1>
+            <hr class="mb-5">
+
+            {% for group_name, group_cat, certs in cert_groups %}
+                <h4 class="text-muted mb-4" style="font-family:Georgia,'Times New Roman',serif; font-weight:700; font-variant:small-caps; letter-spacing:.05em;">{{ group_name }}</h4>
+
+                {# Timeline rail with diamond markers #}
+                <div class="position-relative" style="padding-left:2rem;">
+                    {# Vertical line #}
+                    <div class="position-absolute" style="left:7px; top:8px; bottom:0; width:2px; background:var(--primary); opacity:.25;"></div>
+
+                    {% for cert in certs %}
+                        <div class="position-relative mb-4">
+                            {# Timeline diamond #}
+                            <div class="position-absolute" style="left:-2rem; top:6px; width:16px; height:16px; background:var(--primary); border:3px solid var(--page-bg); transform:rotate(45deg);"></div>
+
+                            <div class="card shadow-sm border-0" style="border-top:3px solid var(--primary) !important;">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-2">
+                                        <div>
+                                            <h5 class="mb-1" style="font-family:Georgia,'Times New Roman',serif; font-weight:700;">{{ cert.name }}</h5>
+                                            <p class="text-muted small mb-0">{{ cert.issuer }}{% if cert.credential_id %} &middot; ID: {{ cert.credential_id }}{% endif %}</p>
+                                        </div>
+                                        <div class="text-muted small mt-1 mt-md-0 text-md-end text-nowrap">
+                                            {% if cert.issue_date %}Issued {{ cert.issue_date|date:"M Y" }}{% endif %}{% if cert.expires_date %} &middot; Expires {{ cert.expires_date|date:"M Y" }}{% endif %}
+                                        </div>
+                                    </div>
+                                    {% if cert.description %}
+                                        <div class="text-secondary small mt-2 mb-2" style="line-height:1.7;">{{ cert.description|linebreaks }}</div>
+                                    {% endif %}
+                                    {% if cert.image %}
+                                        <div class="mt-2 mb-2">
+                                            <img src="{{ cert.image.url }}" alt="{{ cert.name }}" class="img-fluid rounded shadow-sm" style="max-height:240px;">
+                                        </div>
+                                    {% endif %}
+                                    <div class="d-flex flex-wrap gap-2 mt-2">
+                                        {% if cert.credential_url %}<a href="{{ cert.credential_url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm"><i class="fas fa-external-link-alt me-1"></i> Verify</a>{% endif %}
+                                        {% if cert.attachment %}
+                                            <a href="{{ cert.attachment.url }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-download me-1"></i> Download</a>
+                                            {% if cert.preview_kind == "pdf" %}
+                                                <a href="{% url 'portfolio:certification_preview' cert.pk %}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm"><i class="fas fa-file-pdf me-1"></i> Preview PDF</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    {% if cert.preview_kind == "pdf" %}
+                                        <div class="mt-3 ratio ratio-16x9 border rounded overflow-hidden cert-pdf-preview" data-cert-id="{{ cert.pk }}">
+                                            <iframe src="{% url 'portfolio:certification_inline' cert.pk %}" title="PDF preview: {{ cert.name }}" allowfullscreen></iframe>
+                                        </div>
+                                    {% elif cert.preview_kind == "image" %}
+                                        <div class="mt-3 text-center">
+                                            <img src="{% url 'portfolio:certification_inline' cert.pk %}" alt="Attachment: {{ cert.name }}" class="img-fluid rounded shadow-sm" style="max-height:400px;">
+                                        </div>
+                                    {% elif cert.preview_kind == "text" %}
+                                        <div class="mt-3 ratio ratio-16x9 border rounded overflow-hidden">
+                                            <iframe src="{% url 'portfolio:certification_inline' cert.pk %}" title="Text preview: {{ cert.name }}" style="background:#f8f9fa;"></iframe>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% empty %}
+                <p class="text-muted">No certifications yet. Add them via the admin.</p>
+            {% endfor %}
+
+            {% if is_paginated %}
+                <nav aria-label="Certification pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

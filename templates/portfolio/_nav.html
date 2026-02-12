@@ -1,10 +1,10 @@
 {# Render nested nav_items from context_processor #}
 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
   {% for item in nav_items %}
-    {% if item.children.all %}
+    {% if item.url == "#" %}
+      {# Dropdown parent (url="#" signals a toggle-only menu) #}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="{{ item.url }}" id="nav{{ forloop.counter }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-           {% if item.new_tab or item.external %} target="_blank" rel="noopener noreferrer"{% endif %}>
+        <a class="nav-link dropdown-toggle" href="#" id="nav{{ forloop.counter }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %} {{ item.title }}
         </a>
         <ul class="dropdown-menu" aria-labelledby="nav{{ forloop.counter }}">
@@ -22,3 +22,4 @@
     {% endif %}
   {% endfor %}
 </ul>
+

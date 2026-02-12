@@ -1,0 +1,108 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO: Full-viewport dark hero with massive display type
+     ============================================================ -->
+<section class="bb-hero bb-hero--full">
+  {% if settings.hero_image %}
+  <div class="bb-hero__overlay" style="background-image: url('{{ settings.hero_image.url }}');"></div>
+  {% endif %}
+  <div class="bb-hero__gradient"></div>
+  <div class="container position-relative py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-9 col-xl-8">
+        {% if settings.hero_label %}
+        <span class="bb-eyebrow" style="letter-spacing: 0.35em; font-size: 0.78rem;">{{ settings.hero_label }}</span>
+        {% endif %}
+
+        {% if settings.hero_title %}
+        <h1 class="display-1 mb-4">{{ settings.hero_title }}</h1>
+        {% endif %}
+
+        {% if settings.hero_subtitle %}
+        <p class="lead fs-3 mb-4" style="max-width: 640px; opacity: 0.85;">{{ settings.hero_subtitle }}</p>
+        {% endif %}
+
+        {% if settings.hero_roles %}
+        <div class="d-flex flex-wrap gap-2 mb-5">
+          {% for role in settings.hero_roles %}
+          <span class="bb-badge--accent" style="padding: 0.4em 1em; font-size: 0.72rem; letter-spacing: 0.15em;">{{ role }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{% url 'portfolio:project_list' %}" class="btn btn-warning btn-lg px-5 py-3">View Work</a>
+          <a href="{% url 'portfolio:contact' %}" class="btn btn-outline-light btn-lg px-5 py-3">Get in Touch</a>
+          {% if site_settings and site_settings.resume_file %}
+          <a href="{{ site_settings.resume_file.url }}" class="btn btn-outline-warning btn-lg px-5 py-3" target="_blank">Resume</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     FEATURED PROJECTS
+     ============================================================ -->
+{% if featured_projects %}
+
+<!-- Full-width dark band header -->
+<div class="bb-band">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="display-4 text-uppercase mb-0" style="letter-spacing: 0.03em;">Featured Work</h2>
+      <a href="{% url 'portfolio:project_list' %}" class="btn btn-warning px-4">All Projects</a>
+    </div>
+  </div>
+</div>
+
+<section class="bb-section" style="background: var(--bb-bg);">
+  <div class="container">
+    <div class="row g-4">
+      {% for project in featured_projects %}
+      <div class="col-lg-6">
+        <a href="{{ project.get_absolute_url }}" class="text-decoration-none d-block h-100">
+          <div class="bb-card">
+            {% if project.image %}
+            <div class="bb-card__img" style="max-height: 280px;">
+              {% responsive_image image=project.image variant="card" shape="rounded" alt=project.title %}
+            </div>
+            {% endif %}
+            <div class="bb-card__body">
+              {% if project.category %}
+              <span class="bb-card__cat">{{ project.category.name }}</span>
+              {% endif %}
+              <h3 class="bb-card__title">{{ project.title }}</h3>
+              {% if project.summary %}
+              <p class="bb-card__desc mb-0">{{ project.summary }}</p>
+              {% elif project.description %}
+              <p class="bb-card__desc mb-0">{{ project.description|truncatewords:25 }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Bold CTA Band -->
+<section class="bb-section bb-section--accent" style="padding: 4rem 0;">
+  <div class="container text-center">
+    <h2 class="display-4 text-uppercase mb-3" style="letter-spacing: 0.03em;">Let's Build Something</h2>
+    <p class="fs-5 mb-4" style="font-weight: 300; opacity: 0.85;">Interested in working together? I'd love to hear from you.</p>
+    <a href="{% url 'portfolio:contact' %}" class="btn btn-dark btn-lg px-5 py-3">Contact Me</a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

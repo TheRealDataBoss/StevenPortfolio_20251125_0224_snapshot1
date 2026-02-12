@@ -1,0 +1,953 @@
+/* =================================================================
+   Magazine Editorial — serif-forward, typographically rich variant
+   Scoped entirely to body.variant-magazine_editorial
+   Uses Design Token CSS vars with warm editorial defaults:
+     --accent, --bg, --surface, --text, --text-muted, --border
+   ================================================================= */
+
+/* --- Token aliases (warm ink-on-paper palette) ------------------- */
+body.variant-magazine_editorial {
+  --me-accent:     var(--accent, #b91c1c);
+  --me-bg:         var(--bg, #fdfcfa);
+  --me-surface:    var(--surface, #ffffff);
+  --me-text:       var(--text, #1c1917);
+  --me-text-muted: var(--text-muted, #78716c);
+  --me-border:     var(--border, #d6d3d1);
+
+  /* Derived tokens */
+  --me-accent-soft:  color-mix(in srgb, var(--me-accent) 8%, var(--me-bg));
+  --me-accent-ink:   color-mix(in srgb, var(--me-accent) 70%, var(--me-text));
+  --me-rule:         color-mix(in srgb, var(--me-border) 50%, transparent);
+  --me-rule-strong:  var(--me-text);
+  --me-focus-ring:   color-mix(in srgb, var(--me-accent) 30%, transparent);
+  --me-hover-bg:     color-mix(in srgb, var(--me-accent) 4%, var(--me-bg));
+  --me-serif:        "Georgia", "Cambria", "Times New Roman", "Times", serif;
+  --me-sans:         -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                     "Helvetica Neue", Arial, sans-serif;
+  --me-max-prose:    42rem;
+
+  background: var(--me-bg);
+  color: var(--me-text);
+  font-family: var(--me-serif);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  letter-spacing: 0.005em;
+  padding-top: 56px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =================================================================
+   TYPOGRAPHY — editorial hierarchy, generous scale
+   ================================================================= */
+body.variant-magazine_editorial h1 {
+  font-family: var(--me-serif);
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--me-text);
+  margin-bottom: 0.5em;
+}
+body.variant-magazine_editorial h2 {
+  font-family: var(--me-serif);
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--me-text);
+}
+body.variant-magazine_editorial h3 {
+  font-family: var(--me-serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--me-text);
+}
+body.variant-magazine_editorial h4 {
+  font-family: var(--me-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--me-text-muted);
+}
+body.variant-magazine_editorial h5 {
+  font-family: var(--me-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--me-text);
+}
+body.variant-magazine_editorial p {
+  color: var(--me-text);
+  max-width: var(--me-max-prose);
+}
+body.variant-magazine_editorial .lead {
+  font-size: 1.25rem;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.7;
+}
+body.variant-magazine_editorial .text-muted {
+  color: var(--me-text-muted) !important;
+}
+body.variant-magazine_editorial .text-secondary {
+  color: var(--me-text-muted) !important;
+}
+body.variant-magazine_editorial .text-primary {
+  color: var(--me-accent) !important;
+}
+body.variant-magazine_editorial .text-uppercase {
+  font-family: var(--me-sans);
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Links — ink-style underlines */
+body.variant-magazine_editorial a {
+  color: var(--me-accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--me-accent) 35%, transparent);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+body.variant-magazine_editorial a:hover {
+  color: var(--me-accent);
+  text-decoration-color: var(--me-accent);
+}
+
+/* Rules / dividers — editorial hairlines */
+body.variant-magazine_editorial hr {
+  border: none;
+  border-top: 1px solid var(--me-rule);
+  margin: 2rem 0;
+}
+
+/* Double-rule editorial accent */
+body.variant-magazine_editorial section.py-5 > .container > hr.mb-4 {
+  border-top: 3px double var(--me-rule-strong);
+  margin-top: 0;
+  opacity: 1;
+}
+
+/* =================================================================
+   NAVBAR — understated masthead bar
+   ================================================================= */
+body.variant-magazine_editorial .navbar {
+  background: var(--me-surface) !important;
+  border-bottom: 1px solid var(--me-border);
+  box-shadow: none;
+  padding: 0.65rem 1.5rem;
+}
+body.variant-magazine_editorial .navbar-brand {
+  font-family: var(--me-serif);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--me-text) !important;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+body.variant-magazine_editorial .navbar .nav-link {
+  font-family: var(--me-sans);
+  color: var(--me-text-muted) !important;
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+body.variant-magazine_editorial .navbar .nav-link:hover,
+body.variant-magazine_editorial .navbar .nav-link:focus {
+  color: var(--me-text) !important;
+  border-bottom-color: var(--me-accent);
+}
+body.variant-magazine_editorial .navbar .nav-link.active {
+  color: var(--me-text) !important;
+  border-bottom-color: var(--me-accent);
+}
+
+/* Dropdown */
+body.variant-magazine_editorial .dropdown-menu {
+  background: var(--me-surface);
+  border: 1px solid var(--me-border);
+  border-radius: 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  padding: 0.5rem 0;
+}
+body.variant-magazine_editorial .dropdown-item {
+  font-family: var(--me-sans);
+  color: var(--me-text-muted);
+  font-size: 0.85rem;
+  padding: 0.45rem 1.25rem;
+  text-decoration: none;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+body.variant-magazine_editorial .dropdown-item:hover,
+body.variant-magazine_editorial .dropdown-item:focus {
+  color: var(--me-text);
+  background: var(--me-hover-bg);
+}
+
+/* Mobile toggler */
+body.variant-magazine_editorial .navbar-toggler {
+  border-color: var(--me-border);
+}
+body.variant-magazine_editorial .navbar-toggler-icon {
+  filter: none;
+}
+
+/* =================================================================
+   HERO — editorial splash
+   ================================================================= */
+body.variant-magazine_editorial .hero {
+  background: var(--me-text);
+  color: var(--me-bg);
+  padding: 5rem 0 4rem;
+  position: relative;
+}
+body.variant-magazine_editorial .hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+body.variant-magazine_editorial .hero .display-4 {
+  font-family: var(--me-serif);
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: #ffffff;
+}
+body.variant-magazine_editorial .hero .lead {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+  font-weight: 400;
+  max-width: 550px;
+}
+body.variant-magazine_editorial .hero .text-uppercase {
+  color: rgba(255,255,255,0.5);
+  font-family: var(--me-sans);
+}
+body.variant-magazine_editorial .hero .btn-light {
+  background: var(--me-bg);
+  color: var(--me-text);
+  border: none;
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.8rem;
+  border-radius: 0;
+  transition: background 0.2s ease;
+}
+body.variant-magazine_editorial .hero .btn-light:hover {
+  background: var(--me-accent-soft);
+}
+body.variant-magazine_editorial .hero .btn-outline-light {
+  color: rgba(255,255,255,0.85);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: transparent;
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.8rem;
+  border-radius: 0;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+body.variant-magazine_editorial .hero .btn-outline-light:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: #ffffff;
+}
+
+/* =================================================================
+   SECTIONS & BACKGROUNDS
+   ================================================================= */
+body.variant-magazine_editorial .bg-light {
+  background: var(--me-bg) !important;
+}
+body.variant-magazine_editorial section.py-5 {
+  padding-top: 3.5rem !important;
+  padding-bottom: 3.5rem !important;
+}
+
+/* =================================================================
+   CARDS — clean, borderless editorial panels
+   ================================================================= */
+body.variant-magazine_editorial .card {
+  background: var(--me-surface);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--me-rule);
+  transition: border-color 0.2s ease;
+}
+body.variant-magazine_editorial .card:hover {
+  border-bottom-color: var(--me-accent);
+}
+body.variant-magazine_editorial .card-body {
+  padding: 1.75rem 1.5rem;
+}
+body.variant-magazine_editorial .card-title {
+  font-family: var(--me-serif);
+  color: var(--me-text);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+body.variant-magazine_editorial .card-text {
+  color: var(--me-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+body.variant-magazine_editorial .card-footer {
+  background: transparent;
+  border-top: 1px solid var(--me-rule);
+  padding: 1rem 1.5rem;
+}
+body.variant-magazine_editorial .card .card-img-top {
+  border-radius: 0;
+  border-bottom: 1px solid var(--me-rule);
+}
+
+/* =================================================================
+   BADGES — restrained, editorial labels
+   ================================================================= */
+body.variant-magazine_editorial .badge.bg-primary {
+  background: transparent !important;
+  color: var(--me-accent);
+  font-family: var(--me-sans);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3em 0;
+  border-radius: 0;
+}
+body.variant-magazine_editorial .badge.bg-secondary,
+body.variant-magazine_editorial .badge.bg-secondary-subtle {
+  background: transparent !important;
+  color: var(--me-text-muted) !important;
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3em 0.5em;
+  border: 1px solid var(--me-rule);
+  border-radius: 0;
+}
+body.variant-magazine_editorial .badge.bg-primary-subtle {
+  background: var(--me-accent-soft) !important;
+  color: var(--me-accent) !important;
+  font-family: var(--me-sans);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 0;
+}
+body.variant-magazine_editorial .badge.bg-success {
+  background: transparent !important;
+  color: #065f46;
+  font-family: var(--me-sans);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid #065f46;
+  border-radius: 0;
+}
+
+/* =================================================================
+   BUTTONS — restrained, newspaper-like
+   ================================================================= */
+body.variant-magazine_editorial .btn-primary {
+  background: var(--me-text);
+  border: 1px solid var(--me-text);
+  color: var(--me-bg);
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+body.variant-magazine_editorial .btn-primary:hover {
+  background: var(--me-accent);
+  border-color: var(--me-accent);
+}
+body.variant-magazine_editorial .btn-outline-primary {
+  color: var(--me-text);
+  border: 1.5px solid var(--me-text);
+  background: transparent;
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+body.variant-magazine_editorial .btn-outline-primary:hover {
+  background: var(--me-text);
+  color: var(--me-bg);
+}
+body.variant-magazine_editorial .btn-outline-secondary {
+  color: var(--me-text-muted);
+  border: 1.5px solid var(--me-border);
+  background: transparent;
+  font-family: var(--me-sans);
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+body.variant-magazine_editorial .btn-outline-secondary:hover {
+  background: var(--me-hover-bg);
+  color: var(--me-text);
+}
+body.variant-magazine_editorial .btn-outline-dark {
+  color: var(--me-text);
+  border: 1.5px solid var(--me-text);
+  background: transparent;
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+body.variant-magazine_editorial .btn-outline-dark:hover {
+  background: var(--me-text);
+  color: var(--me-bg);
+}
+body.variant-magazine_editorial .btn-sm {
+  padding: 0.4rem 1rem;
+  font-size: 0.78rem;
+}
+
+/* =================================================================
+   HOME PAGE — featured grid
+   ================================================================= */
+body.variant-magazine_editorial .featured-grid .card {
+  border-bottom: none;
+  border-top: 3px solid var(--me-text);
+}
+body.variant-magazine_editorial .featured-grid .card:hover {
+  border-top-color: var(--me-accent);
+}
+body.variant-magazine_editorial .featured-grid .card a.stretched-link {
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--me-accent);
+}
+body.variant-magazine_editorial .d-flex.justify-content-between h2 {
+  font-family: var(--me-serif);
+}
+body.variant-magazine_editorial .d-flex.justify-content-between .btn {
+  text-decoration: none;
+}
+
+/* =================================================================
+   PROJECT LIST — editorial grid
+   ================================================================= */
+body.variant-magazine_editorial .row.g-4 > .col-md-4 .card {
+  border-bottom: none;
+  border-top: 2px solid var(--me-text);
+}
+body.variant-magazine_editorial .row.g-4 > .col-md-4 .card:hover {
+  border-top-color: var(--me-accent);
+}
+body.variant-magazine_editorial .row.g-4 > .col-md-4 .card a.stretched-link {
+  font-family: var(--me-sans);
+  text-decoration: none;
+  color: var(--me-accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+/* Search form */
+body.variant-magazine_editorial .d-flex.gap-2 .form-control {
+  border: 1px solid var(--me-border);
+  border-radius: 0;
+  background: var(--me-surface);
+  color: var(--me-text);
+  font-family: var(--me-sans);
+  font-size: 0.9rem;
+}
+
+/* Category filter buttons */
+body.variant-magazine_editorial .d-flex.flex-wrap.gap-2 > .btn.btn-sm {
+  border-radius: 0;
+  text-decoration: none;
+}
+
+/* =================================================================
+   PROJECT DETAIL — long-form editorial
+   ================================================================= */
+body.variant-magazine_editorial article {
+  font-family: var(--me-serif);
+  color: var(--me-text);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  max-width: var(--me-max-prose);
+}
+body.variant-magazine_editorial article p {
+  margin-bottom: 1.35rem;
+  text-align: left;
+  hyphens: auto;
+}
+body.variant-magazine_editorial article p:first-of-type::first-letter {
+  font-size: 3.2em;
+  font-weight: 700;
+  float: left;
+  line-height: 0.85;
+  margin-right: 0.08em;
+  margin-top: 0.05em;
+  color: var(--me-accent);
+}
+
+/* Meta sidebar card */
+body.variant-magazine_editorial .col-lg-5 .card {
+  border-top: 3px solid var(--me-text);
+  border-bottom: none;
+}
+body.variant-magazine_editorial .col-lg-5 .card .card-title {
+  font-family: var(--me-sans);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--me-text-muted);
+  font-weight: 700;
+}
+body.variant-magazine_editorial .col-lg-5 .card strong {
+  font-family: var(--me-sans);
+  color: var(--me-text);
+  font-size: 0.9rem;
+}
+
+/* Project Notes — pull-quote styling */
+body.variant-magazine_editorial .col-lg-7 > .mt-4 > .card {
+  border: none;
+  border-left: 3px solid var(--me-accent);
+  border-bottom: none;
+  background: var(--me-accent-soft);
+  padding-left: 0.5rem;
+}
+body.variant-magazine_editorial .col-lg-7 > .mt-4 > .card .card-body {
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+/* Attachments */
+body.variant-magazine_editorial iframe.border {
+  border-color: var(--me-border) !important;
+  border-radius: 0;
+}
+
+/* =================================================================
+   ABOUT PAGE — editorial bio
+   ================================================================= */
+body.variant-magazine_editorial .img-shape-circle {
+  box-shadow: 0 0 0 3px var(--me-surface), 0 0 0 5px var(--me-border);
+}
+body.variant-magazine_editorial .about-bio {
+  font-family: var(--me-serif);
+  font-size: 1.08rem;
+  line-height: 1.85;
+  color: var(--me-text);
+  max-width: var(--me-max-prose);
+}
+
+/* =================================================================
+   EDUCATION & CERTIFICATIONS — editorial list
+   ================================================================= */
+body.variant-magazine_editorial section.py-5 > .container > .card.mb-4 {
+  border: none;
+  border-top: 1px solid var(--me-rule);
+  border-bottom: none;
+}
+body.variant-magazine_editorial section.py-5 > .container > .card.mb-4:first-of-type {
+  border-top: 3px double var(--me-text);
+}
+body.variant-magazine_editorial section.py-5 > .container > .card.mb-4:hover {
+  border-top-color: var(--me-accent);
+}
+
+/* Group headers — section labels */
+body.variant-magazine_editorial section.py-5 > .container > h4.text-muted {
+  border-bottom: 1px solid var(--me-rule);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Date text — editorial dateline */
+body.variant-magazine_editorial section.py-5 > .container > .card.mb-4 .text-muted.small {
+  font-family: var(--me-sans);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.variant-magazine_editorial .edu-pdf-preview,
+body.variant-magazine_editorial .cert-pdf-preview {
+  border-color: var(--me-border);
+  border-radius: 0;
+}
+
+/* =================================================================
+   RESUME PAGE
+   ================================================================= */
+body.variant-magazine_editorial .btn-group .btn {
+  border-radius: 0;
+  text-decoration: none;
+}
+
+/* =================================================================
+   CONTACT FORM — clean, high-contrast
+   ================================================================= */
+body.variant-magazine_editorial .form-label {
+  font-family: var(--me-sans);
+  color: var(--me-text);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+body.variant-magazine_editorial .form-control {
+  background: var(--me-surface);
+  border: none;
+  border-bottom: 2px solid var(--me-border);
+  border-radius: 0;
+  color: var(--me-text);
+  font-family: var(--me-serif);
+  font-size: 1rem;
+  padding: 0.7rem 0.25rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-magazine_editorial .form-control::placeholder {
+  color: color-mix(in srgb, var(--me-text-muted) 50%, transparent);
+  font-style: italic;
+}
+body.variant-magazine_editorial .form-control:focus {
+  border-bottom-color: var(--me-text);
+  box-shadow: 0 2px 0 0 var(--me-text);
+  outline: none;
+}
+body.variant-magazine_editorial textarea.form-control {
+  min-height: 140px;
+  border: 1px solid var(--me-border);
+  border-bottom: 2px solid var(--me-border);
+  padding: 0.7rem;
+}
+body.variant-magazine_editorial textarea.form-control:focus {
+  border-color: var(--me-text);
+  box-shadow: 0 0 0 1px var(--me-text);
+}
+body.variant-magazine_editorial .form-select {
+  background-color: var(--me-surface);
+  border: none;
+  border-bottom: 2px solid var(--me-border);
+  border-radius: 0;
+  color: var(--me-text);
+  font-family: var(--me-serif);
+  padding: 0.7rem 0.25rem;
+}
+body.variant-magazine_editorial .form-select:focus {
+  border-bottom-color: var(--me-text);
+  box-shadow: 0 2px 0 0 var(--me-text);
+}
+
+/* Error states */
+body.variant-magazine_editorial .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.3rem 0 0;
+}
+body.variant-magazine_editorial .errorlist li {
+  color: var(--me-accent);
+  font-family: var(--me-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-magazine_editorial .alert {
+  border-radius: 0;
+  border: none;
+  border-left: 4px solid;
+  font-family: var(--me-serif);
+  font-size: 0.95rem;
+}
+body.variant-magazine_editorial .alert-success {
+  background: color-mix(in srgb, #059669 5%, var(--me-surface));
+  border-left-color: #059669;
+  color: #065f46;
+}
+body.variant-magazine_editorial .alert-danger {
+  background: color-mix(in srgb, var(--me-accent) 5%, var(--me-surface));
+  border-left-color: var(--me-accent);
+  color: #991b1b;
+}
+body.variant-magazine_editorial .alert-warning {
+  background: color-mix(in srgb, #d97706 5%, var(--me-surface));
+  border-left-color: #d97706;
+  color: #92400e;
+}
+body.variant-magazine_editorial .alert-info {
+  background: color-mix(in srgb, #0369a1 5%, var(--me-surface));
+  border-left-color: #0369a1;
+  color: #0c4a6e;
+}
+
+/* =================================================================
+   FOOTER — dark editorial colophon
+   ================================================================= */
+body.variant-magazine_editorial footer,
+body.variant-magazine_editorial .footer {
+  background: var(--me-text);
+  color: color-mix(in srgb, var(--me-text-muted) 40%, #ffffff);
+  padding: 2.5rem 0;
+  border-top: 3px double var(--me-text);
+}
+body.variant-magazine_editorial footer a {
+  color: color-mix(in srgb, var(--me-text-muted) 40%, #ffffff);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+body.variant-magazine_editorial footer a:hover {
+  color: #ffffff;
+  text-decoration-color: currentColor;
+}
+
+/* =================================================================
+   PAGINATION
+   ================================================================= */
+body.variant-magazine_editorial .pagination .page-link {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--me-text-muted);
+  font-family: var(--me-sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  margin: 0;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+body.variant-magazine_editorial .pagination .page-link:hover {
+  color: var(--me-text);
+  border-bottom-color: var(--me-text);
+}
+body.variant-magazine_editorial .pagination .page-item.active .page-link {
+  background: transparent;
+  color: var(--me-text);
+  border-bottom-color: var(--me-accent);
+  font-weight: 700;
+}
+body.variant-magazine_editorial .pagination .page-item.disabled .page-link {
+  color: color-mix(in srgb, var(--me-text-muted) 40%, transparent);
+}
+
+/* =================================================================
+   IMAGES — editorial treatment
+   ================================================================= */
+body.variant-magazine_editorial .img-hero,
+body.variant-magazine_editorial .img-card,
+body.variant-magazine_editorial .img-square,
+body.variant-magazine_editorial .img-portrait {
+  border-radius: 0;
+}
+body.variant-magazine_editorial .img-hover-scale {
+  transition: transform 0.35s ease;
+}
+body.variant-magazine_editorial .img-hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* =================================================================
+   TABLES
+   ================================================================= */
+body.variant-magazine_editorial .table {
+  color: var(--me-text);
+  --bs-table-bg: transparent;
+  font-family: var(--me-sans);
+  font-size: 0.9rem;
+}
+body.variant-magazine_editorial .table th {
+  color: var(--me-text);
+  border-color: var(--me-text);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  border-bottom-width: 2px;
+}
+body.variant-magazine_editorial .table td {
+  color: var(--me-text-muted);
+  border-color: var(--me-rule);
+}
+
+/* =================================================================
+   FOCUS & ACCESSIBILITY
+   ================================================================= */
+body.variant-magazine_editorial :focus-visible {
+  outline: 2px solid var(--me-accent);
+  outline-offset: 2px;
+}
+body.variant-magazine_editorial .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--me-focus-ring);
+  outline: none;
+}
+body.variant-magazine_editorial .form-control:focus-visible,
+body.variant-magazine_editorial .form-select:focus-visible {
+  outline: none;
+}
+
+/* Skip-link */
+body.variant-magazine_editorial .skip-link:focus {
+  background: var(--me-accent);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 9999;
+}
+
+/* =================================================================
+   REDUCED MOTION — @media & .no-motion class
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-magazine_editorial,
+  body.variant-magazine_editorial * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  body.variant-magazine_editorial .card:hover {
+    transform: none;
+  }
+  body.variant-magazine_editorial .img-hover-scale:hover {
+    transform: none;
+  }
+}
+
+body.variant-magazine_editorial.no-motion,
+body.variant-magazine_editorial.no-motion * {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}
+body.variant-magazine_editorial.no-motion .card:hover {
+  transform: none;
+}
+body.variant-magazine_editorial.no-motion .img-hover-scale:hover {
+  transform: none;
+}
+
+/* =================================================================
+   RESPONSIVE — tablet (≤992px)
+   ================================================================= */
+@media (max-width: 992px) {
+  body.variant-magazine_editorial .hero {
+    padding: 4rem 0 3rem;
+  }
+  body.variant-magazine_editorial .hero .display-4 {
+    font-size: 2.5rem;
+  }
+  body.variant-magazine_editorial h1 {
+    font-size: 2.1rem;
+  }
+  body.variant-magazine_editorial h2 {
+    font-size: 1.5rem;
+  }
+  body.variant-magazine_editorial article p:first-of-type::first-letter {
+    font-size: 2.6em;
+  }
+}
+
+/* =================================================================
+   RESPONSIVE — mobile (≤576px)
+   ================================================================= */
+@media (max-width: 576px) {
+  body.variant-magazine_editorial {
+    padding-top: 48px;
+    font-size: 1rem;
+  }
+  body.variant-magazine_editorial .hero {
+    padding: 3rem 0 2.5rem;
+  }
+  body.variant-magazine_editorial .hero .display-4 {
+    font-size: 2rem;
+  }
+  body.variant-magazine_editorial .hero .lead {
+    font-size: 1rem;
+  }
+  body.variant-magazine_editorial .hero .btn-light,
+  body.variant-magazine_editorial .hero .btn-outline-light {
+    padding: 0.55rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  body.variant-magazine_editorial h1 {
+    font-size: 1.75rem;
+  }
+  body.variant-magazine_editorial h2 {
+    font-size: 1.3rem;
+  }
+  body.variant-magazine_editorial .card-body {
+    padding: 1.25rem 1rem;
+  }
+  body.variant-magazine_editorial .btn-primary,
+  body.variant-magazine_editorial .btn-outline-primary,
+  body.variant-magazine_editorial .btn-outline-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  body.variant-magazine_editorial .navbar {
+    padding: 0.5rem 1rem;
+  }
+  body.variant-magazine_editorial article p:first-of-type::first-letter {
+    font-size: 2.2em;
+  }
+  body.variant-magazine_editorial .form-control {
+    padding: 0.6rem 0.2rem;
+  }
+}

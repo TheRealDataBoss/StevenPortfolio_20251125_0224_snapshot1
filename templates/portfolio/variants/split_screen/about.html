@@ -1,0 +1,58 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}About{% if site_settings.full_name %} - {{ site_settings.full_name }}{% endif %} | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="split_screen"></div>
+
+{# ── ABOUT: Split layout — headshot left panel, bio right ── #}
+<div class="ss-about-split">
+    <div class="ss-about-visual">
+        {% if site_settings and site_settings.headshot %}
+            {% responsive_image image=site_settings.headshot variant="square" shape="circle" alt=site_settings.full_name|default:"Headshot" extra_class="mx-auto" %}
+        {% elif site_settings and site_settings.hero_image %}
+            {% media_img site_settings.hero_image ratio="landscape" fit="cover" alt="About image" shadow=True %}
+        {% else %}
+            <div style="background:var(--ss-surface);border:2px dashed var(--ss-border);border-radius:14px;padding:3rem 2rem;text-align:center;color:var(--ss-text-muted);max-width:280px;">
+                <i class="fa-solid fa-user fa-3x mb-3" style="opacity:0.3;"></i>
+                <p class="mb-0">Add a headshot in Site Settings.</p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="ss-about-content">
+        <span class="ss-eyebrow">About</span>
+        {% if site_settings and site_settings.full_name %}
+            <h1>{{ site_settings.full_name }}</h1>
+        {% elif site_settings and site_settings.about_title %}
+            <h1>{{ site_settings.about_title }}</h1>
+        {% else %}
+            <h1>About Me</h1>
+        {% endif %}
+        {% if site_settings and site_settings.headline %}
+            <p class="text-muted mb-3" style="font-size:1.1rem;">{{ site_settings.headline }}</p>
+        {% endif %}
+        <div class="ss-about-bio">
+            {% if site_settings and site_settings.bio_long %}
+                {{ site_settings.bio_long|linebreaks }}
+            {% elif site_settings and site_settings.about_body %}
+                <p class="lead">{{ site_settings.about_body }}</p>
+            {% else %}
+                <p class="lead">Use the admin Site Settings to tell your story, add your elevator pitch, and explain your work.</p>
+            {% endif %}
+        </div>
+        {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+            <div class="ss-about-social">
+                {% if site_settings.linkedin_url %}
+                    <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="ss-btn-primary" style="font-size:0.875rem;padding:0.5rem 1.25rem;">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                {% endif %}
+                {% if site_settings.github_url %}
+                    <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="ss-btn-ghost" style="font-size:0.875rem;padding:0.5rem 1.25rem;">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

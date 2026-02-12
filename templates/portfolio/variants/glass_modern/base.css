@@ -1,0 +1,877 @@
+/* =================================================================
+   Glass Modern — glassmorphism-driven portfolio variant
+   Scoped entirely to body.variant-glass_modern
+   Uses Design Token CSS vars with frosted glass defaults:
+     --accent, --bg, --surface, --text, --text-muted, --border
+   ================================================================= */
+
+/* --- Token aliases (cool frosted palette) ----------------------- */
+body.variant-glass_modern {
+  --gm-accent:     var(--accent, #6366f1);
+  --gm-bg:         var(--bg, #0f1729);
+  --gm-surface:    var(--surface, #1e293b);
+  --gm-text:       var(--text, #e2e8f0);
+  --gm-text-muted: var(--text-muted, #94a3b8);
+  --gm-border:     var(--border, rgba(255,255,255,0.08));
+
+  /* Derived tokens */
+  --gm-accent-soft:  color-mix(in srgb, var(--gm-accent) 12%, transparent);
+  --gm-accent-glow:  color-mix(in srgb, var(--gm-accent) 25%, transparent);
+  --gm-glass:        rgba(255,255,255,0.04);
+  --gm-glass-heavy:  rgba(255,255,255,0.07);
+  --gm-glass-border: rgba(255,255,255,0.10);
+  --gm-glass-shine:  rgba(255,255,255,0.15);
+  --gm-focus-ring:   color-mix(in srgb, var(--gm-accent) 40%, transparent);
+  --gm-hover-bg:     rgba(255,255,255,0.06);
+  --gm-gradient-start: color-mix(in srgb, var(--gm-accent) 30%, var(--gm-bg));
+  --gm-gradient-end:   color-mix(in srgb, var(--gm-accent) 8%, var(--gm-bg));
+
+  background: var(--gm-bg);
+  color: var(--gm-text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  padding-top: 56px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle mesh background */
+body.variant-glass_modern::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, var(--gm-accent-soft), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 70%, color-mix(in srgb, var(--gm-accent) 6%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* =================================================================
+   TYPOGRAPHY
+   ================================================================= */
+body.variant-glass_modern h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #ffffff;
+}
+body.variant-glass_modern h2 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #ffffff;
+}
+body.variant-glass_modern h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--gm-text);
+}
+body.variant-glass_modern h4,
+body.variant-glass_modern h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gm-text);
+}
+body.variant-glass_modern p {
+  color: var(--gm-text-muted);
+}
+body.variant-glass_modern .text-muted {
+  color: var(--gm-text-muted) !important;
+}
+body.variant-glass_modern .text-secondary {
+  color: var(--gm-text-muted) !important;
+}
+body.variant-glass_modern a {
+  color: var(--gm-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+body.variant-glass_modern a:hover {
+  color: color-mix(in srgb, var(--gm-accent) 80%, #ffffff);
+}
+
+/* =================================================================
+   GLASS MIXIN — reusable frosted surface
+   ================================================================= */
+/* backdrop-filter with @supports fallback */
+body.variant-glass_modern .glass,
+body.variant-glass_modern .card,
+body.variant-glass_modern .navbar {
+  background: var(--gm-glass-heavy);
+  border: 1px solid var(--gm-glass-border);
+}
+
+@supports ((-webkit-backdrop-filter: blur(12px)) or (backdrop-filter: blur(12px))) {
+  body.variant-glass_modern .glass,
+  body.variant-glass_modern .card,
+  body.variant-glass_modern .navbar {
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+    background: var(--gm-glass);
+  }
+}
+
+/* =================================================================
+   NAVBAR
+   ================================================================= */
+body.variant-glass_modern .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--gm-glass-border);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+  transition: background 0.3s ease;
+}
+body.variant-glass_modern .navbar-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: #ffffff !important;
+}
+body.variant-glass_modern .navbar .nav-link {
+  color: var(--gm-text-muted) !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+body.variant-glass_modern .navbar .nav-link:hover,
+body.variant-glass_modern .navbar .nav-link:focus {
+  color: #ffffff !important;
+  background: var(--gm-hover-bg);
+}
+body.variant-glass_modern .navbar .nav-link.active {
+  color: #ffffff !important;
+  background: var(--gm-accent-soft);
+}
+
+/* Dropdown */
+body.variant-glass_modern .dropdown-menu {
+  background: var(--gm-surface);
+  border: 1px solid var(--gm-glass-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+@supports ((-webkit-backdrop-filter: blur(12px)) or (backdrop-filter: blur(12px))) {
+  body.variant-glass_modern .dropdown-menu {
+    background: rgba(30,41,59,0.85);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    backdrop-filter: blur(20px) saturate(1.3);
+  }
+}
+
+body.variant-glass_modern .dropdown-item {
+  color: var(--gm-text-muted);
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.9rem;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+body.variant-glass_modern .dropdown-item:hover,
+body.variant-glass_modern .dropdown-item:focus {
+  color: #ffffff;
+  background: var(--gm-hover-bg);
+}
+
+/* Mobile toggler */
+body.variant-glass_modern .navbar-toggler {
+  border-color: var(--gm-glass-border);
+  padding: 0.35rem 0.6rem;
+}
+body.variant-glass_modern .navbar-toggler-icon {
+  filter: invert(1) brightness(2);
+}
+
+/* =================================================================
+   HERO SECTION
+   ================================================================= */
+body.variant-glass_modern .hero {
+  background:
+    radial-gradient(ellipse 100% 80% at 30% 10%, var(--gm-accent-glow), transparent 60%),
+    linear-gradient(160deg, var(--gm-gradient-start), var(--gm-gradient-end));
+  color: #ffffff;
+  padding: 6rem 0 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--gm-glass-border);
+}
+body.variant-glass_modern .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle 600px at 70% 80%, var(--gm-accent-soft), transparent);
+  pointer-events: none;
+}
+body.variant-glass_modern .hero .display-4 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
+}
+body.variant-glass_modern .hero .lead {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: 400;
+  max-width: 600px;
+  margin: 1rem auto 0;
+  position: relative;
+  z-index: 1;
+}
+/* Hero buttons */
+body.variant-glass_modern .hero .btn-light {
+  background: rgba(255,255,255,0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-weight: 600;
+  padding: 0.65rem 1.6rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  body.variant-glass_modern .hero .btn-light {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+body.variant-glass_modern .hero .btn-light:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+body.variant-glass_modern .hero .btn-outline-light {
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.2);
+  font-weight: 600;
+  padding: 0.65rem 1.6rem;
+  border-radius: 0.75rem;
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+body.variant-glass_modern .hero .btn-outline-light:hover {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* =================================================================
+   CARDS — frosted glass panels
+   ================================================================= */
+body.variant-glass_modern .card {
+  border-radius: 1rem;
+  border-color: var(--gm-glass-border);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12), inset 0 1px 0 var(--gm-glass-shine);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+body.variant-glass_modern .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 var(--gm-glass-shine);
+}
+body.variant-glass_modern .card-body {
+  padding: 1.5rem;
+}
+body.variant-glass_modern .card-title {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+body.variant-glass_modern .card-text {
+  color: var(--gm-text-muted);
+  font-size: 0.95rem;
+}
+body.variant-glass_modern .card-footer {
+  background: transparent;
+  border-top: 1px solid var(--gm-glass-border);
+  padding: 1rem 1.5rem;
+}
+body.variant-glass_modern .card .card-img-top {
+  border-bottom: 1px solid var(--gm-glass-border);
+}
+
+/* =================================================================
+   BADGES
+   ================================================================= */
+body.variant-glass_modern .badge.bg-primary {
+  background: var(--gm-accent-soft) !important;
+  color: var(--gm-accent);
+  font-weight: 500;
+  padding: 0.35em 0.75em;
+  border: 1px solid color-mix(in srgb, var(--gm-accent) 20%, transparent);
+  border-radius: 2rem;
+}
+body.variant-glass_modern .badge.bg-secondary,
+body.variant-glass_modern .badge.bg-secondary-subtle {
+  background: var(--gm-glass-heavy) !important;
+  color: var(--gm-text-muted) !important;
+  font-weight: 500;
+  padding: 0.35em 0.75em;
+  border: 1px solid var(--gm-glass-border);
+  border-radius: 2rem;
+}
+body.variant-glass_modern .badge.bg-primary-subtle {
+  background: var(--gm-accent-soft) !important;
+  color: var(--gm-accent) !important;
+  border: 1px solid color-mix(in srgb, var(--gm-accent) 15%, transparent);
+  border-radius: 2rem;
+}
+
+/* =================================================================
+   BUTTONS — glass with glow
+   ================================================================= */
+body.variant-glass_modern .btn-primary {
+  background: var(--gm-accent);
+  border: 1px solid color-mix(in srgb, var(--gm-accent) 80%, #ffffff);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 12px var(--gm-accent-glow);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+body.variant-glass_modern .btn-primary:hover {
+  background: color-mix(in srgb, var(--gm-accent) 85%, #ffffff);
+  box-shadow: 0 4px 20px var(--gm-accent-glow);
+  transform: translateY(-1px);
+}
+body.variant-glass_modern .btn-outline-primary {
+  color: var(--gm-accent);
+  border: 1px solid color-mix(in srgb, var(--gm-accent) 40%, transparent);
+  background: transparent;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+body.variant-glass_modern .btn-outline-primary:hover {
+  background: var(--gm-accent-soft);
+  color: var(--gm-accent);
+  transform: translateY(-1px);
+}
+body.variant-glass_modern .btn-outline-secondary {
+  color: var(--gm-text-muted);
+  border: 1px solid var(--gm-glass-border);
+  background: transparent;
+  font-weight: 500;
+  padding: 0.55rem 1.4rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+body.variant-glass_modern .btn-outline-secondary:hover {
+  background: var(--gm-hover-bg);
+  color: var(--gm-text);
+}
+body.variant-glass_modern .btn-outline-dark {
+  color: var(--gm-text);
+  border: 1px solid var(--gm-glass-border);
+  background: transparent;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+body.variant-glass_modern .btn-outline-dark:hover {
+  background: var(--gm-hover-bg);
+  color: #ffffff;
+}
+body.variant-glass_modern .btn-sm {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+  border-radius: 0.5rem;
+}
+
+/* =================================================================
+   SECTIONS & BACKGROUNDS
+   ================================================================= */
+body.variant-glass_modern .bg-light {
+  background: transparent !important;
+}
+body.variant-glass_modern section.py-5 {
+  padding-top: 3.5rem !important;
+  padding-bottom: 3.5rem !important;
+}
+
+/* =================================================================
+   HOME PAGE — featured project grid
+   ================================================================= */
+body.variant-glass_modern .card a.text-decoration-none {
+  color: var(--gm-text);
+}
+body.variant-glass_modern .card a.text-decoration-none:hover {
+  color: var(--gm-accent);
+}
+
+/* =================================================================
+   PROJECT LIST
+   ================================================================= */
+/* Search form */
+body.variant-glass_modern .input-group .form-control {
+  background: var(--gm-glass-heavy);
+  border: 1px solid var(--gm-glass-border);
+  color: var(--gm-text);
+  border-radius: 0.75rem 0 0 0.75rem;
+  padding: 0.6rem 1rem;
+}
+body.variant-glass_modern .input-group .form-control::placeholder {
+  color: var(--gm-text-muted);
+  opacity: 0.7;
+}
+body.variant-glass_modern .input-group .btn {
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+
+/* Category filter pills */
+body.variant-glass_modern .nav-pills .nav-link {
+  color: var(--gm-text-muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+body.variant-glass_modern .nav-pills .nav-link:hover {
+  color: var(--gm-text);
+  background: var(--gm-hover-bg);
+  border-color: var(--gm-glass-border);
+}
+body.variant-glass_modern .nav-pills .nav-link.active,
+body.variant-glass_modern .nav-pills .nav-link.bg-primary {
+  background: var(--gm-accent-soft) !important;
+  color: var(--gm-accent) !important;
+  border-color: color-mix(in srgb, var(--gm-accent) 25%, transparent);
+}
+
+/* =================================================================
+   PROJECT DETAIL
+   ================================================================= */
+body.variant-glass_modern article {
+  color: var(--gm-text-muted);
+  line-height: 1.8;
+}
+body.variant-glass_modern hr {
+  border-color: var(--gm-glass-border);
+  opacity: 1;
+}
+
+/* Meta sidebar card */
+body.variant-glass_modern .card .card-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+body.variant-glass_modern .card .card-body strong {
+  color: var(--gm-text);
+}
+
+/* Attachment preview iframes */
+body.variant-glass_modern iframe.border {
+  border-color: var(--gm-glass-border) !important;
+  border-radius: 0.75rem;
+  background: rgba(0,0,0,0.3);
+}
+
+/* =================================================================
+   ABOUT PAGE
+   ================================================================= */
+body.variant-glass_modern .img-shape-circle {
+  box-shadow: 0 0 0 4px var(--gm-glass-border), 0 8px 32px rgba(0,0,0,0.25);
+}
+body.variant-glass_modern .about-bio {
+  color: var(--gm-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* Social links */
+body.variant-glass_modern a[target="_blank"] .fab,
+body.variant-glass_modern a[target="_blank"] .fas {
+  transition: color 0.2s ease;
+}
+
+/* =================================================================
+   EDUCATION & CERTIFICATIONS
+   ================================================================= */
+body.variant-glass_modern .edu-pdf-preview,
+body.variant-glass_modern .cert-pdf-preview {
+  border-color: var(--gm-glass-border);
+  border-radius: 0.75rem;
+  background: rgba(0,0,0,0.3);
+}
+body.variant-glass_modern .d-flex.flex-column.flex-md-row {
+  gap: 1rem;
+}
+
+/* =================================================================
+   RESUME PAGE
+   ================================================================= */
+body.variant-glass_modern .btn-group .btn {
+  border-radius: 0.5rem;
+  margin-right: 0.25rem;
+}
+
+/* =================================================================
+   CONTACT FORM — glass inputs
+   ================================================================= */
+body.variant-glass_modern .form-label {
+  color: var(--gm-text);
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+body.variant-glass_modern .form-control {
+  background: var(--gm-glass-heavy);
+  border: 1px solid var(--gm-glass-border);
+  color: var(--gm-text);
+  border-radius: 0.75rem;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+body.variant-glass_modern .form-control::placeholder {
+  color: var(--gm-text-muted);
+  opacity: 0.6;
+}
+body.variant-glass_modern .form-control:focus {
+  background: var(--gm-glass);
+  border-color: var(--gm-accent);
+  box-shadow: 0 0 0 3px var(--gm-focus-ring);
+  color: var(--gm-text);
+  outline: none;
+}
+body.variant-glass_modern textarea.form-control {
+  min-height: 140px;
+}
+body.variant-glass_modern .form-select {
+  background-color: var(--gm-glass-heavy);
+  border: 1px solid var(--gm-glass-border);
+  color: var(--gm-text);
+  border-radius: 0.75rem;
+  padding: 0.65rem 1rem;
+}
+body.variant-glass_modern .form-select:focus {
+  border-color: var(--gm-accent);
+  box-shadow: 0 0 0 3px var(--gm-focus-ring);
+}
+
+/* Error states */
+body.variant-glass_modern .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+}
+body.variant-glass_modern .errorlist li {
+  color: #f87171;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-glass_modern .alert {
+  border-radius: 0.75rem;
+  border: 1px solid var(--gm-glass-border);
+  background: var(--gm-glass-heavy);
+  color: var(--gm-text);
+}
+
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  body.variant-glass_modern .alert {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    background: var(--gm-glass);
+  }
+}
+
+body.variant-glass_modern .alert-success {
+  border-color: rgba(52,211,153,0.2);
+  color: #34d399;
+}
+body.variant-glass_modern .alert-danger {
+  border-color: rgba(248,113,113,0.2);
+  color: #f87171;
+}
+body.variant-glass_modern .alert-warning {
+  border-color: rgba(251,191,36,0.2);
+  color: #fbbf24;
+}
+body.variant-glass_modern .alert-info {
+  border-color: color-mix(in srgb, var(--gm-accent) 20%, transparent);
+  color: var(--gm-accent);
+}
+
+/* =================================================================
+   FOOTER
+   ================================================================= */
+body.variant-glass_modern footer,
+body.variant-glass_modern .footer {
+  background: var(--gm-glass-heavy);
+  border-top: 1px solid var(--gm-glass-border);
+  color: var(--gm-text-muted);
+  padding: 2rem 0;
+}
+
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  body.variant-glass_modern footer,
+  body.variant-glass_modern .footer {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    background: var(--gm-glass);
+  }
+}
+
+body.variant-glass_modern footer a {
+  color: var(--gm-text-muted);
+}
+body.variant-glass_modern footer a:hover {
+  color: var(--gm-accent);
+}
+
+/* =================================================================
+   PAGINATION
+   ================================================================= */
+body.variant-glass_modern .pagination .page-link {
+  background: var(--gm-glass-heavy);
+  border: 1px solid var(--gm-glass-border);
+  color: var(--gm-text-muted);
+  border-radius: 0.5rem;
+  margin: 0 0.15rem;
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+body.variant-glass_modern .pagination .page-link:hover {
+  background: var(--gm-hover-bg);
+  color: var(--gm-text);
+  border-color: var(--gm-glass-shine);
+}
+body.variant-glass_modern .pagination .page-item.active .page-link {
+  background: var(--gm-accent);
+  border-color: var(--gm-accent);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--gm-accent-glow);
+}
+body.variant-glass_modern .pagination .page-item.disabled .page-link {
+  background: transparent;
+  border-color: var(--gm-glass-border);
+  color: color-mix(in srgb, var(--gm-text-muted) 40%, transparent);
+}
+
+/* =================================================================
+   IMAGES — media component overrides
+   ================================================================= */
+body.variant-glass_modern .img-hero,
+body.variant-glass_modern .img-card,
+body.variant-glass_modern .img-square,
+body.variant-glass_modern .img-portrait {
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+body.variant-glass_modern .img-hover-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+body.variant-glass_modern .img-hover-scale:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* =================================================================
+   TABLES (if used)
+   ================================================================= */
+body.variant-glass_modern .table {
+  color: var(--gm-text);
+  --bs-table-bg: transparent;
+}
+body.variant-glass_modern .table th {
+  color: var(--gm-text);
+  border-color: var(--gm-glass-border);
+  font-weight: 600;
+}
+body.variant-glass_modern .table td {
+  color: var(--gm-text-muted);
+  border-color: var(--gm-glass-border);
+}
+
+/* =================================================================
+   FOCUS & ACCESSIBILITY
+   ================================================================= */
+body.variant-glass_modern :focus-visible {
+  outline: 2px solid var(--gm-accent);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+body.variant-glass_modern .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--gm-focus-ring);
+}
+body.variant-glass_modern .form-control:focus-visible,
+body.variant-glass_modern .form-select:focus-visible {
+  outline: none; /* handled by box-shadow above */
+}
+
+/* Skip-link */
+body.variant-glass_modern .skip-link:focus {
+  background: var(--gm-accent);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 9999;
+}
+
+/* =================================================================
+   SCROLLBAR (Webkit + Firefox)
+   ================================================================= */
+body.variant-glass_modern ::-webkit-scrollbar {
+  width: 8px;
+}
+body.variant-glass_modern ::-webkit-scrollbar-track {
+  background: var(--gm-bg);
+}
+body.variant-glass_modern ::-webkit-scrollbar-thumb {
+  background: var(--gm-glass-shine);
+  border-radius: 4px;
+}
+body.variant-glass_modern ::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--gm-accent) 40%, transparent);
+}
+body.variant-glass_modern {
+  scrollbar-color: var(--gm-glass-shine) var(--gm-bg);
+  scrollbar-width: thin;
+}
+
+/* =================================================================
+   REDUCED MOTION — @media & .no-motion class
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-glass_modern,
+  body.variant-glass_modern * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  body.variant-glass_modern .card:hover {
+    transform: none;
+  }
+  body.variant-glass_modern .img-hover-scale:hover {
+    transform: none;
+  }
+  body.variant-glass_modern .btn:hover {
+    transform: none;
+  }
+  body.variant-glass_modern .hero .btn-light:hover,
+  body.variant-glass_modern .hero .btn-outline-light:hover {
+    transform: none;
+  }
+  body.variant-glass_modern::before {
+    display: none;
+  }
+}
+
+body.variant-glass_modern.no-motion,
+body.variant-glass_modern.no-motion * {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}
+body.variant-glass_modern.no-motion .card:hover {
+  transform: none;
+}
+body.variant-glass_modern.no-motion .img-hover-scale:hover {
+  transform: none;
+}
+body.variant-glass_modern.no-motion .btn:hover {
+  transform: none;
+}
+body.variant-glass_modern.no-motion .hero .btn-light:hover,
+body.variant-glass_modern.no-motion .hero .btn-outline-light:hover {
+  transform: none;
+}
+body.variant-glass_modern.no-motion::before {
+  display: none;
+}
+
+/* =================================================================
+   RESPONSIVE — tablet (≤992px)
+   ================================================================= */
+@media (max-width: 992px) {
+  body.variant-glass_modern .hero {
+    padding: 4.5rem 0 3.5rem;
+  }
+  body.variant-glass_modern .hero .display-4 {
+    font-size: 2.2rem;
+  }
+  body.variant-glass_modern h1 {
+    font-size: 1.85rem;
+  }
+  body.variant-glass_modern h2 {
+    font-size: 1.4rem;
+  }
+}
+
+/* =================================================================
+   RESPONSIVE — mobile (≤576px)
+   ================================================================= */
+@media (max-width: 576px) {
+  body.variant-glass_modern {
+    padding-top: 48px;
+  }
+  body.variant-glass_modern .hero {
+    padding: 3.5rem 0 2.5rem;
+  }
+  body.variant-glass_modern .hero .display-4 {
+    font-size: 1.75rem;
+  }
+  body.variant-glass_modern .hero .lead {
+    font-size: 1rem;
+  }
+  body.variant-glass_modern .hero .btn-light,
+  body.variant-glass_modern .hero .btn-outline-light {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  body.variant-glass_modern h1 {
+    font-size: 1.6rem;
+  }
+  body.variant-glass_modern h2 {
+    font-size: 1.25rem;
+  }
+  body.variant-glass_modern .card {
+    border-radius: 0.75rem;
+  }
+  body.variant-glass_modern .card-body {
+    padding: 1.15rem;
+  }
+  body.variant-glass_modern .btn-primary,
+  body.variant-glass_modern .btn-outline-primary,
+  body.variant-glass_modern .btn-outline-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  body.variant-glass_modern .navbar {
+    padding: 0.5rem 1rem;
+  }
+}

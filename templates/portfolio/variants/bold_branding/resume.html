@@ -1,0 +1,128 @@
+{% extends base_template|default:"portfolio/base.html" %}
+
+{% block title %}Resume{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="Steven Wazlavek - Data Analyst transitioning to Data Scientist. Resume with experience in Python, SQL, data visualization, machine learning. Kennesaw State University, MIT IDSS, Harvard Business School Online, Wharton.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Wazlavek",
+  "jobTitle": "Data Analyst (transitioning to Data Scientist)",
+  "url": "/",
+  "sameAs": [
+    "https://github.com/TheRealDataBoss",
+    "https://www.linkedin.com/in/databoss/"
+  ],
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "Kennesaw State University"},
+    {"@type": "CollegeOrUniversity", "name": "University of Alabama Manderson Graduate School of Business"},
+    {"@type": "CollegeOrUniversity", "name": "MIT Institute for Data, Systems, and Society (IDSS)"},
+    {"@type": "CollegeOrUniversity", "name": "Harvard Business School Online"},
+    {"@type": "CollegeOrUniversity", "name": "The Wharton School, University of Pennsylvania"}
+  ]{% if has_pdf %},
+  "mainEntityOfPage": {
+    "@type": "MediaObject",
+    "contentUrl": "{% url 'portfolio:resume_pdf_inline' %}",
+    "encodingFormat": "application/pdf",
+    "name": "Steven Wazlavek Resume"
+  }{% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO BANNER
+     ============================================================ -->
+<section class="bb-hero bb-hero--banner">
+  <div class="container position-relative">
+    <div class="row align-items-end">
+      <div class="col-lg-7">
+        <span class="bb-eyebrow" style="letter-spacing: 0.35em; font-size: 0.78rem;">Professional</span>
+        <h1 class="display-2 mb-3">Resume</h1>
+        {% if primary_resume %}
+        <p class="lead fs-4 mb-0" style="opacity: 0.85;">{{ primary_resume.title }}{% if primary_resume.category %} &mdash; {{ primary_resume.category }}{% endif %}</p>
+        {% endif %}
+      </div>
+      <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
+        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+          {% if download_primary_url %}
+          <a href="{{ download_primary_url }}" class="btn btn-warning btn-lg px-4">
+            <i class="fas fa-download me-2"></i>Download
+          </a>
+          {% endif %}
+          {% if has_pdf %}
+          <a href="{% url 'portfolio:resume_pdf_inline' %}" class="btn btn-outline-light btn-lg px-4" target="_blank">
+            <i class="fas fa-file-pdf me-2"></i>View PDF
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     RESUME CONTENT
+     ============================================================ -->
+<section class="bb-section" style="background: var(--bb-bg);">
+  <div class="container">
+    <!-- PDF Preview -->
+    {% if has_pdf %}
+    <div class="mb-5">
+      <div class="bb-section-header">
+        <div class="bb-section-header__bar"></div>
+        <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">Document Preview</h2>
+      </div>
+      <div class="bb-pdf-frame">
+        <iframe src="{% url 'portfolio:resume_viewer' %}" width="100%" height="800" title="Resume PDF Preview"></iframe>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Additional Documents -->
+    {% if resume_entries %}
+    <div>
+      <div class="bb-section-header">
+        <div class="bb-section-header__bar"></div>
+        <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">Additional Documents</h2>
+      </div>
+      <div class="row g-4">
+        {% for entry in resume_entries %}
+        <div class="col-md-6 col-lg-4">
+          <div class="bb-resume-entry">
+            <h3 class="h6 text-uppercase mb-1" style="letter-spacing: 0.1em; font-weight: 800;">{{ entry.title }}</h3>
+            {% if entry.category %}
+            <span class="bb-eyebrow" style="font-size: 0.65rem; margin-bottom: 0.5rem;">{{ entry.category }}</span>
+            {% endif %}
+            {% if entry.updated_at %}
+            <span class="d-block text-muted small">Updated {{ entry.updated_at|date:"F j, Y" }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA BAND
+     ============================================================ -->
+{% if site_settings and site_settings.resume_file %}
+<section class="bb-section bb-section--accent" style="padding: 4rem 0;">
+  <div class="container text-center">
+    <h2 class="display-5 text-uppercase mb-3" style="letter-spacing: 0.03em;">Want a Copy?</h2>
+    <a href="{{ site_settings.resume_file.url }}" class="btn btn-dark btn-lg px-5 py-3" target="_blank">
+      <i class="fas fa-download me-2"></i>Download Resume
+    </a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

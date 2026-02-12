@@ -1,0 +1,54 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="timeline_pro"></div>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="text-center mb-4">
+                    <h1 style="font-family:Georgia,'Times New Roman',serif; font-weight:700;">Get in Touch</h1>
+                    <p class="text-muted">Have a question or want to work together? Send a message and I will respond promptly.</p>
+                </div>
+
+                <div class="card shadow-sm border-0" style="border-top:3px solid var(--primary) !important;">
+                    <div class="card-body p-4">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            <div class="mb-3">
+                                <label class="form-label" style="font-family:Georgia,'Times New Roman',serif; font-weight:600;">Name</label>
+                                {{ form.name }}{{ form.name.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" style="font-family:Georgia,'Times New Roman',serif; font-weight:600;">Email</label>
+                                {{ form.email }}{{ form.email.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" style="font-family:Georgia,'Times New Roman',serif; font-weight:600;">Subject</label>
+                                {{ form.subject }}{{ form.subject.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" style="font-family:Georgia,'Times New Roman',serif; font-weight:600;">Message</label>
+                                {{ form.message }}{{ form.message.errors }}
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+
+                {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+                    <div class="mt-4 text-center">
+                        {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin me-1"></i> LinkedIn</a>
+                        {% endif %}
+                        {% if site_settings.github_url %}
+                            <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-outline-dark"><i class="fab fa-github me-1"></i> GitHub</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

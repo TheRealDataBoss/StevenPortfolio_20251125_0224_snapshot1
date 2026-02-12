@@ -1,0 +1,8 @@
+/* Default variant – intentionally minimal */
+
+:root { --navbar-offset: 72px; }
+body { padding-top: var(--navbar-offset); }
+
+/* Breathing room between fixed navbar and hero banner */
+body.variant-default .hero { margin-top: 1rem; }
+

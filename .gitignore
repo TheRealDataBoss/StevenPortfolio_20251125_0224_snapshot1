@@ -38,3 +38,24 @@ nul
 CLAUDE_BUGREPORT.md
 FINAL_REPORT.md
 CLAUDE_CONTEXT_*.txt
+
+# --- Local / environment ---
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Local backups / artifacts ---
+_local_backups/
+Portfolio_BACKUPS/
+*.bak
+*.bak.*
+*.log
+
+# --- Django runtime ---
+db.sqlite3
+media/
+staticfiles/
+

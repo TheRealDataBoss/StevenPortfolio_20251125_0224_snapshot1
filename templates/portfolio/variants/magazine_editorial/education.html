@@ -1,0 +1,130 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% load portfolio_tags %}
+{% block title %}Education | Portfolio{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Education",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for entry in all_education %}
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "{{ entry.title|escapejs }}",
+        "description": "{{ entry.description|escapejs|truncatewords:30 }}",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "{{ entry.institution|escapejs }}"
+        }{% if entry.url %},
+        "url": "{{ entry.url|escapejs }}"{% endif %}{% if entry.start_date %},
+        "dateCreated": "{{ entry.start_date|date:'Y-m-d' }}"{% endif %}
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div data-variant-template="magazine_editorial"></div>
+
+<!-- Education header -->
+<section style="background: #faf8f5; border-bottom: 3px double #2c2c2c; padding: 3.5rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            <p class="text-uppercase mb-1" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.25em; color: #999;">Academic Background</p>
+            <h1 style="font-family: Georgia, serif; font-size: 2.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem;">Education</h1>
+            <p style="font-family: Georgia, serif; font-size: 1rem; font-style: italic; color: #666;">Degrees, programs, and continued learning.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Education body -->
+<section style="background: #fff; padding: 3rem 0;">
+    <div class="container">
+        <div class="col-lg-8 mx-auto">
+            {% for group_name, group_cat, entries in education_groups %}
+            <div class="mb-4">
+                <p class="text-uppercase mb-2" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; color: #999;">{{ group_name }}</p>
+                <hr style="border: none; border-top: 1px solid #ddd; margin-bottom: 1.5rem;">
+
+                {% for entry in entries %}
+                <div style="border-top: 3px solid #1a1a1a; padding: 1.25rem 0; margin-bottom: 1.5rem;">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-2">
+                        <div>
+                            <h3 style="font-family: Georgia, serif; font-size: 1.15rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem;">{{ entry.title }}</h3>
+                            <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 0;">{{ entry.institution }}{% if entry.location %} &middot; {{ entry.location }}{% endif %}</p>
+                        </div>
+                        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #999; white-space: nowrap; margin-top: 0.25rem;">
+                            {% if entry.start_date %}{{ entry.start_date|date:"M Y" }}{% endif %}{% if entry.start_date and entry.end_date %} &ndash; {% endif %}{% if entry.end_date %}{{ entry.end_date|date:"M Y" }}{% endif %}
+                        </div>
+                    </div>
+
+                    {% if entry.description %}
+                    <div style="font-family: Georgia, serif; font-size: 0.95rem; color: #555; line-height: 1.7; margin-top: 0.75rem;">
+                        {{ entry.description|linebreaks }}
+                    </div>
+                    {% endif %}
+
+                    {% if entry.image %}
+                    <div class="mt-2 mb-2">
+                        <img src="{{ entry.image.url }}" alt="{{ entry.title }}" class="img-fluid" style="max-height:240px; border: 1px solid #ddd;">
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-wrap gap-3 mt-2">
+                        {% if entry.url %}
+                        <a href="{{ entry.url }}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-external-link-alt me-1"></i> Website</a>
+                        {% endif %}
+                        {% if entry.attachment %}
+                        <a href="{% url 'portfolio:education_download' entry.pk %}" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-download me-1"></i> Download</a>
+                            {% if entry.preview_kind == "pdf" %}
+                        <a href="{% url 'portfolio:education_preview' entry.pk %}" target="_blank" rel="noopener" style="font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.1em; color: #555; text-decoration: underline;"><i class="fas fa-file-pdf me-1"></i> Preview PDF</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    {% if entry.preview_kind == "pdf" %}
+                    <div class="mt-3 ratio ratio-16x9 overflow-hidden edu-pdf-preview" data-entry-id="{{ entry.pk }}" style="border: 1px solid #ddd;">
+                        <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="PDF preview: {{ entry.title }}" allowfullscreen></iframe>
+                    </div>
+                    {% elif entry.preview_kind == "image" %}
+                    <div class="mt-3 text-center">
+                        <img src="{% url 'portfolio:education_inline' entry.pk %}" alt="Attachment: {{ entry.title }}" class="img-fluid" style="max-height:400px; border: 1px solid #ddd;">
+                    </div>
+                    {% elif entry.preview_kind == "text" %}
+                    <div class="mt-3 ratio ratio-16x9 overflow-hidden" style="border: 1px solid #ddd;">
+                        <iframe src="{% url 'portfolio:education_inline' entry.pk %}" title="Text preview: {{ entry.title }}" style="background:#faf8f5;"></iframe>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% empty %}
+            <p style="font-family: Georgia, serif; font-style: italic; color: #999;">No education entries yet. Add them via the admin.</p>
+            {% endfor %}
+
+            {% if is_paginated %}
+            <nav aria-label="Education pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" style="border-radius: 0; font-family: Georgia, serif;">Previous</a></li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item{% if num == page_obj.number %} active{% endif %}"><a class="page-link" href="?page={{ num }}" style="border-radius: 0; font-family: Georgia, serif;">{{ num }}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}" style="border-radius: 0; font-family: Georgia, serif;">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends base_template|default:"portfolio/base.html" %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div data-variant-template="bold_branding"></div>
+
+<!-- ============================================================
+     HERO BANNER
+     ============================================================ -->
+<section class="bb-hero bb-hero--banner">
+  <div class="container position-relative">
+    <div class="row align-items-end">
+      <div class="col-lg-8">
+        <span class="bb-eyebrow" style="letter-spacing: 0.35em; font-size: 0.78rem;">Get in Touch</span>
+        <h1 class="display-2 mb-3">Contact</h1>
+        <p class="lead fs-4 mb-0" style="opacity: 0.85;">Have a question or want to work together? Send me a message.</p>
+      </div>
+    </div>
+  </div>
+  <div class="bb-hero__stripe"></div>
+</section>
+
+<!-- ============================================================
+     CONTACT: Two-column (form + dark sidebar panel)
+     ============================================================ -->
+<section class="bb-section" style="background: var(--bb-bg);">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Form Column -->
+      <div class="col-lg-7">
+        <div class="bb-section-header">
+          <div class="bb-section-header__bar"></div>
+          <h2 class="h4 text-uppercase mb-0" style="letter-spacing: 0.15em;">Send a Message</h2>
+        </div>
+
+        <form method="post">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+          <div class="mb-4 p-3" style="border-left: 5px solid var(--bb-danger); background: #fef2f2;">
+            {% for error in form.non_field_errors %}
+            <p class="mb-0 fw-bold" style="color: var(--bb-danger);">{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+              <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}" class="form-control py-3 {% if form.name.errors %}is-invalid{% endif %}" value="{{ form.name.value|default:'' }}" placeholder="Your name" required>
+              {% if form.name.errors %}
+              <div class="invalid-feedback">{% for error in form.name.errors %}{{ error }}{% endfor %}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+              <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" class="form-control py-3 {% if form.email.errors %}is-invalid{% endif %}" value="{{ form.email.value|default:'' }}" placeholder="you@example.com" required>
+              {% if form.email.errors %}
+              <div class="invalid-feedback">{% for error in form.email.errors %}{{ error }}{% endfor %}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="{{ form.subject.id_for_label }}" class="form-label">Subject</label>
+            <input type="text" name="{{ form.subject.html_name }}" id="{{ form.subject.id_for_label }}" class="form-control py-3 {% if form.subject.errors %}is-invalid{% endif %}" value="{{ form.subject.value|default:'' }}" placeholder="What is this regarding?" required>
+            {% if form.subject.errors %}
+            <div class="invalid-feedback">{% for error in form.subject.errors %}{{ error }}{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-4">
+            <label for="{{ form.message.id_for_label }}" class="form-label">Message</label>
+            <textarea name="{{ form.message.html_name }}" id="{{ form.message.id_for_label }}" rows="7" class="form-control py-3 {% if form.message.errors %}is-invalid{% endif %}" placeholder="Your message..." required>{{ form.message.value|default:'' }}</textarea>
+            {% if form.message.errors %}
+            <div class="invalid-feedback">{% for error in form.message.errors %}{{ error }}{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-warning btn-lg px-5 py-3">Send Message</button>
+        </form>
+      </div>
+
+      <!-- Sidebar: Dark Panel -->
+      <div class="col-lg-5">
+        <div class="bb-panel h-100">
+          <div class="bb-panel__title">Other Ways to Connect</div>
+
+          <p class="mb-4 lh-lg" style="font-weight: 300; opacity: 0.85;">Feel free to reach out through any of the channels below. I typically respond within 24-48 hours.</p>
+
+          <div class="d-flex flex-column gap-3">
+            {% if site_settings and site_settings.linkedin_url %}
+            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg w-100 py-3 text-start">
+              <i class="fab fa-linkedin me-3"></i>LinkedIn
+            </a>
+            {% endif %}
+            {% if site_settings and site_settings.github_url %}
+            <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg w-100 py-3 text-start">
+              <i class="fab fa-github me-3"></i>GitHub
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

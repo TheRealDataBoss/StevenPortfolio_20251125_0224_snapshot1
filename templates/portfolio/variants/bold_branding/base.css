@@ -1,0 +1,962 @@
+/* =================================================================
+   Bold Branding — Agency / Editorial Portfolio
+   Nike, Spotify, bold agency vibes: heavy type, strong color blocks,
+   dramatic contrast, sharp edges, editorial flair.
+   Scoped entirely to body.variant-bold_branding
+   Uses Design Token CSS vars with bold defaults:
+     --accent, --bg, --surface, --text, --text-muted, --border
+   ================================================================= */
+
+/* --- Design Tokens ------------------------------------------------ */
+body.variant-bold_branding {
+  --bb-accent:       var(--accent, #f59e0b);
+  --bb-accent-dark:  color-mix(in srgb, var(--bb-accent) 80%, #000);
+  --bb-accent-soft:  color-mix(in srgb, var(--bb-accent) 10%, #ffffff);
+  --bb-accent-glow:  color-mix(in srgb, var(--bb-accent) 15%, transparent);
+  --bb-bg:           var(--bg, #ffffff);
+  --bb-surface:      var(--surface, #f5f5f5);
+  --bb-dark:         #111111;
+  --bb-dark-mid:     #1a1a1a;
+  --bb-dark-soft:    #222222;
+  --bb-text:         var(--text, #1a1a1a);
+  --bb-text-muted:   var(--text-muted, #6b7280);
+  --bb-border:       var(--border, #e5e7eb);
+  --bb-danger:       #dc2626;
+  --bb-focus-ring:   color-mix(in srgb, var(--bb-accent) 25%, transparent);
+  --bb-radius:       0px;
+
+  background: var(--bb-bg);
+  color: var(--bb-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =================================================================
+   TYPOGRAPHY -- massive, unapologetic, dramatic
+   ================================================================= */
+body.variant-bold_branding h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: inherit;
+}
+body.variant-bold_branding h2 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: inherit;
+}
+body.variant-bold_branding h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: inherit;
+}
+body.variant-bold_branding h4 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+body.variant-bold_branding h5,
+body.variant-bold_branding h6 {
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Display scale -- used for page heroes */
+body.variant-bold_branding .display-1 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+body.variant-bold_branding .display-2 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+body.variant-bold_branding .display-4 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+body.variant-bold_branding .display-5 {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+/* Eyebrow labels -- uppercase micro-text, wide tracking */
+body.variant-bold_branding .bb-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--bb-accent);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+/* Lead paragraph */
+body.variant-bold_branding .lead {
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Muted text */
+body.variant-bold_branding .text-muted {
+  color: var(--bb-text-muted) !important;
+}
+
+/* =================================================================
+   NAVBAR -- dark, imposing, accent hover
+   ================================================================= */
+body.variant-bold_branding .navbar {
+  background: var(--bb-dark) !important;
+  border-bottom: 3px solid var(--bb-accent);
+  padding: 0.65rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+body.variant-bold_branding .navbar .navbar-brand {
+  color: #ffffff !important;
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+body.variant-bold_branding .navbar .nav-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.85rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+body.variant-bold_branding .navbar .nav-link:hover,
+body.variant-bold_branding .navbar .nav-link.active {
+  color: var(--bb-accent) !important;
+}
+
+/* Accent underline on hover/active */
+body.variant-bold_branding .navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0.85rem;
+  right: 0.85rem;
+  height: 2px;
+  background: var(--bb-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+body.variant-bold_branding .navbar .nav-link:hover::after,
+body.variant-bold_branding .navbar .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Dropdown */
+body.variant-bold_branding .dropdown-menu {
+  background: var(--bb-dark);
+  border: 1px solid var(--bb-dark-soft);
+  border-radius: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  padding: 0.5rem 0;
+}
+body.variant-bold_branding .dropdown-item {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+body.variant-bold_branding .dropdown-item:hover,
+body.variant-bold_branding .dropdown-item:focus {
+  background: var(--bb-dark-soft);
+  color: var(--bb-accent);
+}
+body.variant-bold_branding .dropdown-toggle::after {
+  opacity: 0.5;
+}
+
+/* Mobile toggler */
+body.variant-bold_branding .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.25);
+  padding: 0.3rem 0.6rem;
+}
+body.variant-bold_branding .navbar-toggler-icon {
+  filter: brightness(2);
+}
+
+/* =================================================================
+   HERO SECTIONS -- full-dark, massive type, accent stripe
+   ================================================================= */
+body.variant-bold_branding .bb-hero {
+  background: var(--bb-dark);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+body.variant-bold_branding .bb-hero--full {
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+}
+body.variant-bold_branding .bb-hero--half {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+}
+body.variant-bold_branding .bb-hero--banner {
+  padding: 4.5rem 0 4rem;
+}
+
+/* Hero background overlay */
+body.variant-bold_branding .bb-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* Hero gradient overlay for extra drama */
+body.variant-bold_branding .bb-hero__gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(17,17,17,0.97) 0%, rgba(17,17,17,0.85) 50%, color-mix(in srgb, var(--bb-accent) 15%, rgba(17,17,17,0.9)) 100%);
+  pointer-events: none;
+}
+
+/* Accent stripe at hero bottom */
+body.variant-bold_branding .bb-hero__stripe {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: var(--bb-accent);
+}
+
+/* Small accent bar for section headings */
+body.variant-bold_branding .bb-accent-bar {
+  width: 60px;
+  height: 5px;
+  background: var(--bb-accent);
+  display: block;
+}
+body.variant-bold_branding .bb-accent-bar--sm {
+  width: 40px;
+  height: 4px;
+}
+body.variant-bold_branding .bb-accent-bar--lg {
+  width: 80px;
+  height: 6px;
+}
+
+/* =================================================================
+   SECTIONS -- full-width bands, strong contrast
+   ================================================================= */
+body.variant-bold_branding .bb-section {
+  padding: 5rem 0;
+}
+body.variant-bold_branding .bb-section--dark {
+  background: var(--bb-dark);
+  color: #ffffff;
+}
+body.variant-bold_branding .bb-section--surface {
+  background: var(--bb-surface);
+}
+body.variant-bold_branding .bb-section--accent {
+  background: var(--bb-accent);
+  color: var(--bb-dark);
+}
+
+/* Dark band header -- full-width dark strip above sections */
+body.variant-bold_branding .bb-band {
+  background: var(--bb-dark);
+  color: #ffffff;
+  padding: 1.5rem 0;
+}
+
+/* Section heading with left accent bar */
+body.variant-bold_branding .bb-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+body.variant-bold_branding .bb-section-header__bar {
+  width: 6px;
+  height: 44px;
+  background: var(--bb-accent);
+  flex-shrink: 0;
+}
+
+/* Full-width accent stripe separator */
+body.variant-bold_branding .bb-stripe-sep {
+  height: 5px;
+  background: var(--bb-accent);
+  width: 100%;
+}
+
+/* =================================================================
+   CARDS -- sharp edges, thick left accent border, zero shadow
+   ================================================================= */
+body.variant-bold_branding .bb-card {
+  background: var(--bb-bg);
+  border-radius: 0;
+  border: none;
+  border-left: 6px solid var(--bb-accent);
+  box-shadow: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+body.variant-bold_branding .bb-card:hover {
+  border-left-color: var(--bb-accent-dark);
+  transform: translateY(-2px);
+}
+body.variant-bold_branding .bb-card--dark-border {
+  border-left-color: var(--bb-dark);
+}
+body.variant-bold_branding .bb-card--dark-border:hover {
+  border-left-color: var(--bb-accent);
+}
+body.variant-bold_branding .bb-card__body {
+  padding: 1.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+body.variant-bold_branding .bb-card__img {
+  overflow: hidden;
+}
+body.variant-bold_branding .bb-card__img img {
+  width: 100%;
+  display: block;
+}
+
+/* Category eyebrow in cards */
+body.variant-bold_branding .bb-card__cat {
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--bb-accent);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+body.variant-bold_branding .bb-card__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--bb-text);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+body.variant-bold_branding .bb-card__desc {
+  font-size: 0.9rem;
+  color: var(--bb-text-muted);
+  line-height: 1.65;
+  flex: 1;
+}
+
+/* Bootstrap card overrides */
+body.variant-bold_branding .card {
+  border-radius: 0;
+  border: none;
+  border-left: 6px solid var(--bb-accent);
+  box-shadow: none;
+}
+
+/* =================================================================
+   DARK PANEL -- sidebar, info panels
+   ================================================================= */
+body.variant-bold_branding .bb-panel {
+  background: var(--bb-dark);
+  color: #ffffff;
+  padding: 2rem;
+  border-radius: 0;
+}
+body.variant-bold_branding .bb-panel__title {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--bb-accent);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.variant-bold_branding .bb-panel__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 0.35rem;
+  display: block;
+}
+body.variant-bold_branding .bb-panel__value {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #ffffff;
+  display: block;
+}
+
+/* =================================================================
+   BADGES -- dark bg, accent text, sharp edges
+   ================================================================= */
+body.variant-bold_branding .badge {
+  border-radius: 0;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  padding: 0.35em 0.75em;
+}
+body.variant-bold_branding .badge.bg-dark {
+  background: var(--bb-dark) !important;
+  color: #ffffff;
+}
+body.variant-bold_branding .badge.bg-warning {
+  background: var(--bb-accent) !important;
+  color: var(--bb-dark) !important;
+}
+body.variant-bold_branding .badge.bg-secondary {
+  background: #374151 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+body.variant-bold_branding .bb-badge {
+  display: inline-block;
+  padding: 0.3em 0.7em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 0;
+  background: var(--bb-dark);
+  color: var(--bb-accent);
+}
+body.variant-bold_branding .bb-badge--accent {
+  background: var(--bb-accent);
+  color: var(--bb-dark);
+}
+body.variant-bold_branding .bb-badge--outline {
+  background: transparent;
+  border: 2px solid var(--bb-accent);
+  color: var(--bb-accent);
+}
+
+/* Tech stack tags */
+body.variant-bold_branding .bb-tag {
+  display: inline-block;
+  padding: 0.25em 0.65em;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--bb-accent);
+  color: var(--bb-dark);
+  border-radius: 0;
+}
+
+/* =================================================================
+   BUTTONS -- zero radius, heavy uppercase, wide letter-spacing
+   ================================================================= */
+body.variant-bold_branding .btn {
+  border-radius: 0;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  box-shadow: none;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+body.variant-bold_branding .btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary / Warning -- accent fills */
+body.variant-bold_branding .btn-warning,
+body.variant-bold_branding .btn-primary {
+  background: var(--bb-accent);
+  border: 2px solid var(--bb-accent);
+  color: var(--bb-dark);
+}
+body.variant-bold_branding .btn-warning:hover,
+body.variant-bold_branding .btn-primary:hover {
+  background: var(--bb-accent-dark);
+  border-color: var(--bb-accent-dark);
+  color: #ffffff;
+}
+
+/* Dark */
+body.variant-bold_branding .btn-dark {
+  background: var(--bb-dark);
+  border: 2px solid var(--bb-dark);
+  color: #ffffff;
+}
+body.variant-bold_branding .btn-dark:hover {
+  background: var(--bb-accent);
+  border-color: var(--bb-accent);
+  color: var(--bb-dark);
+}
+
+/* Outline variants */
+body.variant-bold_branding .btn-outline-light {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+}
+body.variant-bold_branding .btn-outline-light:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--bb-dark);
+}
+body.variant-bold_branding .btn-outline-warning {
+  background: transparent;
+  border: 2px solid var(--bb-accent);
+  color: var(--bb-accent);
+}
+body.variant-bold_branding .btn-outline-warning:hover {
+  background: var(--bb-accent);
+  color: var(--bb-dark);
+}
+body.variant-bold_branding .btn-outline-dark {
+  background: transparent;
+  border: 2px solid var(--bb-dark);
+  color: var(--bb-dark);
+}
+body.variant-bold_branding .btn-outline-dark:hover {
+  background: var(--bb-dark);
+  color: #ffffff;
+}
+
+/* Large buttons */
+body.variant-bold_branding .btn-lg {
+  padding: 0.85rem 2.25rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+}
+
+/* Small buttons */
+body.variant-bold_branding .btn-sm {
+  padding: 0.35rem 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+
+/* =================================================================
+   FORMS -- sharp inputs, bold labels, accent focus
+   ================================================================= */
+body.variant-bold_branding .form-control {
+  border-radius: 0;
+  border: 2px solid var(--bb-dark);
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--bb-text);
+  background: var(--bb-bg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.variant-bold_branding .form-control:focus {
+  border-color: var(--bb-accent);
+  box-shadow: 0 0 0 3px var(--bb-focus-ring);
+  outline: none;
+}
+body.variant-bold_branding .form-control::placeholder {
+  color: var(--bb-text-muted);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+body.variant-bold_branding .form-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bb-text);
+  margin-bottom: 0.5rem;
+}
+body.variant-bold_branding textarea.form-control {
+  min-height: 160px;
+  resize: vertical;
+}
+body.variant-bold_branding .form-control.is-invalid {
+  border-color: var(--bb-danger);
+}
+body.variant-bold_branding .invalid-feedback {
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--bb-danger);
+}
+
+/* Input group override */
+body.variant-bold_branding .input-group .form-control {
+  border-right: none;
+}
+body.variant-bold_branding .input-group .btn {
+  border-left: none;
+}
+
+/* =================================================================
+   ATTACHMENTS -- left border treatment
+   ================================================================= */
+body.variant-bold_branding .bb-attachment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  background: var(--bb-bg);
+  border-left: 5px solid var(--bb-dark);
+  transition: border-color 0.2s ease;
+}
+body.variant-bold_branding .bb-attachment:hover {
+  border-left-color: var(--bb-accent);
+}
+body.variant-bold_branding .bb-attachment__name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--bb-text);
+}
+
+/* =================================================================
+   CREDENTIAL CARDS -- education & certifications
+   ================================================================= */
+body.variant-bold_branding .bb-credential {
+  background: var(--bb-bg);
+  border-left: 5px solid var(--bb-accent);
+  padding: 1.75rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+}
+body.variant-bold_branding .bb-credential:hover {
+  border-left-color: var(--bb-accent-dark);
+}
+body.variant-bold_branding .bb-credential--alt {
+  border-left-color: var(--bb-dark);
+}
+body.variant-bold_branding .bb-credential--alt:hover {
+  border-left-color: var(--bb-accent);
+}
+body.variant-bold_branding .bb-credential__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--bb-text);
+  margin-bottom: 0.25rem;
+}
+body.variant-bold_branding .bb-credential__org {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--bb-accent);
+}
+body.variant-bold_branding .bb-credential__date {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--bb-text);
+}
+body.variant-bold_branding .bb-credential__desc {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--bb-text-muted);
+  margin-top: 0.75rem;
+}
+body.variant-bold_branding .bb-credential__meta {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2em 0.6em;
+  background: var(--bb-dark);
+  color: var(--bb-accent);
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Group heading */
+body.variant-bold_branding .bb-group-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--bb-accent);
+}
+body.variant-bold_branding .bb-group-header__bar {
+  width: 6px;
+  height: 36px;
+  background: var(--bb-accent);
+  flex-shrink: 0;
+}
+
+/* =================================================================
+   RESUME
+   ================================================================= */
+body.variant-bold_branding .bb-pdf-frame {
+  border: 3px solid var(--bb-dark);
+}
+body.variant-bold_branding .bb-pdf-frame iframe {
+  display: block;
+  border: none;
+  width: 100%;
+}
+body.variant-bold_branding .bb-resume-entry {
+  border-left: 5px solid var(--bb-accent);
+  padding: 1.5rem;
+  background: var(--bb-bg);
+  height: 100%;
+  transition: border-color 0.2s ease;
+}
+body.variant-bold_branding .bb-resume-entry:hover {
+  border-left-color: var(--bb-accent-dark);
+}
+
+/* =================================================================
+   IMAGES & MEDIA
+   ================================================================= */
+body.variant-bold_branding .media-img--rounded {
+  border-radius: 0;
+}
+body.variant-bold_branding .img-shape-rounded {
+  border-radius: 0;
+}
+body.variant-bold_branding .img-card,
+body.variant-bold_branding .img-hero {
+  border-radius: 0;
+}
+
+/* Headshot treatment: rectangular with thick accent border */
+body.variant-bold_branding .bb-headshot-frame {
+  display: inline-block;
+  border: 5px solid var(--bb-accent);
+  line-height: 0;
+}
+body.variant-bold_branding .bb-headshot-frame img {
+  display: block;
+}
+
+/* =================================================================
+   PAGINATION -- dark, sharp
+   ================================================================= */
+body.variant-bold_branding .pagination .page-link {
+  border-radius: 0;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.9rem;
+  border: 2px solid var(--bb-dark);
+  color: var(--bb-dark);
+  background: var(--bb-bg);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+body.variant-bold_branding .pagination .page-link:hover {
+  background: var(--bb-dark);
+  color: #ffffff;
+}
+body.variant-bold_branding .pagination .page-item.active .page-link {
+  background: var(--bb-accent);
+  border-color: var(--bb-accent);
+  color: var(--bb-dark);
+}
+
+/* =================================================================
+   LINKS
+   ================================================================= */
+body.variant-bold_branding a {
+  color: var(--bb-accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+body.variant-bold_branding a:hover {
+  color: var(--bb-accent-dark);
+}
+
+/* =================================================================
+   FOOTER -- dark, accent links
+   ================================================================= */
+body.variant-bold_branding .footer {
+  background: var(--bb-dark) !important;
+  color: rgba(255, 255, 255, 0.6);
+  border-top: 4px solid var(--bb-accent);
+  padding: 2.5rem 0;
+  font-size: 0.82rem;
+}
+body.variant-bold_branding .footer a {
+  color: var(--bb-accent) !important;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+body.variant-bold_branding .footer a:hover {
+  color: #ffffff !important;
+}
+
+/* =================================================================
+   ALERTS
+   ================================================================= */
+body.variant-bold_branding .alert {
+  border-radius: 0;
+  border-left: 5px solid;
+  font-weight: 500;
+}
+
+/* =================================================================
+   FOCUS -- accessibility
+   ================================================================= */
+body.variant-bold_branding *:focus-visible {
+  outline: 2px solid var(--bb-accent);
+  outline-offset: 2px;
+}
+body.variant-bold_branding .btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--bb-focus-ring);
+  outline: none;
+}
+
+/* =================================================================
+   REDUCED MOTION
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body.variant-bold_branding,
+  body.variant-bold_branding *,
+  body.variant-bold_branding *::before,
+  body.variant-bold_branding *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+body.variant-bold_branding.no-motion,
+body.variant-bold_branding.no-motion *,
+body.variant-bold_branding.no-motion *::before,
+body.variant-bold_branding.no-motion *::after {
+  transition-duration: 0.01ms !important;
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+
+/* Tablets / small desktop */
+@media (max-width: 991.98px) {
+  body.variant-bold_branding .bb-hero--full {
+    min-height: 70vh;
+  }
+  body.variant-bold_branding .bb-hero--half {
+    min-height: 40vh;
+  }
+  body.variant-bold_branding .bb-hero--banner {
+    padding: 3rem 0 2.5rem;
+  }
+  body.variant-bold_branding .bb-section {
+    padding: 3.5rem 0;
+  }
+  body.variant-bold_branding .bb-card__body {
+    padding: 1.35rem;
+  }
+  body.variant-bold_branding .bb-panel {
+    padding: 1.5rem;
+  }
+  body.variant-bold_branding .bb-credential {
+    padding: 1.35rem;
+  }
+  body.variant-bold_branding .bb-group-header {
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 575.98px) {
+  body.variant-bold_branding {
+    line-height: 1.6;
+  }
+  body.variant-bold_branding h1 {
+    font-size: 2.25rem;
+  }
+  body.variant-bold_branding h2 {
+    font-size: 1.75rem;
+  }
+  body.variant-bold_branding .display-1 {
+    font-size: 2.5rem;
+  }
+  body.variant-bold_branding .display-2 {
+    font-size: 2.25rem;
+  }
+  body.variant-bold_branding .display-4 {
+    font-size: 1.85rem;
+  }
+  body.variant-bold_branding .display-5 {
+    font-size: 1.65rem;
+  }
+  body.variant-bold_branding .bb-hero--full {
+    min-height: 60vh;
+  }
+  body.variant-bold_branding .bb-hero--half {
+    min-height: 35vh;
+  }
+  body.variant-bold_branding .bb-hero--banner {
+    padding: 2.5rem 0 2rem;
+  }
+  body.variant-bold_branding .bb-section {
+    padding: 2.5rem 0;
+  }
+  body.variant-bold_branding .bb-card__body {
+    padding: 1.15rem;
+  }
+  body.variant-bold_branding .bb-panel {
+    padding: 1.25rem;
+    margin-top: 2rem;
+  }
+  body.variant-bold_branding .bb-credential {
+    padding: 1.15rem;
+  }
+  body.variant-bold_branding .btn-lg {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.78rem;
+  }
+  body.variant-bold_branding .bb-attachment {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  body.variant-bold_branding .bb-headshot-frame {
+    border-width: 3px;
+  }
+  body.variant-bold_branding .footer .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    text-align: center;
+  }
+  body.variant-bold_branding .bb-group-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
+}

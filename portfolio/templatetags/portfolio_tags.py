@@ -14,6 +14,34 @@ def split(value, sep=","):
     return [item.strip() for item in value.split(sep)]
 
 
+@register.filter
+def endswith(value, suffix):
+    """Check if a string ends with a suffix (case-insensitive)."""
+    if not value or not suffix:
+        return False
+    return str(value).lower().endswith(str(suffix).lower())
+
+
+_HIDDEN_CODE_EXTENSIONS = frozenset({
+    '.py', '.ps1', '.sh', '.js', '.ts', '.rb', '.php',
+    '.java', '.c', '.cpp', '.cs', '.go', '.rs',
+})
+
+
+@register.filter
+def is_hidden_attachment(att):
+    """Return True if an attachment is a code file that should be hidden from detail pages."""
+    title = getattr(att, 'title', '') or ''
+    if title.strip().lower() == 'helper script':
+        return True
+    f = getattr(att, 'file', None)
+    if f and f.name:
+        ext = ('.' + f.name.rsplit('.', 1)[-1].lower()) if '.' in f.name else ''
+        if ext in _HIDDEN_CODE_EXTENSIONS:
+            return True
+    return False
+
+
 _VALID_RATIOS = {"square", "landscape", "wide", "ultrawide", "portrait"}
 _VALID_FITS = {"cover", "contain"}
 

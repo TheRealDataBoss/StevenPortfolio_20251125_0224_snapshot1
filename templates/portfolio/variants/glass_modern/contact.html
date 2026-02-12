@@ -1,0 +1,61 @@
+{% extends base_template|default:"portfolio/base.html" %}
+{% block title %}Contact | Portfolio{% endblock %}
+{% block content %}
+<div data-variant-template="glass_modern"></div>
+
+<!-- Hero -->
+<section class="hero py-4">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-1">Get in Touch</h1>
+        <p class="lead text-white-75 mb-0">Send a note and I'll respond promptly.</p>
+    </div>
+</section>
+
+<!-- Contact form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-6">
+                <!-- Social links -->
+                {% if site_settings and site_settings.linkedin_url or site_settings and site_settings.github_url %}
+                    <div class="d-flex flex-wrap gap-3 mb-4 justify-content-center">
+                        {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="btn btn-primary btn-lg px-4"><i class="fab fa-linkedin me-2"></i> LinkedIn</a>
+                        {% endif %}
+                        {% if site_settings.github_url %}
+                            <a href="{{ site_settings.github_url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-lg px-4"><i class="fab fa-github me-2"></i> GitHub</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Contact form card -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Name</label>
+                                {{ form.name }}{{ form.name.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Email</label>
+                                {{ form.email }}{{ form.email.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Subject</label>
+                                {{ form.subject }}{{ form.subject.errors }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Message</label>
+                                {{ form.message }}{{ form.message.errors }}
+                            </div>
+                            <button class="btn btn-primary btn-lg w-100" type="submit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
